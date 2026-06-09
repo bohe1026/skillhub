@@ -2,11 +2,13 @@ package com.iflytek.skillhub.domain.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iflytek.skillhub.domain.event.SecurityScanCompletedEvent;
 import com.iflytek.skillhub.domain.skill.SkillVisibility;
 import com.iflytek.skillhub.domain.skill.SkillVersion;
 import com.iflytek.skillhub.domain.skill.SkillVersionRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersionStatus;
 import com.iflytek.skillhub.domain.skill.validation.PackageEntry;
+import org.springframework.context.ApplicationEventPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,7 @@ public class SecurityScanService {
     private final SkillVersionRepository skillVersionRepository;
     private final ScanTaskProducer scanTaskProducer;
     private final ObjectMapper objectMapper;
+    private final ApplicationEventPublisher eventPublisher;
     private final String scanMode;
     private final boolean enabled;
 
@@ -41,12 +44,14 @@ public class SecurityScanService {
                                SkillVersionRepository skillVersionRepository,
                                ScanTaskProducer scanTaskProducer,
                                ObjectMapper objectMapper,
+                               ApplicationEventPublisher eventPublisher,
                                @Value("${skillhub.security.scanner.mode:local}") String scanMode,
                                @Value("${skillhub.security.scanner.enabled:false}") boolean enabled) {
         this.auditRepository = auditRepository;
         this.skillVersionRepository = skillVersionRepository;
         this.scanTaskProducer = scanTaskProducer;
         this.objectMapper = objectMapper;
+        this.eventPublisher = eventPublisher;
         this.scanMode = scanMode;
         this.enabled = enabled;
     }
@@ -118,6 +123,14 @@ public class SecurityScanService {
             }
         }
         skillVersionRepository.save(version);
+        // Auto-review must only run after the scan verdict and version status are durable.
+        // Publishing here keeps the security gate in front of automated approval.
+        eventPublisher.publishEvent(new SecurityScanCompletedEvent(
+                versionId,
+                scannerType,
+                response.verdict(),
+                response.verdict() == SecurityVerdict.SAFE
+        ));
     }
 
     private Path saveTempDirectory(Long versionId, List<PackageEntry> entries) {

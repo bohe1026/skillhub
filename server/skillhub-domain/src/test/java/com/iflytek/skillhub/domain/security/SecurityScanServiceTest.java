@@ -1,6 +1,7 @@
 package com.iflytek.skillhub.domain.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iflytek.skillhub.domain.event.SecurityScanCompletedEvent;
 import com.iflytek.skillhub.domain.skill.SkillVersion;
 import com.iflytek.skillhub.domain.skill.SkillVersionRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersionStatus;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
@@ -34,6 +36,9 @@ class SecurityScanServiceTest {
     @Mock
     private ScanTaskProducer scanTaskProducer;
 
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private SecurityScanService service;
 
     @BeforeEach
@@ -43,6 +48,7 @@ class SecurityScanServiceTest {
                 skillVersionRepository,
                 scanTaskProducer,
                 new ObjectMapper(),
+                eventPublisher,
                 "local",
                 true
         );
@@ -99,6 +105,7 @@ class SecurityScanServiceTest {
                 skillVersionRepository,
                 scanTaskProducer,
                 new ObjectMapper(),
+                eventPublisher,
                 "upload",
                 true
         );
@@ -149,6 +156,7 @@ class SecurityScanServiceTest {
                 skillVersionRepository,
                 scanTaskProducer,
                 new ObjectMapper(),
+                eventPublisher,
                 "upload",
                 true
         );
@@ -209,6 +217,35 @@ class SecurityScanServiceTest {
         assertThat(version.getStatus()).isEqualTo(SkillVersionStatus.PENDING_REVIEW);
         verify(auditRepository).save(audit);
         verify(skillVersionRepository).save(version);
+    }
+
+    @Test
+    void processScanResult_publishesScanCompletedEvent() {
+        SecurityAudit audit = new SecurityAudit(42L, ScannerType.SKILL_SCANNER);
+        SkillVersion version = new SkillVersion(8L, "1.0.0", "publisher-1");
+        version.setStatus(SkillVersionStatus.SCANNING);
+
+        given(auditRepository.findLatestActiveByVersionIdAndScannerType(42L, ScannerType.SKILL_SCANNER))
+                .willReturn(Optional.of(audit));
+        given(skillVersionRepository.findById(42L)).willReturn(Optional.of(version));
+
+        SecurityScanResponse response = new SecurityScanResponse(
+                "scan-789",
+                SecurityVerdict.SAFE,
+                0,
+                null,
+                List.of(),
+                0.75
+        );
+
+        service.processScanResult(42L, ScannerType.SKILL_SCANNER, response);
+
+        verify(eventPublisher).publishEvent(new SecurityScanCompletedEvent(
+                42L,
+                ScannerType.SKILL_SCANNER,
+                SecurityVerdict.SAFE,
+                true
+        ));
     }
 
     @Test

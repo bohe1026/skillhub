@@ -149,6 +149,13 @@ skillhub:
     max-package-size: 104857600 # 100MB
     # allowed-file-extensions: uses SkillPackagePolicy.ALLOWED_EXTENSIONS by default
     # Override via SKILLHUB_PUBLISH_ALLOWED_FILE_EXTENSIONS env var if needed
+  auto-review:
+    # Opt-in so existing deployments keep manual review until explicitly enabled.
+    enabled: ${SKILLHUB_AUTO_REVIEW_ENABLED:false}
+    # Skill Judge uses a 120-point scale. 96 maps to grade B and is the default pass line.
+    pass-score: ${SKILLHUB_AUTO_REVIEW_PASS_SCORE:96}
+    # Stored as the reviewer id on generated approve/reject audit records.
+    reviewer-id: ${SKILLHUB_AUTO_REVIEW_REVIEWER_ID:system-auto-review}
   profile:
     moderation:
       machine-review: ${SKILLHUB_PROFILE_MACHINE_REVIEW_ENABLED:true} # Enable machine review (e.g. sensitive word detection)

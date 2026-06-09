@@ -272,6 +272,10 @@ Spring Boot 会把这个环境变量绑定到
 `skillhub.publish.allowed-file-extensions`。一旦设置，该配置会替换默认白名单，
 而不是在默认列表后追加。
 
+### Skill Judge 自动审核
+
+公共技能可以启用自动审核，减少人工审核操作。开启后，系统会在安全扫描通过后读取已上传的 bundle，并按 Skill Judge 规则自动评分；达到阈值自动通过，低于阈值自动驳回。详细配置和 Docker Compose 部署方式见 [`docs/20-auto-review-deployment.md`](./docs/20-auto-review-deployment.md)。
+
 ## 架构
 
 SkillHub 采用清晰的分层架构：
