@@ -11,6 +11,8 @@ import com.iflytek.skillhub.domain.skill.SkillVersionRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,21 +56,21 @@ public class AutoReviewAppService {
     }
 
     @Transactional
-    public void reviewPendingVersion(Long versionId) {
+    public boolean reviewPendingVersion(Long versionId) {
         if (!properties.isEnabled()) {
-            return;
+            return false;
         }
 
         SkillVersion version = skillVersionRepository.findById(versionId).orElse(null);
         if (version == null || version.getStatus() != SkillVersionStatus.PENDING_REVIEW) {
-            return;
+            return false;
         }
 
         ReviewTask task = reviewTaskRepository
                 .findBySkillVersionIdAndStatus(versionId, ReviewTaskStatus.PENDING)
                 .orElse(null);
         if (task == null) {
-            return;
+            return false;
         }
 
         SkillJudgeEvaluationResult result;
@@ -79,7 +81,7 @@ public class AutoReviewAppService {
             // Keep manual review as the safe fallback whenever storage or evaluation is unavailable.
             log.warn("Auto review skipped for versionId={} because Skill Judge evaluation failed",
                     versionId, ex);
-            return;
+            return false;
         }
 
         String comment = buildReviewComment(result);
@@ -91,7 +93,7 @@ public class AutoReviewAppService {
                     Map.of(),
                     SYSTEM_REVIEW_ROLES
             );
-            return;
+            return true;
         }
 
         reviewService.rejectReview(
@@ -101,6 +103,34 @@ public class AutoReviewAppService {
                 Map.of(),
                 SYSTEM_REVIEW_ROLES
         );
+        return true;
+    }
+
+    public int reviewPendingVersions(int limit) {
+        if (!properties.isEnabled() || limit <= 0) {
+            return 0;
+        }
+
+        Page<ReviewTask> tasks = reviewTaskRepository.findByStatus(
+                ReviewTaskStatus.PENDING,
+                PageRequest.of(0, limit)
+        );
+        int reviewed = 0;
+        for (ReviewTask task : tasks.getContent()) {
+            SkillVersion version = skillVersionRepository.findById(task.getSkillVersionId()).orElse(null);
+            if (version == null || version.getStatus() != SkillVersionStatus.PENDING_REVIEW) {
+                continue;
+            }
+            try {
+                if (reviewPendingVersion(task.getSkillVersionId())) {
+                    reviewed++;
+                }
+            } catch (RuntimeException ex) {
+                log.warn("Auto review compensation skipped reviewTaskId={} versionId={}",
+                        task.getId(), task.getSkillVersionId(), ex);
+            }
+        }
+        return reviewed;
     }
 
     private String buildReviewComment(SkillJudgeEvaluationResult result) {

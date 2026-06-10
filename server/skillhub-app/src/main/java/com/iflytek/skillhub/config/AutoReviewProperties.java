@@ -20,6 +20,16 @@ public class AutoReviewProperties {
      * System actor recorded on the generated review task decision.
      */
     private String reviewerId = "system-auto-review";
+    /**
+     * Delay before the first backfill pass that picks up pending reviews which
+     * missed the normal scan-completed event.
+     */
+    private long compensationInitialDelayMs = 15000;
+    /**
+     * Delay between backfill passes. Kept small enough for operations feedback
+     * while avoiding constant database polling.
+     */
+    private long compensationDelayMs = 60000;
 
     public boolean isEnabled() {
         return enabled;
@@ -43,5 +53,21 @@ public class AutoReviewProperties {
 
     public void setReviewerId(String reviewerId) {
         this.reviewerId = reviewerId;
+    }
+
+    public long getCompensationInitialDelayMs() {
+        return compensationInitialDelayMs;
+    }
+
+    public void setCompensationInitialDelayMs(long compensationInitialDelayMs) {
+        this.compensationInitialDelayMs = compensationInitialDelayMs;
+    }
+
+    public long getCompensationDelayMs() {
+        return compensationDelayMs;
+    }
+
+    public void setCompensationDelayMs(long compensationDelayMs) {
+        this.compensationDelayMs = compensationDelayMs;
     }
 }

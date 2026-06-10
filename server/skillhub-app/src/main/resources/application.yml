@@ -156,6 +156,9 @@ skillhub:
     pass-score: ${SKILLHUB_AUTO_REVIEW_PASS_SCORE:96}
     # Stored as the reviewer id on generated approve/reject audit records.
     reviewer-id: ${SKILLHUB_AUTO_REVIEW_REVIEWER_ID:system-auto-review}
+    # Backfill pending reviews that missed the normal scan-completed event, for example during restart.
+    compensation-initial-delay-ms: ${SKILLHUB_AUTO_REVIEW_COMPENSATION_INITIAL_DELAY_MS:15000}
+    compensation-delay-ms: ${SKILLHUB_AUTO_REVIEW_COMPENSATION_DELAY_MS:60000}
   profile:
     moderation:
       machine-review: ${SKILLHUB_PROFILE_MACHINE_REVIEW_ENABLED:true} # Enable machine review (e.g. sensitive word detection)

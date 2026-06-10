@@ -8,6 +8,7 @@
 - 公共技能版本进入审核流程后会被自动评分。分数大于等于 `SKILLHUB_AUTO_REVIEW_PASS_SCORE` 时自动通过，低于阈值时自动驳回。
 - 如果安全扫描开启，自动审核只会在扫描结果为 `SAFE` 后执行。
 - 如果安全扫描关闭，技能版本进入 `PENDING_REVIEW` 后会直接触发自动审核。
+- 服务会定时补偿已经进入 `PENDING_REVIEW` 但仍是 `PENDING` 的审核任务，避免重启或事件丢失导致页面一直显示待审核。
 - 如果读取 bundle 或评分过程失败，系统只记录 warning 日志，不自动通过或驳回，保留人工审核兜底。
 
 ## 环境变量
@@ -16,6 +17,10 @@
 SKILLHUB_AUTO_REVIEW_ENABLED=true
 SKILLHUB_AUTO_REVIEW_PASS_SCORE=96
 SKILLHUB_AUTO_REVIEW_REVIEWER_ID=system-auto-review
+# 可选：启动后首次补偿等待时间，默认 15 秒
+SKILLHUB_AUTO_REVIEW_COMPENSATION_INITIAL_DELAY_MS=15000
+# 可选：两次补偿扫描间隔，默认 60 秒
+SKILLHUB_AUTO_REVIEW_COMPENSATION_DELAY_MS=60000
 ```
 
 评分满分为 120。默认阈值 96 对应 Skill Judge 的 B 档，适合作为自动通过线；如果希望更严格，可以提高到 108。

@@ -25,6 +25,8 @@ class AutoReviewPropertiesBindingTest {
         assertFalse(properties.isEnabled());
         assertEquals(96, properties.getPassScore());
         assertEquals("system-auto-review", properties.getReviewerId());
+        assertEquals(15000, properties.getCompensationInitialDelayMs());
+        assertEquals(60000, properties.getCompensationDelayMs());
     }
 
     @Test
@@ -32,12 +34,16 @@ class AutoReviewPropertiesBindingTest {
         AutoReviewProperties properties = bindProperties(Map.of(
                 "SKILLHUB_AUTO_REVIEW_ENABLED", "true",
                 "SKILLHUB_AUTO_REVIEW_PASS_SCORE", "108",
-                "SKILLHUB_AUTO_REVIEW_REVIEWER_ID", "robot-reviewer"
+                "SKILLHUB_AUTO_REVIEW_REVIEWER_ID", "robot-reviewer",
+                "SKILLHUB_AUTO_REVIEW_COMPENSATION_INITIAL_DELAY_MS", "3000",
+                "SKILLHUB_AUTO_REVIEW_COMPENSATION_DELAY_MS", "10000"
         ));
 
         assertEquals(true, properties.isEnabled());
         assertEquals(108, properties.getPassScore());
         assertEquals("robot-reviewer", properties.getReviewerId());
+        assertEquals(3000, properties.getCompensationInitialDelayMs());
+        assertEquals(10000, properties.getCompensationDelayMs());
     }
 
     private AutoReviewProperties bindProperties(Map<String, Object> envVars) throws IOException {

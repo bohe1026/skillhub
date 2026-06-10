@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
@@ -160,6 +163,59 @@ class AutoReviewAppServiceTest {
                 eq(Map.of()),
                 eq(Set.of("SUPER_ADMIN"))
         );
+    }
+
+    @Test
+    void reviewsPendingVersionsThatMissedTheSecurityScanEvent() throws Exception {
+        SkillVersion version = pendingReviewVersion();
+        ReviewTask task = pendingReviewTask();
+        PageRequest pageRequest = PageRequest.of(0, 50);
+        SkillPackageSnapshot snapshot = new SkillPackageSnapshot(
+                SKILL_ID,
+                VERSION_ID,
+                "---\nname: demo-skill\ndescription: Use when reviewing skills.\n---\n# Demo",
+                List.of("SKILL.md")
+        );
+        SkillJudgeEvaluationResult result = new SkillJudgeEvaluationResult(
+                108,
+                120,
+                "A",
+                "Production-ready expert Skill."
+        );
+        when(reviewTaskRepository.findByStatus(ReviewTaskStatus.PENDING, pageRequest))
+                .thenReturn(new PageImpl<>(List.of(task), pageRequest, 1));
+        when(skillVersionRepository.findById(VERSION_ID)).thenReturn(Optional.of(version));
+        when(reviewTaskRepository.findBySkillVersionIdAndStatus(VERSION_ID, ReviewTaskStatus.PENDING))
+                .thenReturn(Optional.of(task));
+        when(packageReader.read(SKILL_ID, VERSION_ID)).thenReturn(snapshot);
+        when(evaluator.evaluate(snapshot)).thenReturn(result);
+
+        int reviewed = service.reviewPendingVersions(50);
+
+        assertEquals(1, reviewed);
+        verify(reviewService).approveReview(
+                eq(REVIEW_TASK_ID),
+                eq("system-auto-review"),
+                contains("结论：自动通过"),
+                eq(Map.of()),
+                eq(Set.of("SUPER_ADMIN"))
+        );
+    }
+
+    @Test
+    void compensationSkipsVersionsThatAreNotPendingReview() throws Exception {
+        SkillVersion version = new SkillVersion(SKILL_ID, "1.0.0", "publisher-1");
+        version.setStatus(SkillVersionStatus.SCANNING);
+        ReviewTask task = pendingReviewTask();
+        PageRequest pageRequest = PageRequest.of(0, 50);
+        when(reviewTaskRepository.findByStatus(ReviewTaskStatus.PENDING, pageRequest))
+                .thenReturn(new PageImpl<>(List.of(task), pageRequest, 1));
+        when(skillVersionRepository.findById(VERSION_ID)).thenReturn(Optional.of(version));
+
+        int reviewed = service.reviewPendingVersions(50);
+
+        assertEquals(0, reviewed);
+        verifyNoInteractions(reviewService, packageReader, evaluator);
     }
 
 
