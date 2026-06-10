@@ -118,6 +118,10 @@ vi.mock('@/features/review/use-review-detail', () => ({
     mutate: vi.fn(),
     isPending: false,
   }),
+  useOptimizeReview: () => ({
+    mutate: vi.fn(),
+    isPending: false,
+  }),
 }))
 
 const userMock = { platformRoles: ['SKILL_ADMIN'] as string[] }
@@ -245,6 +249,8 @@ describe('ReviewDetailPage', () => {
     expect(html).toContain('Skill Judge 自动审核报告')
     expect(html).toContain('结论：自动拒绝')
     expect(html).toContain('description 缺少明确触发场景')
+    expect(html).toContain('review.optimizeWithSkillJudge')
+    expect(html).toContain('review.optimizeDescription')
   })
 
   it('renders namespace review detail through the namespace route wrapper', () => {

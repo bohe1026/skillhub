@@ -6,6 +6,10 @@ export function buildGlobalReviewsPath() {
   return '/dashboard/reviews'
 }
 
+export function buildGlobalReviewDetailPath(reviewId: number) {
+  return `/dashboard/reviews/${reviewId}`
+}
+
 export function buildNamespaceReviewsPath(slug: string) {
   return `/dashboard/namespaces/${encodeURIComponent(slug)}/reviews`
 }

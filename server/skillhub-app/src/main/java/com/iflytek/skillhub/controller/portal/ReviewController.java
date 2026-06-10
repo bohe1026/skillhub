@@ -6,6 +6,7 @@ import com.iflytek.skillhub.domain.skill.service.SkillDownloadService;
 import com.iflytek.skillhub.dto.ApiResponse;
 import com.iflytek.skillhub.dto.ApiResponseFactory;
 import com.iflytek.skillhub.dto.PageResponse;
+import com.iflytek.skillhub.dto.ReviewOptimizationResponse;
 import com.iflytek.skillhub.dto.ReviewActionRequest;
 import com.iflytek.skillhub.dto.ReviewSkillDetailResponse;
 import com.iflytek.skillhub.dto.ReviewTaskRequest;
@@ -14,6 +15,7 @@ import com.iflytek.skillhub.service.AuditRequestContext;
 import com.iflytek.skillhub.service.GovernanceWorkflowAppService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -150,6 +152,17 @@ public class ReviewController extends BaseApiController {
         return ok(
                 "response.success.read",
                 governanceWorkflowAppService.getReviewSkillDetail(id, userId, userNsRoles)
+        );
+    }
+
+    @PostMapping("/{id}/optimize")
+    public ApiResponse<ReviewOptimizationResponse> optimizeReview(@PathVariable Long id,
+                                                                  @RequestAttribute("userId") String userId,
+                                                                  @RequestAttribute(value = "userNsRoles", required = false) Map<Long, NamespaceRole> userNsRoles,
+                                                                  @RequestAttribute(value = "platformRoles", required = false) Set<String> platformRoles) {
+        return ok(
+                "response.success.created",
+                governanceWorkflowAppService.optimizeReview(id, userId, userNsRoles, platformRoles)
         );
     }
 

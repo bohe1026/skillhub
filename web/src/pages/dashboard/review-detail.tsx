@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, Folder } from 'lucide-react'
+import { ChevronDown, Folder, Sparkles } from 'lucide-react'
 import { useAuth } from '@/features/auth/use-auth'
 import {
+  buildGlobalReviewDetailPath,
   buildGlobalReviewsPath,
   buildNamespaceReviewDetailPath,
   buildNamespaceReviewsPath,
@@ -26,7 +27,13 @@ import { FilePreviewDialog } from '@/features/skill/file-preview-dialog'
 import type { FileTreeNode } from '@/features/skill/file-tree-builder'
 import { useReviewFile } from '@/features/review/use-review-file'
 import { buildApiUrl, WEB_API_PREFIX } from '@/api/client'
-import { useReviewDetail, useReviewSkillDetail, useApproveReview, useRejectReview } from '@/features/review/use-review-detail'
+import {
+  useReviewDetail,
+  useReviewSkillDetail,
+  useApproveReview,
+  useRejectReview,
+  useOptimizeReview,
+} from '@/features/review/use-review-detail'
 
 /**
  * Review task detail page for moderators. The route owns the approve/reject
@@ -68,6 +75,22 @@ function ReviewDetailScreen({
     },
     onError: (error) => {
       toast.error(t('review.rejectFailed'), resolveReviewActionErrorDescription(error))
+    },
+  })
+  const optimizeMutation = useOptimizeReview({
+    onSuccess: (result) => {
+      toast.success(t('review.optimizeSuccess', { version: result.version }))
+      if (!result.reviewTaskId) {
+        return
+      }
+      navigate({
+        to: namespaceSlug
+          ? buildNamespaceReviewDetailPath(result.namespace || namespaceSlug, result.reviewTaskId)
+          : buildGlobalReviewDetailPath(result.reviewTaskId),
+      })
+    },
+    onError: (error) => {
+      toast.error(t('review.optimizeFailed'), resolveReviewActionErrorDescription(error))
     },
   })
 
@@ -179,6 +202,9 @@ function ReviewDetailScreen({
     (version) => version.version === reviewSkillDetail.activeVersion
   )
   const isApprovalBlockedByScanning = activeReviewVersion?.status === 'SCANNING'
+  const isSkillJudgeRejectedReview =
+    review.status === 'REJECTED' &&
+    Boolean(review.reviewComment?.includes('Skill Judge 自动审核报告'))
 
   return (
     <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 animate-fade-up">
@@ -250,6 +276,22 @@ function ReviewDetailScreen({
           <div className="space-y-2">
             <Label className="text-xs text-muted-foreground uppercase tracking-wider">{t('review.reviewComment')}</Label>
             <ReviewCommentReport comment={review.reviewComment} />
+          </div>
+        )}
+
+        {isSkillJudgeRejectedReview && (
+          <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-muted-foreground">{t('review.optimizeDescription')}</p>
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => optimizeMutation.mutate({ taskId: review.id })}
+              disabled={optimizeMutation.isPending}
+              className="gap-2 sm:w-auto"
+            >
+              <Sparkles className="h-4 w-4" />
+              {optimizeMutation.isPending ? t('review.optimizePending') : t('review.optimizeWithSkillJudge')}
+            </Button>
           </div>
         )}
       </Card>

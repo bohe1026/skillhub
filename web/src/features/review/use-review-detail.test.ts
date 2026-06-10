@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 // The use-review-detail module exports thin useQuery / useMutation wrappers
-// (useReviewDetail, useReviewSkillDetail, useApproveReview, useRejectReview).
+// (useReviewDetail, useReviewSkillDetail, useApproveReview, useRejectReview,
+// useOptimizeReview).
 // Internal helper functions (getReviewDetail, getReviewSkillDetail, approveReview,
 // rejectReview) are not exported and cannot be tested directly.
 //
@@ -31,5 +32,11 @@ describe('use-review-detail exports', () => {
     const mod = await import('./use-review-detail')
     expect(mod.useRejectReview).toBeDefined()
     expect(typeof mod.useRejectReview).toBe('function')
+  })
+
+  it('exports useOptimizeReview', async () => {
+    const mod = await import('./use-review-detail')
+    expect(mod.useOptimizeReview).toBeDefined()
+    expect(typeof mod.useOptimizeReview).toBe('function')
   })
 })

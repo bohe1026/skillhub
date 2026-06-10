@@ -22,6 +22,8 @@ import com.iflytek.skillhub.dto.SkillLifecycleVersionResponse;
 import com.iflytek.skillhub.dto.SkillVersionResponse;
 import com.iflytek.skillhub.repository.GovernanceQueryRepository;
 import com.iflytek.skillhub.service.ReviewSkillDetailAppService;
+import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationAppService;
+import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -90,6 +92,9 @@ class ReviewPortalControllerTest {
 
     @MockBean
     private ReviewSkillDetailAppService reviewSkillDetailAppService;
+
+    @MockBean
+    private SkillJudgeOptimizationAppService skillJudgeOptimizationAppService;
 
     @Test
     void submitReview_passesNamespaceRolesToService() throws Exception {
@@ -218,6 +223,30 @@ class ReviewPortalControllerTest {
         mockMvc.perform(get("/api/v1/reviews/1/skill-detail").with(auth("user-9")))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value(403));
+    }
+
+    @Test
+    void optimizeReview_returnsGeneratedReviewTask() throws Exception {
+        stubNamespaceRoles("admin", List.of());
+        given(skillJudgeOptimizationAppService.optimizeReview(1L, "admin", Map.of(), Set.of()))
+                .willReturn(new SkillJudgeOptimizationResult(
+                        30L,
+                        "global",
+                        "demo-skill",
+                        11L,
+                        100L,
+                        "20260610.062442.opt1",
+                        "PENDING_REVIEW"
+                ));
+
+        mockMvc.perform(post("/api/v1/reviews/1/optimize")
+                        .with(csrf())
+                        .with(auth("admin")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.reviewTaskId").value(100L))
+                .andExpect(jsonPath("$.data.version").value("20260610.062442.opt1"))
+                .andExpect(jsonPath("$.data.status").value("PENDING_REVIEW"));
     }
 
     @Test

@@ -375,6 +375,16 @@ export interface ReviewTask {
   reviewedAt?: string
 }
 
+export interface ReviewOptimizationResult {
+  skillId: number
+  namespace: string
+  slug: string
+  skillVersionId: number
+  reviewTaskId?: number
+  version: string
+  status: string
+}
+
 export interface ReviewSkillDetail {
   skill: SkillDetail
   versions: SkillVersion[]

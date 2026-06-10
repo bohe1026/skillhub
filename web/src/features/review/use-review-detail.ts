@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { reviewApi } from '@/api/client'
-import type { ReviewSkillDetail, ReviewTask } from '@/api/types'
+import type { ReviewOptimizationResult, ReviewSkillDetail, ReviewTask } from '@/api/types'
 
 /**
  * Fetches one review task for governance detail views.
@@ -26,6 +26,10 @@ async function approveReview(taskId: number, comment?: string): Promise<void> {
  */
 async function rejectReview(taskId: number, comment: string): Promise<void> {
   await reviewApi.reject(taskId, comment)
+}
+
+async function optimizeReview(taskId: number): Promise<ReviewOptimizationResult> {
+  return reviewApi.optimize(taskId)
 }
 
 /**
@@ -79,6 +83,23 @@ export function useRejectReview(callbacks?: { onSuccess?: () => void; onError?: 
       queryClient.invalidateQueries({ queryKey: ['reviews'] })
       queryClient.invalidateQueries({ queryKey: ['governance'] })
       callbacks?.onSuccess?.()
+    },
+    onError: callbacks?.onError,
+  })
+}
+
+export function useOptimizeReview(callbacks?: {
+  onSuccess?: (result: ReviewOptimizationResult) => void
+  onError?: (error: Error) => void
+}) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ taskId }: { taskId: number }) => optimizeReview(taskId),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['reviews'] })
+      queryClient.invalidateQueries({ queryKey: ['governance'] })
+      callbacks?.onSuccess?.(result)
     },
     onError: callbacks?.onError,
   })

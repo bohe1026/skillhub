@@ -724,6 +724,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/web/reviews/{id}/optimize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["optimizeReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reviews/{id}/optimize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["optimizeReview_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/web/reviews/{id}/approve": {
         parameters: {
             query?: never;
@@ -910,6 +942,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["unfreezeNamespace_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/web/namespaces/{slug}/transfer-ownership": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["transferOwnership"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/namespaces/{slug}/transfer-ownership": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["transferOwnership_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3639,6 +3703,27 @@ export interface components {
             /** Format: date-time */
             reviewedAt?: string;
         };
+        ApiResponseReviewOptimizationResponse: {
+            /** Format: int32 */
+            code?: number;
+            msg?: string;
+            data?: components["schemas"]["ReviewOptimizationResponse"];
+            /** Format: date-time */
+            timestamp?: string;
+            requestId?: string;
+        };
+        ReviewOptimizationResponse: {
+            /** Format: int64 */
+            skillId?: number;
+            namespace?: string;
+            slug?: string;
+            /** Format: int64 */
+            skillVersionId?: number;
+            /** Format: int64 */
+            reviewTaskId?: number;
+            version?: string;
+            status?: string;
+        };
         ReviewTaskRequest: {
             /** Format: int64 */
             skillVersionId?: number;
@@ -3684,6 +3769,21 @@ export interface components {
             sourceVersionId?: number;
             /** Format: int64 */
             targetNamespaceId?: number;
+        };
+        TransferOwnershipRequest: {
+            newOwnerId: string;
+        };
+        ApiResponseMessageResponse: {
+            /** Format: int32 */
+            code?: number;
+            msg?: string;
+            data?: components["schemas"]["MessageResponse"];
+            /** Format: date-time */
+            timestamp?: string;
+            requestId?: string;
+        };
+        MessageResponse: {
+            message?: string;
         };
         BatchMemberRequest: {
             members: components["schemas"]["MemberRequest"][];
@@ -3780,18 +3880,6 @@ export interface components {
         };
         AuthorizeRequest: {
             userCode?: string;
-        };
-        ApiResponseMessageResponse: {
-            /** Format: int32 */
-            code?: number;
-            msg?: string;
-            data?: components["schemas"]["MessageResponse"];
-            /** Format: date-time */
-            timestamp?: string;
-            requestId?: string;
-        };
-        MessageResponse: {
-            message?: string;
         };
         SessionBootstrapRequest: {
             provider: string;
@@ -3977,8 +4065,8 @@ export interface components {
             valid?: boolean;
             errors?: string[];
             warnings?: string[];
-            resolvedSlug?: string | null;
-            resolvedVersion?: string | null;
+            resolvedSlug?: string;
+            resolvedVersion?: string;
         };
         UpdateProfileRequest: {
             displayName?: string;
@@ -6639,6 +6727,50 @@ export interface operations {
             };
         };
     };
+    optimizeReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseReviewOptimizationResponse"];
+                };
+            };
+        };
+    };
+    optimizeReview_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseReviewOptimizationResponse"];
+                };
+            };
+        };
+    };
     approveReview: {
         parameters: {
             query?: never;
@@ -7031,6 +7163,58 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseNamespaceResponse"];
+                };
+            };
+        };
+    };
+    transferOwnership: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferOwnershipRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseMessageResponse"];
+                };
+            };
+        };
+    };
+    transferOwnership_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferOwnershipRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseMessageResponse"];
                 };
             };
         };
@@ -9851,6 +10035,8 @@ export interface operations {
                 page?: number;
                 size?: number;
                 filter?: string;
+                q?: string;
+                namespace?: string;
             };
             header?: never;
             path?: never;
@@ -9875,6 +10061,8 @@ export interface operations {
                 page?: number;
                 size?: number;
                 filter?: string;
+                q?: string;
+                namespace?: string;
             };
             header?: never;
             path?: never;

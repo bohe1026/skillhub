@@ -14,6 +14,7 @@ import type {
   MergeInitiateResponse,
   MergeVerifyRequest,
   ReviewSkillDetail,
+  ReviewOptimizationResult,
   ReviewTask,
   PromotionTask,
   AuditLogItem,
@@ -865,6 +866,13 @@ export const reviewApi = {
 
   async getSkillDetail(id: number): Promise<ReviewSkillDetail> {
     return fetchJson<ReviewSkillDetail>(`${WEB_API_PREFIX}/reviews/${id}/skill-detail`)
+  },
+
+  async optimize(id: number): Promise<ReviewOptimizationResult> {
+    return fetchJson<ReviewOptimizationResult>(`${WEB_API_PREFIX}/reviews/${id}/optimize`, {
+      method: 'POST',
+      headers: getCsrfHeaders(),
+    })
   },
 
   async approve(id: number, comment?: string): Promise<void> {

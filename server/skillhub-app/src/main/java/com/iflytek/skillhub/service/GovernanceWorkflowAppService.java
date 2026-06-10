@@ -6,13 +6,17 @@ import com.iflytek.skillhub.dto.AdminSkillActionRequest;
 import com.iflytek.skillhub.dto.NamespaceLifecycleRequest;
 import com.iflytek.skillhub.dto.NamespaceResponse;
 import com.iflytek.skillhub.dto.PageResponse;
+import com.iflytek.skillhub.dto.ReviewOptimizationResponse;
 import com.iflytek.skillhub.dto.PromotionResponseDto;
 import com.iflytek.skillhub.dto.ReviewSkillDetailResponse;
 import com.iflytek.skillhub.dto.ReviewTaskResponse;
 import com.iflytek.skillhub.dto.SkillLifecycleMutationResponse;
 import com.iflytek.skillhub.dto.SkillVersionRereleaseRequest;
+import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationAppService;
+import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationResult;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,17 +35,20 @@ public class GovernanceWorkflowAppService {
     private final PromotionPortalAppService promotionPortalAppService;
     private final SkillLifecycleAppService skillLifecycleAppService;
     private final NamespacePortalCommandAppService namespacePortalCommandAppService;
+    private final SkillJudgeOptimizationAppService skillJudgeOptimizationAppService;
 
     public GovernanceWorkflowAppService(ReviewPortalAppService reviewPortalAppService,
                                         ReviewSkillDetailAppService reviewSkillDetailAppService,
                                         PromotionPortalAppService promotionPortalAppService,
                                         SkillLifecycleAppService skillLifecycleAppService,
-                                        NamespacePortalCommandAppService namespacePortalCommandAppService) {
+                                        NamespacePortalCommandAppService namespacePortalCommandAppService,
+                                        SkillJudgeOptimizationAppService skillJudgeOptimizationAppService) {
         this.reviewPortalAppService = reviewPortalAppService;
         this.reviewSkillDetailAppService = reviewSkillDetailAppService;
         this.promotionPortalAppService = promotionPortalAppService;
         this.skillLifecycleAppService = skillLifecycleAppService;
         this.namespacePortalCommandAppService = namespacePortalCommandAppService;
+        this.skillJudgeOptimizationAppService = skillJudgeOptimizationAppService;
     }
 
     public ReviewTaskResponse submitReview(Long skillVersionId,
@@ -106,6 +113,27 @@ public class GovernanceWorkflowAppService {
                 reviewTaskId,
                 userId,
                 userNsRoles != null ? userNsRoles : Map.of()
+        );
+    }
+
+    public ReviewOptimizationResponse optimizeReview(Long reviewTaskId,
+                                                     String userId,
+                                                     Map<Long, NamespaceRole> userNsRoles,
+                                                     Set<String> platformRoles) {
+        SkillJudgeOptimizationResult result = skillJudgeOptimizationAppService.optimizeReview(
+                reviewTaskId,
+                userId,
+                userNsRoles != null ? userNsRoles : Map.of(),
+                platformRoles != null ? platformRoles : Set.of()
+        );
+        return new ReviewOptimizationResponse(
+                result.skillId(),
+                result.namespace(),
+                result.slug(),
+                result.skillVersionId(),
+                result.reviewTaskId(),
+                result.version(),
+                result.status()
         );
     }
 
