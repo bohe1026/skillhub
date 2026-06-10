@@ -82,7 +82,11 @@ public class SkillJudgeOptimizationAppService {
                 .orElseThrow(() -> new DomainNotFoundException("skill.not_found", sourceVersion.getSkillId()));
         String targetVersion = nextOptimizationVersion(skill.getId(), sourceVersion.getVersion());
         SkillPackageBundle sourceBundle = packageReader.readBundle(skill.getId(), sourceVersion.getId());
-        String optimizedSkillMarkdown = optimizer.optimizeSkillMarkdown(sourceBundle.skillMarkdown(), targetVersion);
+        String optimizedSkillMarkdown = optimizer.optimizeSkillMarkdown(
+                sourceBundle.skillMarkdown(),
+                targetVersion,
+                task.getReviewComment()
+        );
         List<PackageEntry> entries = sourceBundle.files().stream()
                 .map(file -> toPackageEntry(file, optimizedSkillMarkdown))
                 .toList();

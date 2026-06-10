@@ -94,7 +94,9 @@ public class HeuristicSkillJudgeEvaluator implements SkillJudgeEvaluator {
     private int descriptionPenalty(String description, List<SkillJudgeIssue> issues) {
         String normalized = normalize(description);
         int penalty = 0;
-        if (!containsAny(normalized, "use when", "when ", "trigger", "review", "audit", "evaluate", "improve")) {
+        if (!containsAny(normalized,
+                "use when", "when ", "trigger", "review", "audit", "evaluate", "improve",
+                "触发", "触发场景", "当用户", "用于", "适用", "审核", "评估", "优化", "改进")) {
             penalty += 12;
             issues.add(issue(
                     "触发描述",

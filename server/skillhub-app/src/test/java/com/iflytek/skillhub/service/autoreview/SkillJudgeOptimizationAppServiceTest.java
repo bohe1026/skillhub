@@ -87,7 +87,7 @@ class SkillJudgeOptimizationAppServiceTest {
                 List.of(
                         new SkillPackageFile(
                                 "SKILL.md",
-                                "---\nname: Demo Skill\ndescription: Helpful stuff.\nversion: 20260610.062442\n---\n# Demo",
+                                "---\nname: Demo Skill\ndescription: 中文业务描述：用于生成客户案例分析报告，保留原有业务语义。\nversion: 20260610.062442\n---\n# Demo",
                                 "text/markdown"
                         ),
                         new SkillPackageFile(
@@ -154,10 +154,19 @@ class SkillJudgeOptimizationAppServiceTest {
                 .map(entry -> new String(entry.content(), StandardCharsets.UTF_8))
                 .orElseThrow();
         assertTrue(optimizedSkillMd.contains("version: 20260610.062442.opt1"));
-        assertTrue(optimizedSkillMd.contains("Use when"));
-        assertTrue(optimizedSkillMd.contains("## Workflow"));
-        assertTrue(optimizedSkillMd.contains("## Review Criteria"));
-        assertTrue(optimizedSkillMd.contains("## Never Do"));
+        assertTrue(optimizedSkillMd.contains("description: 中文业务描述：用于生成客户案例分析报告，保留原有业务语义。"));
+        assertTrue(optimizedSkillMd.contains("## 触发条件"));
+        assertTrue(optimizedSkillMd.contains("## 使用前置条件"));
+        assertTrue(optimizedSkillMd.contains("## 执行步骤"));
+        assertTrue(optimizedSkillMd.contains("## 错误处理"));
+        assertTrue(optimizedSkillMd.contains("## 输出格式"));
+        assertTrue(optimizedSkillMd.contains("## 风险提示"));
+        assertTrue(optimizedSkillMd.contains("## Skill Judge 优化说明"));
+        assertTrue(optimizedSkillMd.contains("### 本次新增"));
+        assertTrue(optimizedSkillMd.contains("### 已保留"));
+        assertTrue(optimizedSkillMd.contains("- 原始 description"));
+        assertTrue(optimizedSkillMd.contains("- 原有正文内容"));
+        assertTrue(optimizedSkillMd.contains("- 分数：84/120"));
         assertTrue(entries.stream().anyMatch(entry -> entry.path().equals("scripts/run.sh")));
     }
 

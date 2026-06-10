@@ -62,6 +62,24 @@ class HeuristicSkillJudgeEvaluatorTest {
                 });
     }
 
+    @Test
+    void acceptsChineseTriggerDescription() {
+        SkillPackageSnapshot snapshot = new SkillPackageSnapshot(
+                1L,
+                2L,
+                strongSkillMarkdown().replace(
+                        "Evaluate Agent Skill design quality. Use when reviewing, auditing, or improving SKILL.md packages with trigger keywords for skill quality.",
+                        "用于审核和优化 Agent Skill 设计质量。触发场景：当用户要求审核、评估、改进 SKILL.md 包，或需要输出评分报告和具体优化建议时使用。"
+                ),
+                List.of("SKILL.md", "references/rubrics.md", "references/failure-patterns.md")
+        );
+
+        SkillJudgeEvaluationResult result = evaluator.evaluate(snapshot);
+
+        assertThat(result.issues())
+                .noneSatisfy(issue -> assertThat(issue.problem()).contains("description 缺少明确触发场景"));
+    }
+
     private String strongSkillMarkdown() {
         return """
                 ---
