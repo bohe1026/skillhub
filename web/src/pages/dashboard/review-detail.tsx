@@ -16,6 +16,7 @@ import { Card } from '@/shared/ui/card'
 import { Textarea } from '@/shared/ui/textarea'
 import { Label } from '@/shared/ui/label'
 import { ConfirmDialog } from '@/shared/components/confirm-dialog'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 import { toast } from '@/shared/lib/toast'
 import { cn } from '@/shared/lib/utils'
 import { resolveReviewActionErrorDescription } from '@/features/review/review-error'
@@ -34,6 +35,7 @@ import {
   useRejectReview,
   useOptimizeReview,
 } from '@/features/review/use-review-detail'
+import type { ReviewOptimizationResult } from '@/api/types'
 
 /**
  * Review task detail page for moderators. The route owns the approve/reject
@@ -80,14 +82,8 @@ function ReviewDetailScreen({
   const optimizeMutation = useOptimizeReview({
     onSuccess: (result) => {
       toast.success(t('review.optimizeSuccess', { version: result.version }))
-      if (!result.reviewTaskId) {
-        return
-      }
-      navigate({
-        to: namespaceSlug
-          ? buildNamespaceReviewDetailPath(result.namespace || namespaceSlug, result.reviewTaskId)
-          : buildGlobalReviewDetailPath(result.reviewTaskId),
-      })
+      setOptimizationResult(result)
+      setOptimizationDialogOpen(true)
     },
     onError: (error) => {
       toast.error(t('review.optimizeFailed'), resolveReviewActionErrorDescription(error))
@@ -98,6 +94,8 @@ function ReviewDetailScreen({
   const [showRejectForm, setShowRejectForm] = useState(false)
   const [approveDialog, setApproveDialog] = useState(false)
   const [rejectDialog, setRejectDialog] = useState(false)
+  const [optimizationDialogOpen, setOptimizationDialogOpen] = useState(false)
+  const [optimizationResult, setOptimizationResult] = useState<ReviewOptimizationResult | null>(null)
   // File browser sidebar state
   const [fileBrowserOpen, setFileBrowserOpen] = useState(true)
   const [previewNode, setPreviewNode] = useState<FileTreeNode | null>(null)
@@ -130,6 +128,18 @@ function ReviewDetailScreen({
     document.body.appendChild(link)
     link.click()
     link.remove()
+  }
+
+  const handleViewOptimizedReview = () => {
+    if (!optimizationResult?.reviewTaskId) {
+      setOptimizationDialogOpen(false)
+      return
+    }
+    navigate({
+      to: namespaceSlug
+        ? buildNamespaceReviewDetailPath(optimizationResult.namespace || namespaceSlug, optimizationResult.reviewTaskId)
+        : buildGlobalReviewDetailPath(optimizationResult.reviewTaskId),
+    })
   }
 
   const formatDate = (dateString: string) => {
@@ -402,6 +412,77 @@ function ReviewDetailScreen({
         variant="destructive"
         onConfirm={handleReject}
       />
+
+      <Dialog open={optimizationDialogOpen} onOpenChange={setOptimizationDialogOpen}>
+        <DialogContent className="w-[min(calc(100vw-2rem),44rem)]">
+          <DialogHeader>
+            <DialogTitle>{t('review.optimizeDialogTitle')}</DialogTitle>
+          </DialogHeader>
+          {optimizationResult && (
+            <div data-testid="optimization-summary-dialog" className="space-y-5 text-sm">
+              <div className="rounded-md border border-border/70 bg-muted/20 p-4">
+                <div className="text-xs text-muted-foreground">{t('review.optimizeDialogVersion')}</div>
+                <div className="font-mono font-semibold text-foreground">{optimizationResult.version}</div>
+              </div>
+              <OptimizationSummaryList
+                title={t('review.optimizeDialogAdded')}
+                items={optimizationResult.optimizationSummary?.addedSections}
+              />
+              <OptimizationSummaryList
+                title={t('review.optimizeDialogPreserved')}
+                items={optimizationResult.optimizationSummary?.preservedItems}
+              />
+              {optimizationResult.optimizationSummary?.reportSummary && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold text-foreground">{t('review.optimizeDialogBasis')}</h3>
+                  <p className="rounded-md bg-muted/20 p-3 text-muted-foreground">
+                    {optimizationResult.optimizationSummary.reportSummary}
+                  </p>
+                </div>
+              )}
+              {optimizationResult.optimizationSummary?.reportMappings?.length ? (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold text-foreground">{t('review.optimizeDialogMappings')}</h3>
+                  <div className="space-y-3">
+                    {optimizationResult.optimizationSummary.reportMappings.map((mapping, index) => (
+                      <div key={`${mapping.problem}-${index}`} className="rounded-md border border-border/70 p-3">
+                        {mapping.problem && (
+                          <p>
+                            <span className="font-medium text-foreground">{t('review.optimizeDialogProblem')}</span>
+                            <span className="text-muted-foreground">{mapping.problem}</span>
+                          </p>
+                        )}
+                        {mapping.suggestion && (
+                          <p>
+                            <span className="font-medium text-foreground">{t('review.optimizeDialogSuggestion')}</span>
+                            <span className="text-muted-foreground">{mapping.suggestion}</span>
+                          </p>
+                        )}
+                        {mapping.matchedSections?.length ? (
+                          <p>
+                            <span className="font-medium text-foreground">{t('review.optimizeDialogMatched')}</span>
+                            <span className="text-muted-foreground">{mapping.matchedSections.join('、')}</span>
+                          </p>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOptimizationDialogOpen(false)}>
+              {t('dialog.close')}
+            </Button>
+            {optimizationResult?.reviewTaskId && (
+              <Button onClick={handleViewOptimizedReview}>
+                {t('review.optimizeDialogViewReview')}
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       </div>
 
       {/* Sidebar — file browser for the review-bound active version */}
@@ -455,6 +536,25 @@ function ReviewDetailScreen({
         error={previewError}
         onDownload={handleDownloadFile}
       />
+    </div>
+  )
+}
+
+function OptimizationSummaryList({ title, items }: { title: string; items?: string[] }) {
+  if (!items?.length) {
+    return null
+  }
+  return (
+    <div className="space-y-2">
+      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      <ul className="space-y-1 rounded-md bg-muted/20 p-3 text-muted-foreground">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

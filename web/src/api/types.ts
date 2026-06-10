@@ -383,6 +383,20 @@ export interface ReviewOptimizationResult {
   reviewTaskId?: number
   version: string
   status: string
+  optimizationSummary?: ReviewOptimizationSummary
+}
+
+export interface ReviewOptimizationSummary {
+  addedSections: string[]
+  preservedItems: string[]
+  reportSummary: string
+  reportMappings: ReviewOptimizationReportMapping[]
+}
+
+export interface ReviewOptimizationReportMapping {
+  problem: string
+  suggestion: string
+  matchedSections: string[]
 }
 
 export interface ReviewSkillDetail {

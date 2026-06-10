@@ -24,6 +24,10 @@ public class SkillJudgePackageOptimizer {
     }
 
     public String optimizeSkillMarkdown(String skillMarkdown, String targetVersion, String reviewComment) {
+        return optimizeSkill(skillMarkdown, targetVersion, reviewComment).skillMarkdown();
+    }
+
+    public OptimizedSkillPackage optimizeSkill(String skillMarkdown, String targetVersion, String reviewComment) {
         SkillMetadata metadata = metadataParser.parse(skillMarkdown);
         Map<String, Object> frontmatter = new LinkedHashMap<>(metadata.frontmatter());
         frontmatter.put("name", metadata.name());
@@ -33,11 +37,12 @@ public class SkillJudgePackageOptimizer {
         String body = cleanBody(metadata.body());
         OptimizationPlan plan = planOptimization(body, reviewComment);
 
-        return buildFrontmatter(frontmatter)
+        String optimizedMarkdown = buildFrontmatter(frontmatter)
                 + "\n"
                 + body
                 + "\n\n"
                 + optimizationBlock(plan);
+        return new OptimizedSkillPackage(optimizedMarkdown, toSummary(plan));
     }
 
     private String preserveDescription(SkillMetadata metadata) {
@@ -263,9 +268,47 @@ public class SkillJudgePackageOptimizer {
         return builder.toString().strip();
     }
 
+    private SkillJudgeOptimizationSummary toSummary(OptimizationPlan plan) {
+        return new SkillJudgeOptimizationSummary(
+                addedSectionTitles(plan),
+                preservedItems(),
+                plan.reportSummary(),
+                reportMappings(plan)
+        );
+    }
+
+    private List<String> addedSectionTitles(OptimizationPlan plan) {
+        if (plan.addedSections().isEmpty()) {
+            return List.of("未追加新的业务章节；原 SKILL.md 已包含重点结构。");
+        }
+        return plan.addedSections().stream()
+                .map(Section::title)
+                .toList();
+    }
+
+    private List<String> preservedItems() {
+        return List.of(
+                "原始 description",
+                "原有正文内容",
+                "原有 scripts/、references/ 等附属文件"
+        );
+    }
+
+    private List<SkillJudgeOptimizationSummary.ReportMapping> reportMappings(OptimizationPlan plan) {
+        return plan.reportFindings().stream()
+                .map(finding -> new SkillJudgeOptimizationSummary.ReportMapping(
+                        finding.problem(),
+                        finding.suggestion(),
+                        finding.matchedSections()
+                ))
+                .toList();
+    }
+
     private record Section(String title, String markdown) {}
 
     private record ReportFinding(String problem, String suggestion, List<String> matchedSections) {}
 
     private record OptimizationPlan(List<Section> addedSections, String reportSummary, List<ReportFinding> reportFindings) {}
+
+    public record OptimizedSkillPackage(String skillMarkdown, SkillJudgeOptimizationSummary summary) {}
 }

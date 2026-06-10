@@ -1,5 +1,7 @@
 package com.iflytek.skillhub.dto;
 
+import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationSummary;
+
 public record ReviewOptimizationResponse(
         Long skillId,
         String namespace,
@@ -7,5 +9,6 @@ public record ReviewOptimizationResponse(
         Long skillVersionId,
         Long reviewTaskId,
         String version,
-        String status
+        String status,
+        SkillJudgeOptimizationSummary optimizationSummary
 ) {}

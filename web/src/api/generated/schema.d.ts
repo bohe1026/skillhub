@@ -3723,6 +3723,18 @@ export interface components {
             reviewTaskId?: number;
             version?: string;
             status?: string;
+            optimizationSummary?: components["schemas"]["SkillJudgeOptimizationSummary"];
+        };
+        SkillJudgeOptimizationSummary: {
+            addedSections?: string[];
+            preservedItems?: string[];
+            reportSummary?: string;
+            reportMappings?: components["schemas"]["ReportMapping"][];
+        };
+        ReportMapping: {
+            problem?: string;
+            suggestion?: string;
+            matchedSections?: string[];
         };
         ReviewTaskRequest: {
             /** Format: int64 */

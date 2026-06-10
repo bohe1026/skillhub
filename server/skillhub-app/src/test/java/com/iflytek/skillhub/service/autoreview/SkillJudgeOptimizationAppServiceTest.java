@@ -138,6 +138,9 @@ class SkillJudgeOptimizationAppServiceTest {
         assertEquals(100L, result.reviewTaskId());
         assertEquals("20260610.062442.opt1", result.version());
         assertEquals("PENDING_REVIEW", result.status());
+        assertTrue(result.optimizationSummary().addedSections().contains("触发条件"));
+        assertTrue(result.optimizationSummary().preservedItems().contains("原始 description"));
+        assertTrue(result.optimizationSummary().reportSummary().contains("分数：84/120"));
         ArgumentCaptor<List<PackageEntry>> entriesCaptor = ArgumentCaptor.forClass(List.class);
         verify(skillPublishService).publishFromEntries(
                 eq("global"),

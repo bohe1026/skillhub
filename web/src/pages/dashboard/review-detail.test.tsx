@@ -1,7 +1,32 @@
+/** @vitest-environment jsdom */
 import { renderToStaticMarkup } from 'react-dom/server'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import type { ReactNode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const navigateMock = vi.fn()
+const optimizeMutateMock = vi.fn()
+const optimizeResult = {
+  skillId: 30,
+  namespace: 'global',
+  slug: 'demo-skill',
+  skillVersionId: 11,
+  reviewTaskId: 100,
+  version: '20260610.062442.opt1',
+  status: 'PENDING_REVIEW',
+  optimizationSummary: {
+    addedSections: ['触发条件', '执行步骤'],
+    preservedItems: ['原始 description', '原有正文内容'],
+    reportSummary: '分数：84/120',
+    reportMappings: [
+      {
+        problem: 'description 缺少明确触发场景',
+        suggestion: '补充什么任务会触发该 Skill',
+        matchedSections: ['触发条件'],
+      },
+    ],
+  },
+}
 
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => navigateMock,
@@ -38,6 +63,15 @@ vi.mock('@/shared/lib/toast', () => ({
     success: vi.fn(),
     error: vi.fn(),
   },
+}))
+
+vi.mock('@/shared/ui/dialog', () => ({
+  Dialog: ({ open, children }: { open?: boolean; children: ReactNode }) => (open ? <>{children}</> : null),
+  DialogContent: ({ children, ...props }: { children: ReactNode }) => <div {...props}>{children}</div>,
+  DialogFooter: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  DialogHeader: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  DialogTitle: ({ children }: { children: ReactNode }) => <h2>{children}</h2>,
+  DialogDescription: ({ children }: { children: ReactNode }) => <p>{children}</p>,
 }))
 
 vi.mock('@/features/review/review-error', () => ({
@@ -118,8 +152,12 @@ vi.mock('@/features/review/use-review-detail', () => ({
     mutate: vi.fn(),
     isPending: false,
   }),
-  useOptimizeReview: () => ({
-    mutate: vi.fn(),
+  useOptimizeReview: (callbacks?: { onSuccess?: (result: typeof optimizeResult) => void }) => ({
+    mutate: (payload: { taskId: number }) => {
+      optimizeMutateMock(payload)
+      callbacks?.onSuccess?.(optimizeResult)
+    },
+    mutateAsync: vi.fn(),
     isPending: false,
   }),
 }))
@@ -144,6 +182,7 @@ import { NamespaceReviewDetailPage, ReviewDetailPage } from './review-detail'
 describe('ReviewDetailPage', () => {
   beforeEach(() => {
     navigateMock.mockReset()
+    optimizeMutateMock.mockReset()
     userMock.platformRoles = ['SKILL_ADMIN']
     useReviewDetailMock.mockReset()
     useReviewSkillDetailMock.mockReset()
@@ -251,6 +290,38 @@ describe('ReviewDetailPage', () => {
     expect(html).toContain('description 缺少明确触发场景')
     expect(html).toContain('review.optimizeWithSkillJudge')
     expect(html).toContain('review.optimizeDescription')
+  })
+
+  it('shows optimization summary dialog after one-click optimization succeeds', async () => {
+    useReviewDetailMock.mockReturnValue({
+      data: {
+        id: 13,
+        namespace: 'global',
+        skillSlug: 'demo-skill',
+        version: '1.2.0',
+        status: 'REJECTED',
+        submittedBy: 'local-admin',
+        submittedByName: 'Local Admin',
+        submittedAt: '2026-03-19T00:00:00Z',
+        reviewedBy: 'system-auto-review',
+        reviewedByName: 'system-auto-review',
+        reviewedAt: '2026-03-19T00:05:00Z',
+        reviewComment: '# Skill Judge 自动审核报告\n\n结论：自动拒绝\n分数：84/120',
+      },
+      isLoading: false,
+    })
+
+    render(<ReviewDetailPage />)
+    fireEvent.click(screen.getByText('review.optimizeWithSkillJudge'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('optimization-summary-dialog')).toBeDefined()
+    })
+    expect(screen.getAllByText('触发条件').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByText('原始 description')).toBeDefined()
+    expect(screen.getByText('分数：84/120')).toBeDefined()
+    expect(screen.getByText('description 缺少明确触发场景')).toBeDefined()
+    expect(screen.getByText('补充什么任务会触发该 Skill')).toBeDefined()
   })
 
   it('renders namespace review detail through the namespace route wrapper', () => {

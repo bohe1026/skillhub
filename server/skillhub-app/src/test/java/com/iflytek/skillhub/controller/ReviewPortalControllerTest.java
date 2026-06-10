@@ -24,6 +24,7 @@ import com.iflytek.skillhub.repository.GovernanceQueryRepository;
 import com.iflytek.skillhub.service.ReviewSkillDetailAppService;
 import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationAppService;
 import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationResult;
+import com.iflytek.skillhub.service.autoreview.SkillJudgeOptimizationSummary;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -236,7 +237,17 @@ class ReviewPortalControllerTest {
                         11L,
                         100L,
                         "20260610.062442.opt1",
-                        "PENDING_REVIEW"
+                        "PENDING_REVIEW",
+                        new SkillJudgeOptimizationSummary(
+                                List.of("触发条件", "执行步骤"),
+                                List.of("原始 description", "原有正文内容"),
+                                "分数：84/120",
+                                List.of(new SkillJudgeOptimizationSummary.ReportMapping(
+                                        "description 缺少明确触发场景",
+                                        "补充什么任务会触发该 Skill",
+                                        List.of("触发条件")
+                                ))
+                        )
                 ));
 
         mockMvc.perform(post("/api/v1/reviews/1/optimize")
@@ -246,7 +257,11 @@ class ReviewPortalControllerTest {
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.data.reviewTaskId").value(100L))
                 .andExpect(jsonPath("$.data.version").value("20260610.062442.opt1"))
-                .andExpect(jsonPath("$.data.status").value("PENDING_REVIEW"));
+                .andExpect(jsonPath("$.data.status").value("PENDING_REVIEW"))
+                .andExpect(jsonPath("$.data.optimizationSummary.addedSections[0]").value("触发条件"))
+                .andExpect(jsonPath("$.data.optimizationSummary.preservedItems[0]").value("原始 description"))
+                .andExpect(jsonPath("$.data.optimizationSummary.reportSummary").value("分数：84/120"))
+                .andExpect(jsonPath("$.data.optimizationSummary.reportMappings[0].matchedSections[0]").value("触发条件"));
     }
 
     @Test

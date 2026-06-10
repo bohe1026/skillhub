@@ -133,7 +133,8 @@ public class GovernanceWorkflowAppService {
                 result.skillVersionId(),
                 result.reviewTaskId(),
                 result.version(),
-                result.status()
+                result.status(),
+                result.optimizationSummary()
         );
     }
 

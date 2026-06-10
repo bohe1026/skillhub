@@ -82,13 +82,13 @@ public class SkillJudgeOptimizationAppService {
                 .orElseThrow(() -> new DomainNotFoundException("skill.not_found", sourceVersion.getSkillId()));
         String targetVersion = nextOptimizationVersion(skill.getId(), sourceVersion.getVersion());
         SkillPackageBundle sourceBundle = packageReader.readBundle(skill.getId(), sourceVersion.getId());
-        String optimizedSkillMarkdown = optimizer.optimizeSkillMarkdown(
+        SkillJudgePackageOptimizer.OptimizedSkillPackage optimizedPackage = optimizer.optimizeSkill(
                 sourceBundle.skillMarkdown(),
                 targetVersion,
                 task.getReviewComment()
         );
         List<PackageEntry> entries = sourceBundle.files().stream()
-                .map(file -> toPackageEntry(file, optimizedSkillMarkdown))
+                .map(file -> toPackageEntry(file, optimizedPackage.skillMarkdown()))
                 .toList();
 
         SkillVisibility visibility = sourceVersion.getRequestedVisibility() != null
@@ -113,7 +113,8 @@ public class SkillJudgeOptimizationAppService {
                 publishResult.version().getId(),
                 optimizedReviewTaskId,
                 publishResult.version().getVersion(),
-                publishResult.version().getStatus().name()
+                publishResult.version().getStatus().name(),
+                optimizedPackage.summary()
         );
     }
 

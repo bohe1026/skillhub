@@ -7,6 +7,7 @@ public record SkillJudgeOptimizationResult(
         Long skillVersionId,
         Long reviewTaskId,
         String version,
-        String status
+        String status,
+        SkillJudgeOptimizationSummary optimizationSummary
 ) {
 }
