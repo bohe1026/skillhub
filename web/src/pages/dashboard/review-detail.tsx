@@ -18,6 +18,7 @@ import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 import { toast } from '@/shared/lib/toast'
 import { cn } from '@/shared/lib/utils'
 import { resolveReviewActionErrorDescription } from '@/features/review/review-error'
+import { ReviewCommentReport } from '@/features/review/review-comment-report'
 import { ReviewSkillDetailSection } from '@/features/review/review-skill-detail-section'
 import { SecurityAuditSection } from '@/features/security-audit/security-audit-section'
 import { FileTree } from '@/features/skill/file-tree'
@@ -248,7 +249,7 @@ function ReviewDetailScreen({
         {review.reviewComment && (
           <div className="space-y-2">
             <Label className="text-xs text-muted-foreground uppercase tracking-wider">{t('review.reviewComment')}</Label>
-            <p className="p-4 bg-secondary/50 rounded-xl text-sm leading-relaxed">{review.reviewComment}</p>
+            <ReviewCommentReport comment={review.reviewComment} />
           </div>
         )}
       </Card>

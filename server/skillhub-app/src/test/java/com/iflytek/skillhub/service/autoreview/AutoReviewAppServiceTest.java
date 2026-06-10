@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -108,7 +109,14 @@ class AutoReviewAppServiceTest {
         verify(reviewService).approveReview(
                 eq(REVIEW_TASK_ID),
                 eq("system-auto-review"),
-                contains("Skill Judge auto-approved: 108/120"),
+                argThat(comment -> comment != null
+                        && comment.contains("# Skill Judge 自动审核报告")
+                        && comment.contains("结论：自动通过")
+                        && comment.contains("分数：108/120")
+                        && comment.contains("通过原因：分数达到通过线")
+                        && comment.contains("## 逐项问题")
+                        && comment.contains("## 具体修改建议")
+                        && comment.contains("## 示例改写")),
                 eq(Map.of()),
                 eq(Set.of("SUPER_ADMIN"))
         );
@@ -148,7 +156,7 @@ class AutoReviewAppServiceTest {
         verify(reviewService).approveReview(
                 eq(REVIEW_TASK_ID),
                 eq("system-auto-review"),
-                contains("Skill Judge auto-approved: 100/120"),
+                contains("分数：100/120"),
                 eq(Map.of()),
                 eq(Set.of("SUPER_ADMIN"))
         );
@@ -169,7 +177,15 @@ class AutoReviewAppServiceTest {
                 84,
                 120,
                 "C",
-                "Description is missing WHEN trigger guidance."
+                "description 缺少明确触发场景。",
+                List.of(new SkillJudgeIssue(
+                        "触发描述",
+                        "中",
+                        12,
+                        "description 缺少明确触发场景，自动激活会不稳定。",
+                        "用 “Use when ...” 说明什么任务会触发该 Skill。",
+                        "description: Use when reviewing SKILL.md packages and producing a scored optimization report."
+                ))
         );
         when(skillVersionRepository.findById(VERSION_ID)).thenReturn(Optional.of(version));
         when(reviewTaskRepository.findBySkillVersionIdAndStatus(VERSION_ID, ReviewTaskStatus.PENDING))
@@ -182,14 +198,21 @@ class AutoReviewAppServiceTest {
         verify(reviewService).rejectReview(
                 eq(REVIEW_TASK_ID),
                 eq("system-auto-review"),
-                contains("Skill Judge auto-rejected: 84/120"),
+                argThat(comment -> comment != null
+                        && comment.contains("# Skill Judge 自动审核报告")
+                        && comment.contains("结论：自动拒绝")
+                        && comment.contains("分数：84/120")
+                        && comment.contains("拒绝原因：分数低于通过线")
+                        && comment.contains("【触发描述｜中｜扣 12 分】description 缺少明确触发场景")
+                        && comment.contains("用 “Use when ...” 说明什么任务会触发该 Skill")
+                        && comment.contains("description: Use when reviewing SKILL.md packages")),
                 eq(Map.of()),
                 eq(Set.of("SUPER_ADMIN"))
         );
         verify(reviewService, never()).approveReview(
                 eq(REVIEW_TASK_ID),
                 eq("system-auto-review"),
-                contains("Skill Judge auto-approved"),
+                contains("结论：自动通过"),
                 eq(Map.of()),
                 eq(Set.of("SUPER_ADMIN"))
         );

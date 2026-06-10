@@ -44,6 +44,10 @@ vi.mock('@/features/review/review-error', () => ({
   resolveReviewActionErrorDescription: () => 'error',
 }))
 
+vi.mock('@/features/review/review-comment-report', () => ({
+  ReviewCommentReport: ({ comment }: { comment: string }) => <section data-testid="review-comment-report">{comment}</section>,
+}))
+
 const useReviewDetailMock = vi.fn<() => unknown>(() => ({
   data: {
     id: 13,
@@ -214,6 +218,33 @@ describe('ReviewDetailPage', () => {
     const html = renderToStaticMarkup(<ReviewDetailPage />)
 
     expect(html).toContain('review.notFound')
+  })
+
+  it('renders the automatic Skill Judge report from reviewComment', () => {
+    useReviewDetailMock.mockReturnValue({
+      data: {
+        id: 13,
+        namespace: 'global',
+        skillSlug: 'demo-skill',
+        version: '1.2.0',
+        status: 'REJECTED',
+        submittedBy: 'local-admin',
+        submittedByName: 'Local Admin',
+        submittedAt: '2026-03-19T00:00:00Z',
+        reviewedBy: 'system-auto-review',
+        reviewedByName: 'system-auto-review',
+        reviewedAt: '2026-03-19T00:05:00Z',
+        reviewComment: '# Skill Judge 自动审核报告\n\n结论：自动拒绝\n分数：84/120\n\n## 逐项问题\n1. description 缺少明确触发场景',
+      },
+      isLoading: false,
+    })
+
+    const html = renderToStaticMarkup(<ReviewDetailPage />)
+
+    expect(html).toContain('data-testid="review-comment-report"')
+    expect(html).toContain('Skill Judge 自动审核报告')
+    expect(html).toContain('结论：自动拒绝')
+    expect(html).toContain('description 缺少明确触发场景')
   })
 
   it('renders namespace review detail through the namespace route wrapper', () => {

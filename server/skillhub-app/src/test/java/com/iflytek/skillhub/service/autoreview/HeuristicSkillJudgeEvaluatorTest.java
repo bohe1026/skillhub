@@ -23,6 +23,12 @@ class HeuristicSkillJudgeEvaluatorTest {
 
         assertThat(result.score()).isGreaterThanOrEqualTo(96);
         assertThat(result.grade()).isIn("A", "B");
+        assertThat(result.issues())
+                .allSatisfy(issue -> {
+                    assertThat(issue.problem()).isNotBlank();
+                    assertThat(issue.suggestion()).isNotBlank();
+                    assertThat(issue.example()).isNotBlank();
+                });
     }
 
     @Test
@@ -46,7 +52,14 @@ class HeuristicSkillJudgeEvaluatorTest {
         SkillJudgeEvaluationResult result = evaluator.evaluate(snapshot);
 
         assertThat(result.score()).isLessThan(96);
-        assertThat(result.summary()).contains("Description should include WHEN trigger guidance.");
+        assertThat(result.summary()).contains("description 缺少明确触发场景");
+        assertThat(result.issues())
+                .anySatisfy(issue -> {
+                    assertThat(issue.dimension()).isEqualTo("触发描述");
+                    assertThat(issue.problem()).contains("description 缺少明确触发场景");
+                    assertThat(issue.suggestion()).contains("Use when");
+                    assertThat(issue.example()).contains("description: Use when reviewing");
+                });
     }
 
     private String strongSkillMarkdown() {

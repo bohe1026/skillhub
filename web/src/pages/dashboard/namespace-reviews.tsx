@@ -7,6 +7,7 @@ import { Card } from '@/shared/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
 import { useNamespaceDetail } from '@/shared/hooks/use-namespace-queries'
+import { ReviewCommentReport } from '@/features/review/review-comment-report'
 import { useReviewList } from '@/features/review/use-review-list'
 import { DashboardPageHeader } from '@/shared/components/dashboard-page-header'
 import { Pagination } from '@/shared/components/pagination'
@@ -90,7 +91,7 @@ function ReviewListSection({ namespaceId, slug }: { namespaceId?: number; slug: 
               </div>
             </div>
             {review.reviewComment ? (
-              <p className="mt-3 text-sm text-muted-foreground">{review.reviewComment}</p>
+              <ReviewCommentReport comment={review.reviewComment} compact />
             ) : null}
             <div className="mt-4 flex justify-end">
               <Link

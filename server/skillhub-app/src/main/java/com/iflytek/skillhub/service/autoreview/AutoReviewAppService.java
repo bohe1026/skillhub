@@ -104,12 +104,84 @@ public class AutoReviewAppService {
     }
 
     private String buildReviewComment(SkillJudgeEvaluationResult result) {
-        String action = result.score() >= properties.getPassScore()
-                ? "auto-approved"
-                : "auto-rejected";
-        return "Skill Judge " + action + ": "
-                + result.score() + "/" + result.maxScore()
-                + " (" + result.grade() + "). "
-                + result.summary();
+        boolean passed = result.score() >= properties.getPassScore();
+        String decision = passed ? "自动通过" : "自动拒绝";
+        String reason = decisionReason(result, passed);
+
+        StringBuilder report = new StringBuilder();
+        report.append("# Skill Judge 自动审核报告\n\n");
+        report.append("结论：").append(decision).append('\n');
+        report.append("分数：")
+                .append(result.score()).append('/').append(result.maxScore())
+                .append("（等级 ").append(result.grade())
+                .append("，通过线 ").append(properties.getPassScore()).append("）\n");
+        report.append(passed ? "通过原因：" : "拒绝原因：")
+                .append(reason)
+                .append("\n\n");
+
+        appendIssues(report, result);
+        appendSuggestions(report, result);
+        appendExamples(report, result);
+        return report.toString().strip();
+    }
+
+    private String decisionReason(SkillJudgeEvaluationResult result, boolean passed) {
+        if (passed && result.issues().isEmpty()) {
+            return "分数达到通过线，自动规则未发现阻塞性问题，可进入发布流程。";
+        }
+        if (passed) {
+            return "分数达到通过线，但仍存在可优化项；建议发布后按报告继续打磨。";
+        }
+        return "分数低于通过线，存在影响触发稳定性、专家判断或可执行性的关键问题，需要修改后重新提交。";
+    }
+
+    private void appendIssues(StringBuilder report, SkillJudgeEvaluationResult result) {
+        report.append("## 逐项问题\n");
+        if (result.issues().isEmpty()) {
+            report.append("- 未发现阻塞性问题。\n\n");
+            return;
+        }
+        for (int i = 0; i < result.issues().size(); i++) {
+            SkillJudgeIssue issue = result.issues().get(i);
+            report.append(i + 1)
+                    .append(". 【").append(issue.dimension())
+                    .append("｜").append(issue.severity())
+                    .append("｜扣 ").append(issue.penalty()).append(" 分】")
+                    .append(issue.problem())
+                    .append('\n');
+        }
+        report.append('\n');
+    }
+
+    private void appendSuggestions(StringBuilder report, SkillJudgeEvaluationResult result) {
+        report.append("## 具体修改建议\n");
+        if (result.issues().isEmpty()) {
+            report.append("- 保持当前结构，后续可继续补充真实案例、反例和边界条件。\n\n");
+            return;
+        }
+        for (int i = 0; i < result.issues().size(); i++) {
+            SkillJudgeIssue issue = result.issues().get(i);
+            report.append(i + 1)
+                    .append(". ")
+                    .append(issue.suggestion())
+                    .append('\n');
+        }
+        report.append('\n');
+    }
+
+    private void appendExamples(StringBuilder report, SkillJudgeEvaluationResult result) {
+        report.append("## 示例改写\n");
+        if (result.issues().isEmpty()) {
+            report.append("- 可增加更具体的成功/失败样例，帮助审核者复现判断过程。\n");
+            return;
+        }
+        for (int i = 0; i < result.issues().size(); i++) {
+            SkillJudgeIssue issue = result.issues().get(i);
+            report.append(i + 1)
+                    .append(". 建议写法：\n\n")
+                    .append("```markdown\n")
+                    .append(issue.example())
+                    .append("\n```\n");
+        }
     }
 }
