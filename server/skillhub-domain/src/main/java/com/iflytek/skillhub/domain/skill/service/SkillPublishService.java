@@ -572,8 +572,10 @@ public class SkillPublishService {
             skillRepository.flush();
         }
 
-        reviewTaskRepository.findBySkillVersionIdAndStatus(version.getId(), ReviewTaskStatus.PENDING)
-                .ifPresent(reviewTaskRepository::delete);
+        // Replacing a non-published version removes its old moderation history.
+        // Otherwise rejected/approved review_task rows still reference this version
+        // and PostgreSQL blocks the skill_version delete through the FK.
+        reviewTaskRepository.deleteBySkillVersionIdIn(List.of(version.getId()));
 
         List<SkillFile> files = skillFileRepository.findByVersionId(version.getId());
         List<String> storageKeys = new ArrayList<>();
