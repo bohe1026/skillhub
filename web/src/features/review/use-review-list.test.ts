@@ -48,4 +48,34 @@ describe('reviewApi.list response mapping', () => {
     expect(response.total).toBe(15)
     expect(response.items).toEqual([])
   })
+
+  it('passes status through my submissions requests', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({
+        code: 0,
+        msg: 'response.success',
+        data: {
+          items: [],
+          total: 0,
+          page: 0,
+          size: 50,
+        },
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    vi.stubGlobal('document', { cookie: '' })
+
+    const { reviewApi } = await import('@/api/client')
+    await reviewApi.listMySubmissions({ status: 'REJECTED', page: 0, size: 50 })
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/web/reviews/my-submissions?status=REJECTED&page=0&size=50',
+      expect.objectContaining({
+        headers: expect.any(Headers),
+      }),
+    )
+  })
 })

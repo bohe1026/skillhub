@@ -860,6 +860,16 @@ export const reviewApi = {
     )
   },
 
+  async listMySubmissions(params: { status?: string; page?: number; size?: number }) {
+    const searchParams = new URLSearchParams()
+    searchParams.set('status', params.status ?? 'PENDING')
+    searchParams.set('page', String(params.page ?? 0))
+    searchParams.set('size', String(params.size ?? 20))
+    return fetchJson<{ items: ReviewTask[]; total: number; page: number; size: number }>(
+      `${WEB_API_PREFIX}/reviews/my-submissions?${searchParams.toString()}`,
+    )
+  },
+
   async get(id: number): Promise<ReviewTask> {
     return fetchJson<ReviewTask>(`${WEB_API_PREFIX}/reviews/${id}`)
   },

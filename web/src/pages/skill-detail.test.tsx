@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const navigateMock = vi.fn()
 const hasRoleMock = vi.fn<(role: string) => boolean>((role: string) => role === 'USER')
 const optimizeMutateMock = vi.fn()
+const useMyReviewSubmissionsMock = vi.fn()
 const useSkillDetailMock = vi.fn()
 const useSkillLabelsMock = vi.fn()
 const useSkillVersionsMock = vi.fn()
@@ -128,6 +129,10 @@ vi.mock('@/features/review/use-review-detail', () => ({
   }),
 }))
 
+vi.mock('@/features/review/use-review-list', () => ({
+  useMyReviewSubmissions: (...args: unknown[]) => useMyReviewSubmissionsMock(...args),
+}))
+
 vi.mock('@/shared/hooks/use-label-queries', () => ({
   useSkillLabels: () => useSkillLabelsMock(),
   useVisibleLabels: () => ({
@@ -177,6 +182,8 @@ describe('SkillDetailPage', () => {
   beforeEach(() => {
     navigateMock.mockReset()
     optimizeMutateMock.mockReset()
+    useMyReviewSubmissionsMock.mockReset()
+    useMyReviewSubmissionsMock.mockReturnValue({ data: null })
     hasRoleMock.mockImplementation((role: string) => role === 'USER')
     authState = {
       user: { userId: 'owner-1', platformRoles: ['USER'] },
@@ -348,6 +355,41 @@ describe('SkillDetailPage', () => {
       isLoading: false,
       isFetching: false,
       error: null,
+    })
+
+    const html = renderToStaticMarkup(<SkillDetailPage />)
+
+    expect(html).toContain('review.optimizeWithSkillJudge')
+  })
+
+  it('falls back to rejected owner submissions when detail does not include review task id', () => {
+    useSkillDetailMock.mockReturnValue({
+      data: createSkill({
+        canInteract: false,
+        headlineVersion: { id: 11, version: '1.1.0', status: 'REJECTED' },
+        publishedVersion: undefined,
+        ownerPreviewVersion: { id: 11, version: '1.1.0', status: 'REJECTED' },
+        ownerPreviewReviewTaskId: undefined,
+        resolutionMode: 'OWNER_PREVIEW',
+        ownerPreviewReviewComment: '自动审核未通过，请补充触发条件和错误处理。',
+      }),
+      isLoading: false,
+      isFetching: false,
+      error: null,
+    })
+    useMyReviewSubmissionsMock.mockReturnValue({
+      data: {
+        items: [
+          {
+            id: 100,
+            namespace: 'global',
+            skillSlug: 'demo-skill',
+            version: '1.1.0',
+            status: 'REJECTED',
+            submittedBy: 'owner-1',
+          },
+        ],
+      },
     })
 
     const html = renderToStaticMarkup(<SkillDetailPage />)

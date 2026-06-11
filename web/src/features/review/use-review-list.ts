@@ -37,3 +37,18 @@ export function useReviewList(
     enabled: enabled && (namespaceId === undefined || namespaceId > 0),
   })
 }
+
+export function useMyReviewSubmissions(status: string, page = 0, size = 20, enabled = true) {
+  return useQuery({
+    queryKey: ['reviews', 'my-submissions', status, page, size],
+    queryFn: async () => {
+      const response = await reviewApi.listMySubmissions({ status, page, size })
+      return {
+        ...response,
+        totalElements: response.total,
+        totalPages: response.size > 0 ? Math.ceil(response.total / response.size) : 0,
+      }
+    },
+    enabled,
+  })
+}

@@ -193,9 +193,10 @@ public class ReviewPortalAppService {
         );
     }
 
-    public PageResponse<ReviewTaskResponse> listMySubmissions(int page, int size, String userId) {
+    public PageResponse<ReviewTaskResponse> listMySubmissions(int page, int size, String status, String userId) {
+        ReviewTaskStatus reviewStatus = ReviewTaskStatus.valueOf(status.toUpperCase());
         Page<ReviewTask> tasks = reviewTaskRepository.findBySubmittedByAndStatus(
-                userId, ReviewTaskStatus.PENDING, PageRequest.of(page, size));
+                userId, reviewStatus, PageRequest.of(page, size));
         return PageResponse.from(new PageImpl<>(
                 governanceQueryRepository.getReviewTaskResponses(tasks.getContent()),
                 tasks.getPageable(),

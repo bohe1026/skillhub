@@ -96,8 +96,8 @@ public class GovernanceWorkflowAppService {
         return reviewPortalAppService.listPendingReviews(namespaceId, page, size, userId, userNsRoles);
     }
 
-    public PageResponse<ReviewTaskResponse> listMyReviewSubmissions(int page, int size, String userId) {
-        return reviewPortalAppService.listMySubmissions(page, size, userId);
+    public PageResponse<ReviewTaskResponse> listMyReviewSubmissions(int page, int size, String status, String userId) {
+        return reviewPortalAppService.listMySubmissions(page, size, status, userId);
     }
 
     public ReviewTaskResponse getReviewDetail(Long reviewTaskId,

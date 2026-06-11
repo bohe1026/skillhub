@@ -37,6 +37,7 @@ import { ReviewOptimizationDialog } from '@/features/review/review-optimization-
 import { buildGlobalReviewDetailPath, buildNamespaceReviewDetailPath } from '@/features/review/review-paths'
 import { resolveReviewActionErrorDescription } from '@/features/review/review-error'
 import { useOptimizeReview } from '@/features/review/use-review-detail'
+import { useMyReviewSubmissions } from '@/features/review/use-review-list'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
@@ -179,8 +180,21 @@ export function SkillDetailPage() {
     && ['PENDING_REVIEW', 'SCANNING', 'SCAN_FAILED'].includes(headlineVersion?.status ?? '')
   const hasPendingOwnerPreview = ownerPreviewVersion?.status === 'PENDING_REVIEW'
   const hasRejectedOwnerPreview = ownerPreviewVersion?.status === 'REJECTED'
+  const shouldFindOwnerRejectedReview =
+    hasRejectedOwnerPreview &&
+    Boolean(user?.userId) &&
+    skill?.ownerId === user?.userId &&
+    !skill?.ownerPreviewReviewTaskId
+  const { data: rejectedOwnerSubmissions } = useMyReviewSubmissions('REJECTED', 0, 50, shouldFindOwnerRejectedReview)
+  const fallbackOwnerPreviewReviewTask = rejectedOwnerSubmissions?.items.find((review) =>
+    review.namespace === namespace &&
+    review.skillSlug === slug &&
+    review.version === ownerPreviewVersion?.version &&
+    review.submittedBy === user?.userId
+  )
+  const ownerPreviewReviewTaskId = skill?.ownerPreviewReviewTaskId ?? fallbackOwnerPreviewReviewTask?.id
   const canOptimizeOwnerPreview =
-    Boolean(skill?.ownerPreviewReviewTaskId) &&
+    Boolean(ownerPreviewReviewTaskId) &&
     Boolean(user?.userId) &&
     skill?.ownerId === user?.userId
   const hasPublishedPendingReview = Boolean(publishedVersion && hasPendingOwnerPreview)
@@ -602,10 +616,10 @@ export function SkillDetailPage() {
   }
 
   const handleOptimizeOwnerPreview = () => {
-    if (!skill?.ownerPreviewReviewTaskId) {
+    if (!ownerPreviewReviewTaskId) {
       return
     }
-    optimizeMutation.mutate({ taskId: skill.ownerPreviewReviewTaskId })
+    optimizeMutation.mutate({ taskId: ownerPreviewReviewTaskId })
   }
 
   const handleViewOptimizedReview = () => {

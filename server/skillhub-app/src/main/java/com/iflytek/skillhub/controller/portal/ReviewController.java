@@ -133,9 +133,10 @@ public class ReviewController extends BaseApiController {
 
     @GetMapping("/my-submissions")
     public ApiResponse<PageResponse<ReviewTaskResponse>> listMySubmissions(@RequestParam(defaultValue = "0") int page,
-                                                                           @RequestParam(defaultValue = "20") int size,
-                                                                           @RequestAttribute("userId") String userId) {
-        return ok("response.success.read", governanceWorkflowAppService.listMyReviewSubmissions(page, size, userId));
+                                                                            @RequestParam(defaultValue = "20") int size,
+                                                                            @RequestParam(defaultValue = "PENDING") String status,
+                                                                            @RequestAttribute("userId") String userId) {
+        return ok("response.success.read", governanceWorkflowAppService.listMyReviewSubmissions(page, size, status, userId));
     }
 
     @GetMapping("/{id}")

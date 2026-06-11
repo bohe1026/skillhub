@@ -266,6 +266,27 @@ class ReviewPortalControllerTest {
     }
 
     @Test
+    void listMySubmissions_allowsRejectedStatusForSubmitter() throws Exception {
+        ReviewTask task = createReviewTask(22L, 20L, "user-1", ReviewTaskStatus.REJECTED);
+        PageRequest pageable = PageRequest.of(0, 50);
+        given(reviewTaskRepository.findBySubmittedByAndStatus("user-1", ReviewTaskStatus.REJECTED, pageable))
+                .willReturn(new PageImpl<>(List.of(task), pageable, 1));
+        given(governanceQueryRepository.getReviewTaskResponses(List.of(task)))
+                .willReturn(List.of(toReviewResponse(task)));
+
+        mockMvc.perform(get("/api/v1/reviews/my-submissions")
+                        .param("status", "REJECTED")
+                        .param("size", "50")
+                        .with(auth("user-1")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.items[0].id").value(22L))
+                .andExpect(jsonPath("$.data.items[0].status").value("REJECTED"));
+
+        verify(reviewTaskRepository).findBySubmittedByAndStatus("user-1", ReviewTaskStatus.REJECTED, pageable);
+    }
+
+    @Test
     void listReviews_appliesRequestedTimeSortDirection() throws Exception {
         stubNamespaceRoles("admin", List.of());
         given(rbacService.getUserRoleCodes("admin")).willReturn(Set.of("SKILL_ADMIN"));
