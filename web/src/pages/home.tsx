@@ -67,7 +67,7 @@ export function HomePage() {
         </div>
       </div>
 
-      {/* Popular Downloads Section */}
+      {/* High reuse section */}
       <section className="space-y-6 animate-fade-up">
         <div className="flex items-center justify-between">
           <div>

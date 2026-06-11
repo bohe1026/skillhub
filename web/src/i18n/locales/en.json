@@ -24,8 +24,8 @@
         "description": "Enterprise-grade security for your AI workflows"
       },
       "community": {
-        "title": "Community Driven",
-        "description": "Share and discover skills from developers worldwide"
+        "title": "Capability Library",
+        "description": "Turn team know-how into reviewed, installable, and reusable skill assets"
       },
       "integration": {
         "title": "Easy Integration",
@@ -45,10 +45,10 @@
       }
     },
     "stats": {
-      "skills": "Catalogs",
-      "downloads": "Downloads",
-      "teams": "Teams",
-      "coverage": "Workflows"
+      "skills": "Registered Skills",
+      "downloads": "Reuse Events",
+      "teams": "Namespaces",
+      "coverage": "Governed Flows"
     },
     "whySkillCenter": {
       "title": "Our Mission",
@@ -60,8 +60,8 @@
     "description": "Self-hosted private skill registry, providing secure and efficient skill sharing and collaboration for teams",
     "publishSkill": "Publish Skill",
     "statsSkills": "Skills",
-    "statsDownloads": "Downloads",
-    "statsTeams": "Teams",
+    "statsDownloads": "Reuse Events",
+    "statsTeams": "Namespaces",
     "whyTitle": "Why Choose",
     "whyDescription": "Enterprise-grade skill management platform with complete publishing, discovery, and governance capabilities",
     "featuresList": {
@@ -95,7 +95,7 @@
     "ctaButton": "Try Now",
     "footerDocs": "Docs",
     "footerGithub": "GitHub",
-    "footerCommunity": "Community",
+    "footerCommunity": "Support",
     "techTags": {
       "ai": "AI skills",
       "cloud": "Private registry",
@@ -162,8 +162,8 @@
     "description": "Efficient skill management, distribution, and collaboration platform for developers",
     "browseSkills": "Browse Skills",
     "publishSkill": "Publish Skill",
-    "popularTitle": "Popular Downloads",
-    "popularDescription": "Most popular skills in the community",
+    "popularTitle": "High Reuse",
+    "popularDescription": "Skill assets with active recent reuse",
     "latestTitle": "Latest Releases",
     "latestDescription": "Freshly published skills",
     "viewAll": "View All →",
@@ -1333,7 +1333,7 @@
     "resources": "Resources",
     "docs": "Documentation",
     "api": "API",
-    "community": "Community",
+    "community": "Support",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },

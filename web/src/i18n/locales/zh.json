@@ -24,8 +24,8 @@
         "description": "企业级安全保护您的 AI 工作流"
       },
       "community": {
-        "title": "社区驱动",
-        "description": "与全球开发者分享和发现技能"
+        "title": "能力沉淀",
+        "description": "把团队经验沉淀为可审核、可安装、可复用的标准技能资产"
       },
       "integration": {
         "title": "轻松集成",
@@ -45,10 +45,10 @@
       }
     },
     "stats": {
-      "skills": "项目库",
-      "downloads": "下载量",
-      "teams": "团队",
-      "coverage": "流程覆盖"
+      "skills": "入库技能",
+      "downloads": "复用记录",
+      "teams": "命名空间",
+      "coverage": "治理流程"
     },
     "whySkillCenter": {
       "title": "我们的使命",
@@ -60,8 +60,8 @@
     "description": "自托管的私有技能注册平台，为团队提供安全、高效的技能共享与协作空间",
     "publishSkill": "发布技能",
     "statsSkills": "技能包",
-    "statsDownloads": "下载量",
-    "statsTeams": "团队",
+    "statsDownloads": "复用记录",
+    "statsTeams": "命名空间",
     "whyTitle": "为什么选择",
     "whyDescription": "专为企业打造的技能管理平台，提供完整的发布、发现、治理能力",
     "featuresList": {
@@ -95,7 +95,7 @@
     "ctaButton": "立即体验",
     "footerDocs": "文档",
     "footerGithub": "GitHub",
-    "footerCommunity": "社区",
+    "footerCommunity": "支持",
     "techTags": {
       "ai": "AI 智能",
       "cloud": "私有注册",
@@ -162,8 +162,8 @@
     "description": "为开发者提供高效的技能管理、分发和协作平台",
     "browseSkills": "浏览技能",
     "publishSkill": "发布技能",
-    "popularTitle": "热门下载",
-    "popularDescription": "社区最受欢迎的技能",
+    "popularTitle": "高频复用",
+    "popularDescription": "近期复用活跃的技能资产",
     "latestTitle": "最新发布",
     "latestDescription": "刚刚发布的新技能",
     "viewAll": "查看全部 →",
@@ -1334,7 +1334,7 @@
     "resources": "资源",
     "docs": "文档",
     "api": "API",
-    "community": "社区",
+    "community": "支持",
     "privacy": "隐私政策",
     "terms": "服务条款"
   },

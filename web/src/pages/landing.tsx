@@ -141,17 +141,17 @@ export function LandingPage() {
     {
       icon: Workflow,
       title: '50K+',
-      description: t('landing.stats.downloads', { defaultValue: 'Downloads' }),
+      description: t('landing.stats.downloads', { defaultValue: 'Reuse Events' }),
     },
     {
       icon: Users,
       title: '200+',
-      description: t('landing.stats.teams', { defaultValue: 'Teams' }),
+      description: t('landing.stats.teams', { defaultValue: 'Namespaces' }),
     },
     {
       icon: Globe2,
       title: '10+',
-      description: t('landing.stats.coverage', { defaultValue: 'Workflows' }),
+      description: t('landing.stats.coverage', { defaultValue: 'Governed Flows' }),
     },
   ]
 
@@ -273,7 +273,6 @@ export function LandingPage() {
                       <h3 className="text-lg font-bold text-slate-950">{feature.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-slate-500">{feature.description}</p>
                     </div>
-                    <ArrowRight className="mt-1 h-4 w-4 flex-shrink-0 text-blue-500 transition group-hover:translate-x-1" strokeWidth={1.8} />
                   </div>
                 </article>
               )
