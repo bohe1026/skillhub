@@ -69,6 +69,9 @@ public class SkillJudgeOptimizationAppService {
                 platformRoles != null ? platformRoles : Set.of())) {
             throw new DomainForbiddenException("review.no_permission");
         }
+        if (!task.getSubmittedBy().equals(actorUserId)) {
+            throw new DomainForbiddenException("review.optimize.only_submitter");
+        }
         if (task.getStatus() != ReviewTaskStatus.REJECTED) {
             throw new DomainBadRequestException("review.optimize.not_rejected", reviewTaskId);
         }

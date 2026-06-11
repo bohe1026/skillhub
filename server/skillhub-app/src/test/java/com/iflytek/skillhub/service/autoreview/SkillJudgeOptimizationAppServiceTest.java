@@ -6,6 +6,7 @@ import com.iflytek.skillhub.domain.review.ReviewService;
 import com.iflytek.skillhub.domain.review.ReviewTask;
 import com.iflytek.skillhub.domain.review.ReviewTaskRepository;
 import com.iflytek.skillhub.domain.review.ReviewTaskStatus;
+import com.iflytek.skillhub.domain.shared.exception.DomainForbiddenException;
 import com.iflytek.skillhub.domain.skill.Skill;
 import com.iflytek.skillhub.domain.skill.SkillRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersion;
@@ -29,10 +30,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -106,10 +109,10 @@ class SkillJudgeOptimizationAppServiceTest {
         when(namespaceRepository.findById(20L)).thenReturn(Optional.of(namespace));
         when(reviewService.canViewReview(
                 eq(rejectedTask),
-                eq("reviewer-1"),
+                eq("publisher-1"),
                 eq(namespace.getType()),
                 eq(Map.of()),
-                eq(Set.of("SKILL_ADMIN"))
+                eq(Set.of())
         )).thenReturn(true);
         when(skillVersionRepository.findById(10L)).thenReturn(Optional.of(rejectedVersion));
         when(skillRepository.findById(30L)).thenReturn(Optional.of(skill));
@@ -129,9 +132,9 @@ class SkillJudgeOptimizationAppServiceTest {
 
         SkillJudgeOptimizationResult result = service.optimizeReview(
                 99L,
-                "reviewer-1",
+                "publisher-1",
                 Map.of(),
-                Set.of("SKILL_ADMIN")
+                Set.of()
         );
 
         assertEquals(11L, result.skillVersionId());
@@ -171,6 +174,38 @@ class SkillJudgeOptimizationAppServiceTest {
         assertTrue(optimizedSkillMd.contains("- 原有正文内容"));
         assertTrue(optimizedSkillMd.contains("- 分数：84/120"));
         assertTrue(entries.stream().anyMatch(entry -> entry.path().equals("scripts/run.sh")));
+    }
+
+    @Test
+    void rejectsOptimizationWhenActorIsReviewerButNotSubmitter() throws Exception {
+        ReviewTask rejectedTask = new ReviewTask(10L, 20L, "publisher-1");
+        setField(rejectedTask, "id", 99L);
+        rejectedTask.setStatus(ReviewTaskStatus.REJECTED);
+        rejectedTask.setReviewComment("""
+                # Skill Judge 自动审核报告
+
+                结论：自动拒绝
+                分数：84/120
+                """);
+        Namespace namespace = new Namespace("global", "Global", "admin");
+        setField(namespace, "id", 20L);
+        when(reviewTaskRepository.findById(99L)).thenReturn(Optional.of(rejectedTask));
+        when(namespaceRepository.findById(20L)).thenReturn(Optional.of(namespace));
+        when(reviewService.canViewReview(
+                eq(rejectedTask),
+                eq("reviewer-1"),
+                eq(namespace.getType()),
+                eq(Map.of()),
+                eq(Set.of("SKILL_ADMIN"))
+        )).thenReturn(true);
+
+        assertThrows(DomainForbiddenException.class, () -> service.optimizeReview(
+                99L,
+                "reviewer-1",
+                Map.of(),
+                Set.of("SKILL_ADMIN")
+        ));
+        verifyNoInteractions(packageReader, skillPublishService);
     }
 
     private void setField(Object target, String fieldName, Object value) throws Exception {

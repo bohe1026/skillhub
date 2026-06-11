@@ -162,7 +162,7 @@ vi.mock('@/features/review/use-review-detail', () => ({
   }),
 }))
 
-const userMock = { platformRoles: ['SKILL_ADMIN'] as string[] }
+const userMock = { userId: 'local-admin', platformRoles: ['SKILL_ADMIN'] as string[] }
 vi.mock('@/features/auth/use-auth', () => ({
   useAuth: () => ({ user: userMock }),
 }))
@@ -187,6 +187,7 @@ describe('ReviewDetailPage', () => {
   beforeEach(() => {
     navigateMock.mockReset()
     optimizeMutateMock.mockReset()
+    userMock.userId = 'local-admin'
     userMock.platformRoles = ['SKILL_ADMIN']
     useReviewDetailMock.mockReset()
     useReviewSkillDetailMock.mockReset()
@@ -326,6 +327,33 @@ describe('ReviewDetailPage', () => {
     expect(screen.getByText('分数：84/120')).toBeDefined()
     expect(screen.getByText('description 缺少明确触发场景')).toBeDefined()
     expect(screen.getByText('补充什么任务会触发该 Skill')).toBeDefined()
+  })
+
+  it('hides one-click optimization from reviewers who did not submit the rejected review', () => {
+    userMock.userId = 'reviewer-1'
+    userMock.platformRoles = ['SKILL_ADMIN']
+    useReviewDetailMock.mockReturnValue({
+      data: {
+        id: 13,
+        namespace: 'global',
+        skillSlug: 'demo-skill',
+        version: '1.2.0',
+        status: 'REJECTED',
+        submittedBy: 'local-admin',
+        submittedByName: 'Local Admin',
+        submittedAt: '2026-03-19T00:00:00Z',
+        reviewedBy: 'system-auto-review',
+        reviewedByName: 'system-auto-review',
+        reviewedAt: '2026-03-19T00:05:00Z',
+        reviewComment: '# Skill Judge 自动审核报告\n\n结论：自动拒绝\n分数：84/120',
+      },
+      isLoading: false,
+    })
+
+    render(<ReviewDetailPage />)
+
+    expect(screen.getByTestId('review-comment-report')).toBeDefined()
+    expect(screen.queryByText('review.optimizeWithSkillJudge')).toBeNull()
   })
 
   it('closes the optimization dialog and opens the optimized review task', async () => {

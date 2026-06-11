@@ -216,6 +216,10 @@ function ReviewDetailScreen({
   const isSkillJudgeRejectedReview =
     review.status === 'REJECTED' &&
     Boolean(review.reviewComment?.includes('Skill Judge 自动审核报告'))
+  const canOptimizeRejectedReview =
+    isSkillJudgeRejectedReview &&
+    Boolean(user?.userId) &&
+    review.submittedBy === user?.userId
 
   return (
     <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 animate-fade-up">
@@ -290,7 +294,7 @@ function ReviewDetailScreen({
           </div>
         )}
 
-        {isSkillJudgeRejectedReview && (
+        {canOptimizeRejectedReview && (
           <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{t('review.optimizeDescription')}</p>
             <Button
