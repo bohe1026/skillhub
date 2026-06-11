@@ -65,7 +65,7 @@ export function Layout() {
       <header className={getAppHeaderClassName(isHeaderElevated)} style={{ borderColor: 'hsl(var(--border))' }}>
         <Link to="/" className="flex items-center gap-3 text-xl font-black tracking-tight text-slate-950">
           <span className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shadow-[0_14px_28px_-18px_rgba(37,99,235,0.8)]">
-            <span className="h-4 w-4 rotate-45 rounded-[3px] border-2 border-white/92" />
+            <span className="h-4 w-4 rotate-45 rounded-[3px] border-2 border-white/90" />
           </span>
           <span>SkillHub</span>
         </Link>

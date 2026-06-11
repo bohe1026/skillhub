@@ -237,10 +237,10 @@ export function AdminUsersPage() {
                       <span
                         className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
                           user.status === 'ACTIVE'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                            ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20'
                             : user.status === 'PENDING'
-                              ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                              : 'bg-red-500/10 text-red-400 border-red-500/20'
+                              ? 'bg-amber-500/10 text-amber-700 border-amber-500/20'
+                              : 'bg-red-500/10 text-red-700 border-red-500/20'
                         }`}
                       >
                         {user.status === 'ACTIVE' ? t('adminUsers.statusActive') : user.status === 'PENDING' ? t('adminUsers.statusPending') : t('adminUsers.statusDisabled')}

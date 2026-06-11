@@ -104,7 +104,7 @@ export function UserMenu({ user, triggerClassName }: UserMenuProps) {
   }
 
   const menuItemClassName =
-    'block w-full rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground'
+    'block w-full rounded-md px-2 py-1.5 text-sm text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-700'
 
   return (
     <div
@@ -140,7 +140,7 @@ export function UserMenu({ user, triggerClassName }: UserMenuProps) {
         >
           <div
             role="menu"
-            className="overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
+            className="overflow-hidden rounded-lg border border-blue-100 bg-white p-1 text-slate-900 shadow-[0_22px_52px_-34px_rgba(15,23,42,0.5)]"
           >
             <Link to="/dashboard" className={menuItemClassName} onClick={closeMenu}>
               {t('user.menu.dashboard')}
@@ -177,7 +177,7 @@ export function UserMenu({ user, triggerClassName }: UserMenuProps) {
                 {t('user.menu.reports')}
               </Link>
             ) : null}
-            {isUserAdmin || isAuditor || isSuperAdmin ? <div className="-mx-1 my-1 h-px bg-muted" /> : null}
+            {isUserAdmin || isAuditor || isSuperAdmin ? <div className="-mx-1 my-1 h-px bg-blue-100" /> : null}
             {isUserAdmin ? (
               <Link to="/admin/users" className={menuItemClassName} onClick={closeMenu}>
                 {t('user.menu.users')}
@@ -193,7 +193,7 @@ export function UserMenu({ user, triggerClassName }: UserMenuProps) {
                 {t('user.menu.auditLog')}
               </Link>
             ) : null}
-            <div className="-mx-1 my-1 h-px bg-muted" />
+            <div className="-mx-1 my-1 h-px bg-blue-100" />
             <Link to="/settings/profile" className={menuItemClassName} onClick={closeMenu}>
               {t('user.menu.profile')}
             </Link>
@@ -205,7 +205,7 @@ export function UserMenu({ user, triggerClassName }: UserMenuProps) {
                 {t('user.menu.security')}
               </Link>
             ) : null}
-            <div className="-mx-1 my-1 h-px bg-muted" />
+            <div className="-mx-1 my-1 h-px bg-blue-100" />
             <button
               type="button"
               onClick={handleLogout}

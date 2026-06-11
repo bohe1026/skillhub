@@ -188,7 +188,7 @@ export function LandingPage() {
         <div className="mx-auto max-w-[1440px]">
           <div className="grid min-h-[560px] items-center gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
             <div className="relative z-10 max-w-2xl pt-4 md:pt-0">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-lg border border-blue-100 bg-white/78 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-lg border border-blue-100 bg-white/80 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
                 <Sparkles className="h-4 w-4" strokeWidth={1.8} />
                 <span>{t('landing.badge')}</span>
               </div>
@@ -212,14 +212,14 @@ export function LandingPage() {
                 </Link>
                 <Link
                   to="/dashboard/publish"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white/72 px-6 py-3 text-base font-semibold text-blue-700 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.5)] backdrop-blur transition hover:border-blue-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white/75 px-6 py-3 text-base font-semibold text-blue-700 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.5)] backdrop-blur transition hover:border-blue-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >
                   {t('landing.hero.publishSkill')}
                   <PlayCircle className="h-4 w-4" strokeWidth={1.9} />
                 </Link>
               </div>
 
-              <div className="mt-8 max-w-xl rounded-lg border border-white/80 bg-white/78 p-2 shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)] backdrop-blur">
+              <div className="mt-8 max-w-xl rounded-lg border border-white/80 bg-white/80 p-2 shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)] backdrop-blur">
                 <div className="flex min-h-12 items-center gap-3 rounded-md border border-blue-50 bg-slate-50/85 px-4">
                   <SearchIcon className="h-5 w-5 flex-shrink-0 text-blue-500" strokeWidth={1.8} />
                   <input
@@ -263,7 +263,7 @@ export function LandingPage() {
               return (
                 <article
                   key={feature.title}
-                  className="group rounded-lg border border-white/80 bg-white/82 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.38)] backdrop-blur transition hover:-translate-y-0.5 hover:shadow-[0_24px_56px_-30px_rgba(37,99,235,0.28)]"
+                  className="group rounded-lg border border-white/80 bg-white/90 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.38)] backdrop-blur transition hover:-translate-y-0.5 hover:shadow-[0_24px_56px_-30px_rgba(37,99,235,0.28)]"
                 >
                   <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${feature.tone} text-white shadow-[0_18px_30px_-18px_rgba(37,99,235,0.55)]`}>
                     <Icon className="h-6 w-6" strokeWidth={1.8} />
@@ -280,7 +280,7 @@ export function LandingPage() {
             })}
           </div>
 
-          <div className="mt-5 grid gap-4 rounded-lg border border-white/85 bg-white/74 px-5 py-5 shadow-[0_20px_48px_-34px_rgba(15,23,42,0.36)] backdrop-blur md:grid-cols-4 md:px-8">
+          <div className="mt-5 grid gap-4 rounded-lg border border-white/80 bg-white/75 px-5 py-5 shadow-[0_20px_48px_-34px_rgba(15,23,42,0.36)] backdrop-blur md:grid-cols-4 md:px-8">
             {stats.map((stat) => {
               const Icon = stat.icon
 
@@ -320,7 +320,7 @@ export function LandingPage() {
 
                   return (
                     <div key={item.title} className="flex gap-3">
-                      <div className="mt-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/82 text-blue-600 shadow-[0_12px_26px_-22px_rgba(37,99,235,0.6)]">
+                      <div className="mt-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/90 text-blue-600 shadow-[0_12px_26px_-22px_rgba(37,99,235,0.6)]">
                         <Icon className="h-5 w-5" strokeWidth={1.8} />
                       </div>
                       <div>

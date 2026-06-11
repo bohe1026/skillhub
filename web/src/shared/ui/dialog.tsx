@@ -9,6 +9,18 @@ interface DialogContextValue {
 
 const DialogContext = React.createContext<DialogContextValue | undefined>(undefined)
 
+export const DIALOG_OVERLAY_CLASS_NAME = cn(
+  'fixed inset-0 z-50 bg-slate-950/50'
+)
+
+export const DIALOG_CONTENT_CLASS_NAME = cn(
+  'fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100vh-2rem)] w-[min(calc(100vw-2rem),32rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto rounded-lg border border-blue-100 bg-white p-8 text-slate-950 shadow-[0_30px_80px_-38px_rgba(15,23,42,0.58)]'
+)
+
+export const DIALOG_CLOSE_BUTTON_CLASS_NAME = cn(
+  'absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/35 focus:ring-offset-2 disabled:pointer-events-none'
+)
+
 function useDialog() {
   const context = React.useContext(DialogContext)
   if (!context) {
@@ -92,10 +104,7 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
     return (
       <div
         ref={ref}
-        className={cn(
-          'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
-          className
-        )}
+        className={cn(DIALOG_OVERLAY_CLASS_NAME, className)}
         onClick={() => onOpenChange(false)}
         {...props}
       />
@@ -114,17 +123,14 @@ const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
           ref={ref}
           role="dialog"
           aria-modal="true"
-          className={cn(
-            'fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100vh-2rem)] w-[min(calc(100vw-2rem),32rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-lg border border-white/80 bg-white/92 p-8 shadow-[0_28px_70px_-34px_rgba(15,23,42,0.42)] backdrop-blur',
-            className
-          )}
+          className={cn(DIALOG_CONTENT_CLASS_NAME, className)}
           onClick={(e) => e.stopPropagation()}
           {...props}
         >
           {children}
           <button
             onClick={() => onOpenChange(false)}
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+            className={DIALOG_CLOSE_BUTTON_CLASS_NAME}
           >
             <span className="sr-only">Close</span>
             <svg
@@ -162,14 +168,14 @@ DialogFooter.displayName = 'DialogFooter'
 
 const DialogTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h2 ref={ref} className={cn('text-center text-xl font-bold font-heading leading-none tracking-tight', className)} {...props} />
+    <h2 ref={ref} className={cn('text-center text-xl font-bold font-heading leading-tight text-slate-950', className)} {...props} />
   )
 )
 DialogTitle.displayName = 'DialogTitle'
 
 const DialogDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn('text-center text-sm text-muted-foreground', className)} {...props} />
+    <p ref={ref} className={cn('text-center text-sm leading-6 text-slate-600', className)} {...props} />
   )
 )
 DialogDescription.displayName = 'DialogDescription'

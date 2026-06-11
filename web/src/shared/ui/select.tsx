@@ -4,7 +4,7 @@ import { Check, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 export const SELECT_TRIGGER_CLASS_NAME = cn(
-  'flex h-11 w-full items-center justify-between gap-2 rounded-lg border border-blue-100 bg-white/82 px-4 py-2 text-sm text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]',
+  'flex h-11 w-full items-center justify-between gap-2 rounded-lg border border-blue-100 bg-white/90 px-4 py-2 text-sm text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]',
   'ring-offset-background transition-all duration-200',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/35 focus-visible:border-blue-300',
   'disabled:cursor-not-allowed disabled:opacity-50',
@@ -12,7 +12,7 @@ export const SELECT_TRIGGER_CLASS_NAME = cn(
 )
 
 export const SELECT_CONTENT_CLASS_NAME = cn(
-  'z-50 overflow-hidden rounded-lg border border-blue-100 bg-white/96 text-popover-foreground shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)] backdrop-blur',
+  'z-50 overflow-hidden rounded-lg border border-blue-100 bg-white text-popover-foreground shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)]',
   'data-[state=open]:animate-in data-[state=closed]:animate-out',
   'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
   'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',

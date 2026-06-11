@@ -12,7 +12,7 @@ describe('shared select contract', () => {
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('h-11')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('rounded-lg')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('border-blue-100')
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('bg-white/82')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('bg-white/90')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:outline-none')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:ring-2')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:ring-blue-500/35')
@@ -20,7 +20,7 @@ describe('shared select contract', () => {
   })
 
   it('uses themed panel and item classes for the floating listbox', () => {
-    expect(SELECT_CONTENT_CLASS_NAME).toContain('bg-white/96')
+    expect(SELECT_CONTENT_CLASS_NAME).toContain('bg-white')
     expect(SELECT_CONTENT_CLASS_NAME).toContain('text-popover-foreground')
     expect(SELECT_ITEM_CLASS_NAME).toContain('focus:bg-blue-50')
     expect(SELECT_ITEM_CLASS_NAME).toContain('data-[disabled]:opacity-50')

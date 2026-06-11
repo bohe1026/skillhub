@@ -137,16 +137,16 @@
 
 /* ─── Glass morphism ─── */
 .glass {
-  background: hsl(var(--surface-glass) / 0.7);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  background: hsl(var(--surface-glass) / 0.9);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
   border: 1px solid hsl(var(--border) / 0.5);
 }
 
 .glass-strong {
-  background: hsl(var(--surface-glass) / 0.85);
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  background: hsl(var(--surface-glass) / 0.96);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
   border: 1px solid hsl(var(--border) / 0.6);
 }
 
