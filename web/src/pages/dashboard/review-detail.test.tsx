@@ -167,6 +167,10 @@ vi.mock('@/features/auth/use-auth', () => ({
   useAuth: () => ({ user: userMock }),
 }))
 
+vi.mock('@/shared/hooks/use-namespace-queries', () => ({
+  useMyNamespaces: () => ({ data: [], isLoading: false }),
+}))
+
 // Mock hooks used directly by the review-detail page for file browser sidebar
 vi.mock('@/features/review/use-review-file', () => ({
   useReviewFile: () => ({ data: null, isLoading: false, error: null }),
@@ -295,6 +299,60 @@ describe('ReviewDetailPage', () => {
     expect(html).toContain('description 缺少明确触发场景')
     expect(html).toContain('review.optimizeWithSkillJudge')
     expect(html).toContain('review.optimizeDescription')
+  })
+
+  it('hides approve and reject actions from the submitter on pending review detail', () => {
+    userMock.userId = 'local-admin'
+    userMock.platformRoles = []
+    useReviewDetailMock.mockReturnValue({
+      data: {
+        id: 25,
+        namespace: 'global',
+        skillSlug: 'demo-skill',
+        version: '20260611.061949.opt1',
+        status: 'PENDING',
+        submittedBy: 'local-admin',
+        submittedByName: 'Local Admin',
+        submittedAt: '2026-06-11T07:04:00Z',
+        reviewedBy: null,
+        reviewedByName: null,
+        reviewedAt: null,
+        reviewComment: null,
+      },
+      isLoading: false,
+    })
+
+    const html = renderToStaticMarkup(<ReviewDetailPage />)
+
+    expect(html).not.toContain('review.actions')
+  })
+
+  it('shows approve and reject actions to a skill admin reviewing someone else submission', () => {
+    userMock.userId = 'reviewer-1'
+    userMock.platformRoles = ['SKILL_ADMIN']
+    useReviewDetailMock.mockReturnValue({
+      data: {
+        id: 25,
+        namespace: 'global',
+        skillSlug: 'demo-skill',
+        version: '20260611.061949.opt1',
+        status: 'PENDING',
+        submittedBy: 'local-admin',
+        submittedByName: 'Local Admin',
+        submittedAt: '2026-06-11T07:04:00Z',
+        reviewedBy: null,
+        reviewedByName: null,
+        reviewedAt: null,
+        reviewComment: null,
+      },
+      isLoading: false,
+    })
+
+    const html = renderToStaticMarkup(<ReviewDetailPage />)
+
+    expect(html).toContain('review.actions')
+    expect(html).toContain('review.approve')
+    expect(html).toContain('review.reject')
   })
 
   it('shows optimization summary dialog after one-click optimization succeeds', async () => {
@@ -466,6 +524,8 @@ describe('ReviewDetailPage', () => {
   })
 
   it('disables approval and shows a scanning hint while the active review version is scanning', () => {
+    userMock.userId = 'reviewer-1'
+    userMock.platformRoles = ['SKILL_ADMIN']
     useReviewSkillDetailMock.mockReturnValue({
       data: {
         skill: {

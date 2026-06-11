@@ -9,7 +9,9 @@ import {
   buildNamespaceReviewDetailPath,
   buildNamespaceReviewsPath,
   canAccessGlobalReviewCenter,
+  canManageNamespaceReviews,
 } from '@/features/review/review-paths'
+import { useMyNamespaces } from '@/shared/hooks/use-namespace-queries'
 import { formatLocalDateTime } from '@/shared/lib/date-time'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
@@ -35,7 +37,26 @@ import {
   useRejectReview,
   useOptimizeReview,
 } from '@/features/review/use-review-detail'
-import type { ReviewOptimizationResult } from '@/api/types'
+import type { NamespaceRole, ReviewOptimizationResult, ReviewTask, User } from '@/api/types'
+
+function canOperateReviewTask(review: ReviewTask, user: User | null | undefined, namespaceRole?: NamespaceRole) {
+  if (review.status !== 'PENDING' || !user?.userId) {
+    return false
+  }
+
+  const isSuperAdmin = user.platformRoles.includes('SUPER_ADMIN')
+  if (isSuperAdmin) {
+    return true
+  }
+
+  if (review.submittedBy === user.userId) {
+    return false
+  }
+
+  const isSkillReviewAdmin = user.platformRoles.includes('SKILL_ADMIN')
+  const isNamespaceReviewer = review.namespace !== 'global' && canManageNamespaceReviews(namespaceRole)
+  return isSkillReviewAdmin || isNamespaceReviewer
+}
 
 /**
  * Review task detail page for moderators. The route owns the approve/reject
@@ -54,6 +75,7 @@ function ReviewDetailScreen({
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const { user } = useAuth()
+  const { data: myNamespaces } = useMyNamespaces()
 
   const { data: review, isLoading } = useReviewDetail(taskId)
   const {
@@ -213,6 +235,8 @@ function ReviewDetailScreen({
     (version) => version.version === reviewSkillDetail.activeVersion
   )
   const isApprovalBlockedByScanning = activeReviewVersion?.status === 'SCANNING'
+  const currentReviewNamespaceRole = myNamespaces?.find((namespace) => namespace.slug === review.namespace)?.currentUserRole
+  const canOperateReview = canOperateReviewTask(review, user, currentReviewNamespaceRole)
   const isSkillJudgeRejectedReview =
     review.status === 'REJECTED' &&
     Boolean(review.reviewComment?.includes('Skill Judge 自动审核报告'))
@@ -311,7 +335,7 @@ function ReviewDetailScreen({
         )}
       </Card>
 
-      {review.status === 'PENDING' && (
+      {canOperateReview && (
         <Card className="p-8 space-y-6">
           <h2 className="text-xl font-bold font-heading">{t('review.actions')}</h2>
 
