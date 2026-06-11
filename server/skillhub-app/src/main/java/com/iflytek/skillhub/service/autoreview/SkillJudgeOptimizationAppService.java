@@ -90,10 +90,10 @@ public class SkillJudgeOptimizationAppService {
             throw new DomainForbiddenException("review.optimize.only_submitter");
         }
         if (task.getStatus() != ReviewTaskStatus.REJECTED) {
-            throw new DomainBadRequestException("review.optimize.not_rejected", reviewTaskId);
+            throw new DomainBadRequestException("review.optimize.not_rejected", task.getId());
         }
         if (task.getReviewComment() == null || !task.getReviewComment().contains("Skill Judge 自动审核报告")) {
-            throw new DomainBadRequestException("review.optimize.not_skill_judge", reviewTaskId);
+            throw new DomainBadRequestException("review.optimize.not_skill_judge", task.getId());
         }
 
         SkillVersion sourceVersion = skillVersionRepository.findById(task.getSkillVersionId())
