@@ -182,8 +182,7 @@ export function SkillDetailPage() {
   const canOptimizeOwnerPreview =
     Boolean(skill?.ownerPreviewReviewTaskId) &&
     Boolean(user?.userId) &&
-    skill?.ownerId === user?.userId &&
-    Boolean(skill?.ownerPreviewReviewComment?.includes('Skill Judge 自动审核报告'))
+    skill?.ownerId === user?.userId
   const hasPublishedPendingReview = Boolean(publishedVersion && hasPendingOwnerPreview)
   const canInteract = skill?.canInteract ?? true
   const canReport = skill?.canReport ?? true
@@ -851,16 +850,8 @@ export function SkillDetailPage() {
             <Card className="border-red-500/30 bg-red-500/5 p-4 text-sm text-muted-foreground">
               <div className="font-medium text-foreground">{t('skillDetail.rejectedFeedbackTitle')}</div>
               <p className="mt-1">{t('skillDetail.rejectedPreviewDescription')}</p>
-              <div className="mt-3 rounded-xl border border-red-500/20 bg-background/80 p-3">
-                <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                  {t('skillDetail.rejectedFeedbackLabel')}
-                </div>
-                <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-foreground">
-                  {skill.ownerPreviewReviewComment || t('skillDetail.rejectedFeedbackFallback')}
-                </p>
-              </div>
               {canOptimizeOwnerPreview && (
-                <div className="mt-4 flex flex-col gap-3 border-t border-red-500/20 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-4 flex flex-col gap-3 rounded-xl border border-red-500/20 bg-background/80 p-3 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-sm text-muted-foreground">{t('review.optimizeDescription')}</p>
                   <Button
                     type="button"
@@ -874,6 +865,14 @@ export function SkillDetailPage() {
                   </Button>
                 </div>
               )}
+              <div className="mt-3 rounded-xl border border-red-500/20 bg-background/80 p-3">
+                <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  {t('skillDetail.rejectedFeedbackLabel')}
+                </div>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-foreground">
+                  {skill.ownerPreviewReviewComment || t('skillDetail.rejectedFeedbackFallback')}
+                </p>
+              </div>
             </Card>
           )}
         </div>

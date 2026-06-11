@@ -334,7 +334,7 @@ describe('SkillDetailPage', () => {
     expect(html).not.toContain('skillDetail.pendingPreviewTitle')
   })
 
-  it('shows one-click optimization for the owner rejected by Skill Judge', () => {
+  it('shows one-click optimization for the owner rejected by auto review', () => {
     useSkillDetailMock.mockReturnValue({
       data: createSkill({
         canInteract: false,
@@ -343,7 +343,7 @@ describe('SkillDetailPage', () => {
         ownerPreviewVersion: { id: 11, version: '1.1.0', status: 'REJECTED' },
         ownerPreviewReviewTaskId: 99,
         resolutionMode: 'OWNER_PREVIEW',
-        ownerPreviewReviewComment: '# Skill Judge 自动审核报告\n\n结论：自动拒绝\n分数：80/120',
+        ownerPreviewReviewComment: '自动审核未通过，请补充触发条件和错误处理。',
       }),
       isLoading: false,
       isFetching: false,
