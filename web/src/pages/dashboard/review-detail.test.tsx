@@ -1,8 +1,8 @@
 /** @vitest-environment jsdom */
 import { renderToStaticMarkup } from 'react-dom/server'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { cleanup, render, screen, fireEvent, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const navigateMock = vi.fn()
 const optimizeMutateMock = vi.fn()
@@ -180,6 +180,10 @@ vi.mock('@/api/client', () => ({
 import { NamespaceReviewDetailPage, ReviewDetailPage } from './review-detail'
 
 describe('ReviewDetailPage', () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   beforeEach(() => {
     navigateMock.mockReset()
     optimizeMutateMock.mockReset()
@@ -322,6 +326,40 @@ describe('ReviewDetailPage', () => {
     expect(screen.getByText('分数：84/120')).toBeDefined()
     expect(screen.getByText('description 缺少明确触发场景')).toBeDefined()
     expect(screen.getByText('补充什么任务会触发该 Skill')).toBeDefined()
+  })
+
+  it('closes the optimization dialog and opens the optimized review task', async () => {
+    useReviewDetailMock.mockReturnValue({
+      data: {
+        id: 13,
+        namespace: 'global',
+        skillSlug: 'demo-skill',
+        version: '1.2.0',
+        status: 'REJECTED',
+        submittedBy: 'local-admin',
+        submittedByName: 'Local Admin',
+        submittedAt: '2026-03-19T00:00:00Z',
+        reviewedBy: 'system-auto-review',
+        reviewedByName: 'system-auto-review',
+        reviewedAt: '2026-03-19T00:05:00Z',
+        reviewComment: '# Skill Judge 自动审核报告\n\n结论：自动拒绝\n分数：84/120',
+      },
+      isLoading: false,
+    })
+
+    render(<ReviewDetailPage />)
+    fireEvent.click(screen.getByText('review.optimizeWithSkillJudge'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('optimization-summary-dialog')).toBeDefined()
+    })
+
+    fireEvent.click(screen.getByText('review.optimizeDialogViewReview'))
+
+    expect(navigateMock).toHaveBeenCalledWith({ to: '/dashboard/reviews/100' })
+    await waitFor(() => {
+      expect(screen.queryByTestId('optimization-summary-dialog')).toBeNull()
+    })
   })
 
   it('renders namespace review detail through the namespace route wrapper', () => {

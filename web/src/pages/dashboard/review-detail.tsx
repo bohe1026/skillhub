@@ -135,6 +135,7 @@ function ReviewDetailScreen({
       setOptimizationDialogOpen(false)
       return
     }
+    setOptimizationDialogOpen(false)
     navigate({
       to: namespaceSlug
         ? buildNamespaceReviewDetailPath(optimizationResult.namespace || namespaceSlug, optimizationResult.reviewTaskId)
