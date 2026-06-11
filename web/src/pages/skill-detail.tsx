@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate, useRouterState, useSearch } from '@tanstack/react-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, ArrowUpCircle, ChevronDown, ChevronUp, Clock, Folder, Globe, Lock, RefreshCw, ShieldCheck, Terminal, User, Users } from 'lucide-react'
+import { ArrowLeft, ArrowUpCircle, ChevronDown, ChevronUp, Clock, Folder, Globe, Lock, RefreshCw, ShieldCheck, Sparkles, Terminal, User, Users } from 'lucide-react'
 import { MarkdownRenderer } from '@/features/skill/markdown-renderer'
 import { FileTree } from '@/features/skill/file-tree'
 import { FilePreviewDialog } from '@/features/skill/file-preview-dialog'
@@ -33,6 +33,10 @@ import { formatCompactCount } from '@/shared/lib/number-format'
 import { resolveDocumentationFilePath } from '@/shared/lib/skill-documentation'
 import { getHeadlineVersion, getOwnerPreviewVersion, getPublishedVersion } from '@/shared/lib/skill-lifecycle'
 import { NamespaceBadge } from '@/shared/components/namespace-badge'
+import { ReviewOptimizationDialog } from '@/features/review/review-optimization-dialog'
+import { buildGlobalReviewDetailPath, buildNamespaceReviewDetailPath } from '@/features/review/review-paths'
+import { resolveReviewActionErrorDescription } from '@/features/review/review-error'
+import { useOptimizeReview } from '@/features/review/use-review-detail'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
@@ -59,6 +63,7 @@ import {
   useConfirmPublish,
 } from '@/shared/hooks/use-skill-queries'
 import { useSubmitPromotion } from '@/shared/hooks/use-user-queries'
+import type { ReviewOptimizationResult } from '@/api/types'
 
 /**
  * Detail page for one skill and its version history.
@@ -123,6 +128,8 @@ export function SkillDetailPage() {
   const [diffSourceVersion, setDiffSourceVersion] = useState<string | null>(null)
   const [confirmPublishTarget, setConfirmPublishTarget] = useState<string | null>(null)
   const [submitReviewTarget, setSubmitReviewTarget] = useState<string | null>(null)
+  const [optimizationDialogOpen, setOptimizationDialogOpen] = useState(false)
+  const [optimizationResult, setOptimizationResult] = useState<ReviewOptimizationResult | null>(null)
   const [diffCompareVersion, setDiffCompareVersion] = useState<string | null>(null)
   const [isOverviewExpanded, setIsOverviewExpanded] = useState(false)
   const [isOverviewCollapsible, setIsOverviewCollapsible] = useState(false)
@@ -172,6 +179,11 @@ export function SkillDetailPage() {
     && ['PENDING_REVIEW', 'SCANNING', 'SCAN_FAILED'].includes(headlineVersion?.status ?? '')
   const hasPendingOwnerPreview = ownerPreviewVersion?.status === 'PENDING_REVIEW'
   const hasRejectedOwnerPreview = ownerPreviewVersion?.status === 'REJECTED'
+  const canOptimizeOwnerPreview =
+    Boolean(skill?.ownerPreviewReviewTaskId) &&
+    Boolean(user?.userId) &&
+    skill?.ownerId === user?.userId &&
+    Boolean(skill?.ownerPreviewReviewComment?.includes('Skill Judge 自动审核报告'))
   const hasPublishedPendingReview = Boolean(publishedVersion && hasPendingOwnerPreview)
   const canInteract = skill?.canInteract ?? true
   const canReport = skill?.canReport ?? true
@@ -269,6 +281,17 @@ export function SkillDetailPage() {
   const reportMutation = useSubmitSkillReport(namespace, slug)
   const submitForReviewMutation = useSubmitForReview()
   const confirmPublishMutation = useConfirmPublish()
+  const optimizeMutation = useOptimizeReview({
+    onSuccess: (result) => {
+      toast.success(t('review.optimizeSuccess', { version: result.version }))
+      setOptimizationResult(result)
+      setOptimizationDialogOpen(true)
+      refreshSkill()
+    },
+    onError: (error) => {
+      toast.error(t('review.optimizeFailed'), resolveReviewActionErrorDescription(error))
+    },
+  })
 
   const triggerBrowserDownload = (url: string) => {
     const link = document.createElement('a')
@@ -579,6 +602,26 @@ export function SkillDetailPage() {
     }
   }
 
+  const handleOptimizeOwnerPreview = () => {
+    if (!skill?.ownerPreviewReviewTaskId) {
+      return
+    }
+    optimizeMutation.mutate({ taskId: skill.ownerPreviewReviewTaskId })
+  }
+
+  const handleViewOptimizedReview = () => {
+    if (!optimizationResult?.reviewTaskId) {
+      setOptimizationDialogOpen(false)
+      return
+    }
+    setOptimizationDialogOpen(false)
+    navigate({
+      to: namespace === 'global'
+        ? buildGlobalReviewDetailPath(optimizationResult.reviewTaskId)
+        : buildNamespaceReviewDetailPath(namespace, optimizationResult.reviewTaskId),
+    })
+  }
+
   const handleOpenRerelease = (version: string) => {
     setRereleaseTarget(version)
     setTargetVersionInput(suggestNextVersion(version))
@@ -816,6 +859,21 @@ export function SkillDetailPage() {
                   {skill.ownerPreviewReviewComment || t('skillDetail.rejectedFeedbackFallback')}
                 </p>
               </div>
+              {canOptimizeOwnerPreview && (
+                <div className="mt-4 flex flex-col gap-3 border-t border-red-500/20 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-muted-foreground">{t('review.optimizeDescription')}</p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleOptimizeOwnerPreview}
+                    disabled={optimizeMutation.isPending}
+                    className="gap-2 sm:w-auto"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    {optimizeMutation.isPending ? t('review.optimizePending') : t('review.optimizeWithSkillJudge')}
+                  </Button>
+                </div>
+              )}
             </Card>
           )}
         </div>
@@ -1618,6 +1676,13 @@ export function SkillDetailPage() {
         isLoading={isLoadingPreview}
         error={previewError}
         onDownload={handleDownloadFile}
+      />
+      <ReviewOptimizationDialog
+        open={optimizationDialogOpen}
+        onOpenChange={setOptimizationDialogOpen}
+        result={optimizationResult}
+        onViewReview={handleViewOptimizedReview}
+        t={t}
       />
     </div>
   )

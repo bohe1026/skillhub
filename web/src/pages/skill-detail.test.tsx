@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const navigateMock = vi.fn()
 const hasRoleMock = vi.fn<(role: string) => boolean>((role: string) => role === 'USER')
+const optimizeMutateMock = vi.fn()
 const useSkillDetailMock = vi.fn()
 const useSkillLabelsMock = vi.fn()
 const useSkillVersionsMock = vi.fn()
@@ -120,6 +121,13 @@ vi.mock('@/shared/hooks/use-skill-queries', () => ({
   useConfirmPublish: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }))
 
+vi.mock('@/features/review/use-review-detail', () => ({
+  useOptimizeReview: () => ({
+    mutate: optimizeMutateMock,
+    isPending: false,
+  }),
+}))
+
 vi.mock('@/shared/hooks/use-label-queries', () => ({
   useSkillLabels: () => useSkillLabelsMock(),
   useVisibleLabels: () => ({
@@ -168,6 +176,7 @@ function createSkill(overrides: Record<string, unknown> = {}) {
 describe('SkillDetailPage', () => {
   beforeEach(() => {
     navigateMock.mockReset()
+    optimizeMutateMock.mockReset()
     hasRoleMock.mockImplementation((role: string) => role === 'USER')
     authState = {
       user: { userId: 'owner-1', platformRoles: ['USER'] },
@@ -323,6 +332,27 @@ describe('SkillDetailPage', () => {
     expect(html).toContain('manifest validation failed')
     expect(html).not.toContain('skillDetail.pendingPreviewBadge')
     expect(html).not.toContain('skillDetail.pendingPreviewTitle')
+  })
+
+  it('shows one-click optimization for the owner rejected by Skill Judge', () => {
+    useSkillDetailMock.mockReturnValue({
+      data: createSkill({
+        canInteract: false,
+        headlineVersion: { id: 11, version: '1.1.0', status: 'REJECTED' },
+        publishedVersion: undefined,
+        ownerPreviewVersion: { id: 11, version: '1.1.0', status: 'REJECTED' },
+        ownerPreviewReviewTaskId: 99,
+        resolutionMode: 'OWNER_PREVIEW',
+        ownerPreviewReviewComment: '# Skill Judge 自动审核报告\n\n结论：自动拒绝\n分数：80/120',
+      }),
+      isLoading: false,
+      isFetching: false,
+      error: null,
+    })
+
+    const html = renderToStaticMarkup(<SkillDetailPage />)
+
+    expect(html).toContain('review.optimizeWithSkillJudge')
   })
 
   it('renders pending review status in the header for scan-failed owner preview versions', () => {

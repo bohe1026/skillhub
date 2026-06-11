@@ -235,6 +235,7 @@ export interface SkillDetail {
   publishedVersion?: SkillLifecycleVersion
   ownerPreviewVersion?: SkillLifecycleVersion
   ownerPreviewReviewComment?: string
+  ownerPreviewReviewTaskId?: number
   resolutionMode?: string
 }
 

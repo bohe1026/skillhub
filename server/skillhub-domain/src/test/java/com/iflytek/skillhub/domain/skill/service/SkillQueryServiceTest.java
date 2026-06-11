@@ -910,6 +910,7 @@ class SkillQueryServiceTest {
         rejected.setStatus(SkillVersionStatus.REJECTED);
 
         ReviewTask reviewTask = new ReviewTask(12L, 1L, ownerId);
+        setId(reviewTask, 99L);
         reviewTask.setStatus(ReviewTaskStatus.REJECTED);
         reviewTask.setReviewComment("metadata missing");
 
@@ -926,6 +927,7 @@ class SkillQueryServiceTest {
         assertNotNull(result.ownerPreviewVersion());
         assertEquals("REJECTED", result.ownerPreviewVersion().status());
         assertEquals("metadata missing", result.ownerPreviewReviewComment());
+        assertEquals(99L, result.ownerPreviewReviewTaskId());
     }
 
     @Test

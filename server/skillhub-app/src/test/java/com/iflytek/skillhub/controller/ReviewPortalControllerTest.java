@@ -198,6 +198,7 @@ class ReviewPortalControllerTest {
                                 new SkillLifecycleVersionResponse(99L, "1.1.0", "PUBLISHED"),
                                 new SkillLifecycleVersionResponse(100L, "1.2.0", "PENDING_REVIEW"),
                                 null,
+                                null,
                                 "REVIEW_TASK"
                         ),
                         List.of(new SkillVersionResponse(100L, "1.2.0", "PENDING_REVIEW", null, 1, 10L, null, true)),
