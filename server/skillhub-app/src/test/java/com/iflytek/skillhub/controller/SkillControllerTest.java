@@ -177,6 +177,7 @@ class SkillControllerTest {
                         null,
                         new com.iflytek.skillhub.domain.skill.service.SkillLifecycleProjectionService.VersionProjection(11L, "1.1.0", "PENDING_REVIEW"),
                         null,
+                        null,
                         "OWNER_PREVIEW"
                 ));
 
