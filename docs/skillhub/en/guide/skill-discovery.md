@@ -2,7 +2,7 @@
 
 ## Overview
 
-SkillHub provides powerful full-text search functionality, enabling users to quickly find the skill packages they need.
+SkillCenter provides powerful full-text search functionality, enabling users to quickly find the skill packages they need.
 
 Search supports not only keyword matching but also multi-dimensional filtering and sorting by namespace, tag, downloads, rating, and more.
 
@@ -18,7 +18,7 @@ Search supports not only keyword matching but also multi-dimensional filtering a
 
 **Search Algorithm**:
 
-SkillHub uses PostgreSQL full-text search, supporting:
+SkillCenter uses PostgreSQL full-text search, supporting:
 - Chinese and English word segmentation
 - Fuzzy matching
 - Weighted ranking (title weight > description weight > tag weight)
@@ -73,7 +73,7 @@ Enter keywords in the search box, e.g., "pdf parser".
 
 3. **Apply Filters**
 
-- Select namespace (e.g., only `iflytek` namespace)
+- Select namespace (e.g., only `team` namespace)
 - Select tag (e.g., `data-processing`)
 - Select sort order (e.g., by downloads descending)
 
@@ -95,7 +95,7 @@ After finding the right skill package, use CLI command to install or click "Down
 
 **Search Skill Packages**:
 ```bash
-GET /api/web/skills?q=pdf&namespace=iflytek&label=data-processing&sort=downloads&page=0&size=20
+GET /api/web/skills?q=pdf&namespace=team&label=data-processing&sort=downloads&page=0&size=20
 ```
 
 **Parameter Reference**:
@@ -114,7 +114,7 @@ GET /api/web/skills?q=pdf&namespace=iflytek&label=data-processing&sort=downloads
   "content": [
     {
       "id": "skill-123",
-      "namespace": "iflytek",
+      "namespace": "team",
       "slug": "pdf-parser",
       "name": "PDF Parser",
       "description": "Extract text and metadata from PDF files",
@@ -137,7 +137,7 @@ GET /api/web/skills?q=pdf&namespace=iflytek&label=data-processing&sort=downloads
 
 > **Permission Control**: Search results are automatically filtered by user permissions. PRIVATE skill packages are only visible to namespace members, INTERNAL skill packages are only visible to logged-in users.
 
-- **Search Performance**: SkillHub uses PostgreSQL full-text search with Chinese and English word segmentation
+- **Search Performance**: SkillCenter uses PostgreSQL full-text search with Chinese and English word segmentation
 - **Real-time Updates**: Newly published skill packages appear immediately in search results
 - **Tag Convention**: Recommend using consistent tag naming conventions for easier filtering
 - **Search Suggestions**: Supports search suggestions and autocomplete (frontend implementation)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-SkillHub provides a complete review workflow to ensure that skill packages published to the registry comply with team standards.
+SkillCenter provides a complete review workflow to ensure that skill packages published to the registry comply with team standards.
 
 The review mechanism operates on two levels:
 - **Namespace Review**: Team administrators review skill packages within their namespace

@@ -67,7 +67,7 @@ export function Layout() {
           <span className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shadow-[0_14px_28px_-18px_rgba(37,99,235,0.8)]">
             <span className="h-4 w-4 rotate-45 rounded-[3px] border-2 border-white/90" />
           </span>
-          <span>SkillHub</span>
+          <span>SkillCenter</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-9 text-[15px] font-semibold" style={{ color: 'hsl(var(--text-secondary))' }}>
@@ -134,7 +134,7 @@ export function Layout() {
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold shadow-sm bg-blue-600">
                   S
                 </div>
-                <span className="text-lg font-bold text-slate-950">SkillHub</span>
+                <span className="text-lg font-bold text-slate-950">SkillCenter</span>
               </div>
               <p className="text-sm max-w-xs" style={{ color: 'hsl(var(--text-secondary))' }}>
                 {t('layout.footerDescription')}
@@ -196,7 +196,6 @@ export function Layout() {
             className="mt-10 pt-6 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs"
             style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--muted-foreground))' }}
           >
-            <span>{t('footer.copyright')}</span>
             <div className="flex items-center gap-2">
               <Link to="/privacy" className="hover:opacity-80 transition-opacity">
                 {t('footer.privacy')}

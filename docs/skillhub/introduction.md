@@ -1,10 +1,10 @@
 # 项目简介
 
-SkillHub 是一个专为企业打造的自托管 Agent Skill 注册中心。
+SkillCenter 是一个专为企业打造的自托管 Agent Skill 注册中心。
 
 在 AI Agent 时代，每个团队都在积累自己的技能包（Skills）。但这些技能包散落在各处：有的在开发者本地，有的在 Git 仓库，有的在内部文档里。团队成员很难发现彼此的工作，更难复用已有的能力。
 
-SkillHub 解决了这个问题。它提供了一个**私有、可控、易用**的技能包注册中心，让团队可以像使用 npm、PyPI 一样管理 Agent Skills。
+SkillCenter 解决了这个问题。它提供了一个**私有、可控、易用**的技能包注册中心，让团队可以像使用 npm、PyPI 一样管理 Agent Skills。
 
 ![项目架构图](/diagrams/architecture.png)
 

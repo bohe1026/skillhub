@@ -1,10 +1,10 @@
 # Introduction
 
-SkillHub is a self-hosted Agent Skill registry built for the enterprise.
+SkillCenter is a self-hosted Agent Skill registry built for the enterprise.
 
 In the age of AI Agents, every team accumulates its own skill packages (Skills). But these packages are scattered everywhere: some on developers' local machines, some in Git repositories, and some buried in internal documentation. Team members struggle to discover each other's work, let alone reuse existing capabilities.
 
-SkillHub solves this problem. It provides a **private, controllable, and easy-to-use** skill package registry, allowing teams to manage Agent Skills just like using npm or PyPI.
+SkillCenter solves this problem. It provides a **private, controllable, and easy-to-use** skill package registry, allowing teams to manage Agent Skills just like using npm or PyPI.
 
 ![Architecture Diagram](/diagrams/architecture.png)
 

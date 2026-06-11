@@ -301,9 +301,9 @@ export function LandingPage() {
           <section className="mt-5 overflow-hidden rounded-lg border border-blue-100 bg-[linear-gradient(105deg,rgba(239,247,255,0.96)_0%,rgba(231,244,255,0.9)_54%,rgba(255,255,255,0.45)_100%)] px-6 py-7 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.35)] md:px-8">
             <div className="grid gap-8 lg:grid-cols-[0.95fr_1.8fr] lg:items-center">
               <div>
-                <h2 className="text-2xl font-black text-slate-950">{t('landing.whySkillHub.title')}</h2>
+                <h2 className="text-2xl font-black text-slate-950">{t('landing.whySkillCenter.title')}</h2>
                 <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600 md:text-base">
-                  {t('landing.whySkillHub.subtitle')}
+                  {t('landing.whySkillCenter.subtitle')}
                 </p>
                 <Link
                   to="/search"
@@ -372,30 +372,56 @@ export function LandingPage() {
 function TechHeroVisual() {
   return (
     <div className="tech-hero-visual" aria-hidden="true">
-      <div className="tech-grid-plane" />
-      <div className="tech-platform">
-        <div className="tech-platform-ring tech-platform-ring-outer" />
-        <div className="tech-platform-ring tech-platform-ring-inner" />
-        <div className="tech-cube">
-          <span className="tech-cube-face tech-cube-front" />
-          <span className="tech-cube-face tech-cube-back" />
-          <span className="tech-cube-face tech-cube-right" />
-          <span className="tech-cube-face tech-cube-left" />
-          <span className="tech-cube-face tech-cube-top" />
-          <span className="tech-cube-face tech-cube-bottom" />
+      <div className="tech-topology-shell">
+        <div className="tech-topology-header">
+          <span />
+          <span />
+          <span />
+          <strong>SkillCenter Registry</strong>
         </div>
-      </div>
-      <div className="tech-node tech-node-cloud">
-        <Cloud className="h-8 w-8" strokeWidth={1.8} />
-      </div>
-      <div className="tech-node tech-node-shield">
-        <ShieldCheck className="h-8 w-8" strokeWidth={1.8} />
-      </div>
-      <div className="tech-node tech-node-data">
-        <Database className="h-7 w-7" strokeWidth={1.8} />
-      </div>
-      <div className="tech-node tech-node-package">
-        <PackageOpen className="h-7 w-7" strokeWidth={1.8} />
+        <div className="tech-topology-grid" />
+        <div className="tech-signal-line tech-signal-line-a" />
+        <div className="tech-signal-line tech-signal-line-b" />
+        <div className="tech-core">
+          <span className="tech-core-ring" />
+          <span className="tech-core-ring tech-core-ring-delay" />
+          <div className="tech-core-chip">
+            <span>SC</span>
+          </div>
+        </div>
+        <div className="tech-flow-card tech-flow-card-upload">
+          <Cloud className="h-5 w-5" strokeWidth={1.8} />
+          <span>UPLOAD</span>
+        </div>
+        <div className="tech-flow-card tech-flow-card-scan">
+          <ShieldCheck className="h-5 w-5" strokeWidth={1.8} />
+          <span>SCAN</span>
+        </div>
+        <div className="tech-flow-card tech-flow-card-store">
+          <Database className="h-5 w-5" strokeWidth={1.8} />
+          <span>INDEX</span>
+        </div>
+        <div className="tech-flow-card tech-flow-card-release">
+          <PackageOpen className="h-5 w-5" strokeWidth={1.8} />
+          <span>RELEASE</span>
+        </div>
+        <div className="tech-review-panel">
+          <div className="tech-review-panel-title">
+            <Workflow className="h-4 w-4" strokeWidth={1.8} />
+            <span>Auto Review</span>
+          </div>
+          <div className="tech-review-row">
+            <span>Quality</span>
+            <strong>96+</strong>
+          </div>
+          <div className="tech-review-meter">
+            <span />
+          </div>
+          <div className="tech-review-row">
+            <span>Risk</span>
+            <strong>SAFE</strong>
+          </div>
+        </div>
       </div>
     </div>
   )

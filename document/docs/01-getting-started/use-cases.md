@@ -1,7 +1,7 @@
 ---
 title: 典型应用场景
 sidebar_position: 3
-description: SkillHub 在企业中的典型应用场景
+description: SkillCenter 在企业中的典型应用场景
 ---
 
 # 典型应用场景
@@ -53,13 +53,13 @@ description: SkillHub 在企业中的典型应用场景
 
 ## CLI 工具集成
 
-**场景描述**：已有使用 ClawHub CLI 的工作流，希望无缝迁移到 SkillHub。
+**场景描述**：已有使用 ClawHub CLI 的工作流，希望无缝迁移到 SkillCenter。
 
 **解决方案**：
 - 提供 ClawHub CLI 协议兼容层
 - 通过 `/.well-known/clawhub.json` 自动发现
 - 现有 CLI 工具无需修改即可使用
-- 同时提供 SkillHub 自有 CLI 增强功能
+- 同时提供 SkillCenter 自有 CLI 增强功能
 
 **价值**：
 - 保护现有投资

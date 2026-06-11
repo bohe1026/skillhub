@@ -2,7 +2,7 @@
 
 ## 功能描述
 
-SkillHub 提供了强大的全文搜索功能，让用户可以快速找到需要的技能包。
+SkillCenter 提供了强大的全文搜索功能，让用户可以快速找到需要的技能包。
 
 搜索不仅支持关键词匹配，还支持按命名空间、标签、下载量、评分等多维度过滤和排序。
 
@@ -18,7 +18,7 @@ SkillHub 提供了强大的全文搜索功能，让用户可以快速找到需�
 
 **搜索算法**：
 
-SkillHub 使用 PostgreSQL 全文搜索，支持：
+SkillCenter 使用 PostgreSQL 全文搜索，支持：
 - 中英文分词
 - 模糊匹配
 - 权重排序（标题权重 > 描述权重 > 标签权重）
@@ -73,7 +73,7 @@ npx clawhub install my-team--pdf-parser
 
 3. **应用过滤器**
 
-- 选择命名空间（例如只看 `iflytek` 命名空间）
+- 选择命名空间（例如只看 `team` 命名空间）
 - 选择标签（例如 `data-processing`）
 - 选择排序方式（例如按下载量降序）
 
@@ -95,7 +95,7 @@ npx clawhub install my-team--pdf-parser
 
 **搜索技能包**：
 ```bash
-GET /api/web/skills?q=pdf&namespace=iflytek&label=data-processing&sort=downloads&page=0&size=20
+GET /api/web/skills?q=pdf&namespace=team&label=data-processing&sort=downloads&page=0&size=20
 ```
 
 **参数说明**：
@@ -114,7 +114,7 @@ GET /api/web/skills?q=pdf&namespace=iflytek&label=data-processing&sort=downloads
   "content": [
     {
       "id": "skill-123",
-      "namespace": "iflytek",
+      "namespace": "team",
       "slug": "pdf-parser",
       "name": "PDF Parser",
       "description": "Extract text and metadata from PDF files",
@@ -137,7 +137,7 @@ GET /api/web/skills?q=pdf&namespace=iflytek&label=data-processing&sort=downloads
 
 > **权限控制**：搜索结果会根据用户权限自动过滤。PRIVATE 技能包只对命名空间成员可见，INTERNAL 技能包只对登录用户可见。
 
-- **搜索性能**：SkillHub 使用 PostgreSQL 全文搜索，支持中英文分词
+- **搜索性能**：SkillCenter 使用 PostgreSQL 全文搜索，支持中英文分词
 - **实时更新**：新发布的技能包会立即出现在搜索结果中
 - **标签规范**：建议使用统一的标签命名规范，便于过滤
 - **搜索提示**：支持搜索建议和自动补全（前端实现）

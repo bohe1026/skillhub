@@ -1,6 +1,6 @@
-# SkillHub SMTP 邮箱配置指南（验证码邮件）
+# SkillCenter SMTP 邮箱配置指南（验证码邮件）
 
-本文说明如何为 SkillHub 配置 SMTP，用于发送“密码重置验证码”邮件。
+本文说明如何为 SkillCenter 配置 SMTP，用于发送“密码重置验证码”邮件。
 
 适用场景：
 - 生产/预发布环境（`compose.release.yml` + `.env.release`）
@@ -30,7 +30,7 @@
 | `SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST` | SSL 信任主机（用于规避部分环境下证书链校验失败） | `smtp.mail.example` |
 | `SKILLHUB_AUTH_PASSWORD_RESET_CODE_EXPIRY` | 验证码有效期（ISO-8601 Duration） | `PT10M` |
 | `SKILLHUB_AUTH_PASSWORD_RESET_FROM_ADDRESS` | 发件人邮箱 | `noreply@example.com` |
-| `SKILLHUB_AUTH_PASSWORD_RESET_FROM_NAME` | 发件人名称 | `SkillHub` |
+| `SKILLHUB_AUTH_PASSWORD_RESET_FROM_NAME` | 发件人名称 | `SkillCenter` |
 
 说明：
 - 当前文档统一按 `465 + SSL` 配置，不再展开 `587 + STARTTLS` 方案。
@@ -83,8 +83,8 @@ SPRING_MAIL_PASSWORD=
 SPRING_MAIL_SMTP_AUTH=false
 SPRING_MAIL_SMTP_STARTTLS_ENABLE=false
 SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=false
-SKILLHUB_AUTH_PASSWORD_RESET_FROM_ADDRESS=noreply@skillhub.local
-SKILLHUB_AUTH_PASSWORD_RESET_FROM_NAME=SkillHub
+SKILLHUB_AUTH_PASSWORD_RESET_FROM_ADDRESS=noreply@skillcenter.local
+SKILLHUB_AUTH_PASSWORD_RESET_FROM_NAME=SkillCenter
 ```
 
 ### C. 线上部署（465 端口示例）
@@ -202,8 +202,8 @@ SPRING_MAIL_PASSWORD= \
 SPRING_MAIL_SMTP_AUTH=false \
 SPRING_MAIL_SMTP_STARTTLS_ENABLE=false \
 SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=false \
-SKILLHUB_AUTH_PASSWORD_RESET_FROM_ADDRESS=noreply@skillhub.local \
-SKILLHUB_AUTH_PASSWORD_RESET_FROM_NAME=SkillHub \
+SKILLHUB_AUTH_PASSWORD_RESET_FROM_ADDRESS=noreply@skillcenter.local \
+SKILLHUB_AUTH_PASSWORD_RESET_FROM_NAME=SkillCenter \
 make dev-server
 ```
 
@@ -213,7 +213,7 @@ make dev-server
 http://localhost:8025
 ```
 
-5. 在 SkillHub 页面验证流程：
+5. 在 SkillCenter 页面验证流程：
 - 打开 `/reset-password`
 - 输入邮箱并点击“发送验证码”
 - 在 MailHog 中查看验证码邮件

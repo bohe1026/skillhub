@@ -7,7 +7,7 @@ import { createRequireAuth } from '@/shared/lib/auth-route'
 import { normalizeSearchQuery } from '@/shared/lib/search-query'
 
 /**
- * Central route registry for the SkillHub web app.
+ * Central route registry for the SkillCenter web app.
  *
  * This file keeps route declarations, auth redirects, role-based wrappers, and search-param
  * normalization in one place so route behavior remains explicit.

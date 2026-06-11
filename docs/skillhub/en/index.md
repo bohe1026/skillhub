@@ -2,12 +2,12 @@
 layout: home
 
 hero:
-  name: SkillHub
+  name: SkillCenter
   text: Enterprise-Grade Agent Skill Registry
   tagline: Manage your team's AI skill packages as easily as npm
   image:
     src: /diagrams/cover.png
-    alt: SkillHub
+    alt: SkillCenter
   actions:
     - theme: brand
       text: Quick Start
@@ -17,7 +17,7 @@ hero:
       link: /guide/skill-publish
     - theme: alt
       text: GitHub
-      link: https://github.com/iflytek/skillhub
+      link: https://github.com/bohe1026/skillcenter
 
 features:
   - icon: 🚀

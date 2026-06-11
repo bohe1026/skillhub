@@ -1,12 +1,12 @@
 ---
 title: API 概述
 sidebar_position: 1
-description: SkillHub API 概述
+description: SkillCenter API 概述
 ---
 
 # API 概述
 
-SkillHub 提供 RESTful API 用于集成和自动化。
+SkillCenter 提供 RESTful API 用于集成和自动化。
 
 ## API 分类
 

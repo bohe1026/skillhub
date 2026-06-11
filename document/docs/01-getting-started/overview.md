@@ -1,12 +1,12 @@
 ---
 title: 产品概述
 sidebar_position: 1
-description: SkillHub 产品概述和核心特性介绍
+description: SkillCenter 产品概述和核心特性介绍
 ---
 
 # 产品概述
 
-SkillHub 是企业级 AI 技能注册平台，支持技能发布、发现与管理，采用自托管架构保障数据安全。
+SkillCenter 是企业级 AI 技能注册平台，支持技能发布、发现与管理，采用自托管架构保障数据安全。
 
 ## 核心特性
 

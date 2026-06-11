@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, Copy } from 'lucide-react'
 import { Button } from '@/shared/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
 import { useCopyToClipboard } from '@/shared/lib/clipboard'
 
 interface InstallCommandProps {
@@ -34,17 +33,9 @@ export function buildInstallCommand(namespace: string, slug: string, baseUrl: st
   return `npx clawhub install ${installTarget} --registry ${baseUrl}`
 }
 
-export function buildSkillhubInstallCommand(namespace: string, slug: string, baseUrl: string): string {
-  const namespaceArg = namespace === 'global' ? '' : ` --namespace ${namespace}`
-  return `npx @astron-team/skillhub@latest install ${slug}${namespaceArg} --registry ${baseUrl}`
-}
-
 interface CommandBlockProps {
   command: string
 }
-
-const installMethodTabTriggerClass =
-  "relative border-b-0 px-1 py-2 text-xs after:absolute after:bottom-[-1px] after:left-1/2 after:h-0.5 after:w-6 after:-translate-x-1/2 after:rounded-full after:bg-transparent after:content-[''] data-[state=active]:after:bg-primary"
 
 function CommandBlock({ command }: CommandBlockProps) {
   const { t } = useTranslation()
@@ -81,27 +72,12 @@ function CommandBlock({ command }: CommandBlockProps) {
 }
 
 export function InstallCommand({ namespace, slug }: InstallCommandProps) {
-  const { t } = useTranslation()
   const baseUrl = useMemo(() => getBaseUrl(), [])
   const clawhubCommand = useMemo(() => buildInstallCommand(namespace, slug, baseUrl), [baseUrl, namespace, slug])
-  const skillhubCommand = useMemo(() => buildSkillhubInstallCommand(namespace, slug, baseUrl), [baseUrl, namespace, slug])
 
   return (
-    <Tabs defaultValue="clawhub" className="space-y-3">
-      <TabsList className="w-full gap-6 border-border/70 bg-transparent p-0 text-xs">
-        <TabsTrigger value="clawhub" className={installMethodTabTriggerClass}>
-          {t('skillDetail.installMethodClawhub')}
-        </TabsTrigger>
-        <TabsTrigger value="skillhub" className={installMethodTabTriggerClass}>
-          {t('skillDetail.installMethodSkillhub')}
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="clawhub">
-        <CommandBlock command={clawhubCommand} />
-      </TabsContent>
-      <TabsContent value="skillhub">
-        <CommandBlock command={skillhubCommand} />
-      </TabsContent>
-    </Tabs>
+    <div className="space-y-3">
+      <CommandBlock command={clawhubCommand} />
+    </div>
   )
 }

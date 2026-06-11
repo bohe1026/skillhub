@@ -1,17 +1,17 @@
 ---
-name: skillhub-registry
-description: Use this when you need to search, inspect, install, or publish agent skills against a SkillHub registry. SkillHub is a skill registry with a ClawHub-compatible API layer, so prefer the `clawhub` CLI for registry operations instead of making raw HTTP calls.
+name: skillcenter-registry
+description: Use this when you need to search, inspect, install, or publish agent skills against a SkillCenter registry. SkillCenter is a skill registry with a ClawHub-compatible API layer, so prefer the `clawhub` CLI for registry operations instead of making raw HTTP calls.
 ---
 
-# SkillHub Registry
+# SkillCenter Registry
 
-Use this skill when you need to work with a SkillHub registry: search skills, inspect metadata, install a package, or publish a new version.
+Use this skill when you need to work with a SkillCenter registry: search skills, inspect metadata, install a package, or publish a new version.
 
-> Important: Prefer the `clawhub` CLI for registry workflows. SkillHub exposes a ClawHub-compatible API surface and a discovery endpoint at `/.well-known/clawhub.json`, so the CLI is the safest path for auth, resolution, and download behavior. Only fall back to raw HTTP when debugging the server itself.
+> Important: Prefer the `clawhub` CLI for registry workflows. SkillCenter exposes a ClawHub-compatible API surface and a discovery endpoint at `/.well-known/clawhub.json`, so the CLI is the safest path for auth, resolution, and download behavior. Only fall back to raw HTTP when debugging the server itself.
 
-## What SkillHub Is
+## What SkillCenter Is
 
-SkillHub is an enterprise-oriented skill registry. It stores versioned skill packages, supports namespace-based skill management, and keeps `SKILL.md` compatibility with OpenSkills-style packages.
+SkillCenter is an enterprise-oriented skill registry. It stores versioned skill packages, supports namespace-based skill management, and keeps `SKILL.md` compatibility with OpenSkills-style packages.
 
 Key facts:
 
@@ -26,16 +26,16 @@ Key facts:
 
 ## Configure The CLI
 
-Point `clawhub` at the SkillHub base URL:
+Point `clawhub` at the SkillCenter base URL:
 
 ```bash
-export CLAWHUB_REGISTRY=https://skillhub.your-company.com
+export CLAWHUB_REGISTRY=https://skillcenter.your-company.com
 ```
 
 Alternatively, use the `--registry` parameter every time, for example:
 
 ```bash
-npx clawhub install my-skill --registry https://skillhub.your-company.com
+npx clawhub install my-skill --registry https://skillcenter.your-company.com
 ```
 
 
@@ -48,7 +48,7 @@ clawhub login --token sk_your_api_token_here
 Optional local check:
 
 ```bash
-curl https://skillhub.your-company.com/.well-known/clawhub.json
+curl https://skillcenter.your-company.com/.well-known/clawhub.json
 ```
 
 Expected response:
@@ -59,9 +59,9 @@ Expected response:
 
 ## Coordinate Rules - IMPORTANT
 
-SkillHub has two naming forms:
+SkillCenter has two naming forms:
 
-| SkillHub coordinate | Canonical slug for `clawhub` |
+| SkillCenter coordinate | Canonical slug for `clawhub` |
 |---|---|
 | `@global/my-skill` | `my-skill` |
 | `@team-name/my-skill` | `team-name--my-skill` |
@@ -138,7 +138,7 @@ If a request fails with `403`, check:
 
 ## Skill Package Contract
 
-SkillHub expects OpenSkills-style packages with `SKILL.md` as the entry point.
+SkillCenter expects packages with `SKILL.md` as the entry point.
 
 ## Publishing Guidance
 

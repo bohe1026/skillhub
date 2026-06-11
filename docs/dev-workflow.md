@@ -1,6 +1,6 @@
 # Development Workflow
 
-This document describes the recommended workflow for developing SkillHub locally.
+This document describes the recommended workflow for developing SkillCenter locally.
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ This starts:
 - Backend (Spring Boot) directly on your machine at http://localhost:8080
 - Frontend (Vite) directly on your machine at http://localhost:3000
 
-SkillHub now pins a shared Docker Compose project name for local development, so multiple git worktrees can reuse the same dependency containers instead of fighting over `5432`, `6379`, and `9000`.
+SkillCenter now pins a shared Docker Compose project name for local development, so multiple git worktrees can reuse the same dependency containers instead of fighting over `5432`, `6379`, and `9000`.
 
 ### Backend restarts
 

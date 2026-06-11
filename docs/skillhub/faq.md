@@ -1,12 +1,12 @@
 # 常见问题
 
-## Q: SkillHub 和 ClawHub 有什么区别？
+## Q: SkillCenter 和 ClawHub 有什么区别？
 
-A: SkillHub 是企业级的自托管方案，提供了更强的权限控制、审核机制和治理能力。ClawHub 是公共注册中心，类似 npm。
+A: SkillCenter 是企业级的自托管方案，提供了更强的权限控制、审核机制和治理能力。ClawHub 是公共注册中心，类似 npm。
 
 **主要区别**：
 
-| 特性 | SkillHub | ClawHub |
+| 特性 | SkillCenter | ClawHub |
 |------|----------|---------|
 | **部署方式** | 自托管 | 公共云 |
 | **权限控制** | 命名空间 RBAC | 基础权限 |
@@ -17,7 +17,7 @@ A: SkillHub 是企业级的自托管方案，提供了更强的权限控制、�
 
 ## Q: 如何备份数据？
 
-A: SkillHub 的数据存储在 PostgreSQL 和对象存储中。定期备份这两部分即可。
+A: SkillCenter 的数据存储在 PostgreSQL 和对象存储中。定期备份这两部分即可。
 
 **备份 PostgreSQL**：
 ```bash
@@ -30,7 +30,7 @@ pg_dump -h localhost -U postgres skillhub > backup.sql
 
 ## Q: 支持哪些认证方式？
 
-A: SkillHub 支持多种认证方式：
+A: SkillCenter 支持多种认证方式：
 
 - **OAuth2**：GitHub、Google、GitLab 等
 - **本地账号**：用户名密码登录（内置管理员：admin / ChangeMe!2026）
@@ -53,11 +53,11 @@ spring:
 
 ## Q: 如何使用 CLI 工具管理技能包？
 
-A: SkillHub 兼容 OpenClaw CLI，使用 `npx clawhub` 命令即可操作：
+A: SkillCenter 兼容 OpenClaw CLI，使用 `npx clawhub` 命令即可操作：
 
 ```bash
 # 配置注册中心地址
-export CLAWHUB_REGISTRY=http://your-skillhub-host:8080
+export CLAWHUB_REGISTRY=http://your-skillcenter-host:8080
 
 # 搜索技能包
 npx clawhub search email
@@ -77,7 +77,7 @@ A: 生产环境建议使用 Nginx 或 Traefik 作为反向代理，配置 SSL �
 ```nginx
 server {
     listen 443 ssl;
-    server_name skillhub.example.com;
+    server_name skillcenter.example.com;
     
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
@@ -92,9 +92,9 @@ server {
 }
 ```
 
-## Q: 如何监控 SkillHub？
+## Q: 如何监控 SkillCenter？
 
-A: SkillHub 提供了多种监控方式：
+A: SkillCenter 提供了多种监控方式：
 
 - **健康检查**：`GET /actuator/health`
 - **Scanner 健康检查**：`GET http://localhost:8000/health`
@@ -104,11 +104,11 @@ A: SkillHub 提供了多种监控方式：
 
 ## Q: 支持多租户吗？
 
-A: SkillHub 通过命名空间实现了逻辑上的多租户隔离。每个命名空间相当于一个租户，拥有独立的成员、权限和技能包。
+A: SkillCenter 通过命名空间实现了逻辑上的多租户隔离。每个命名空间相当于一个租户，拥有独立的成员、权限和技能包。
 
-如果需要物理隔离，可以为每个租户部署独立的 SkillHub 实例。
+如果需要物理隔离，可以为每个租户部署独立的 SkillCenter 实例。
 
-## Q: 如何升级 SkillHub？
+## Q: 如何升级 SkillCenter？
 
 A: 使用 curl 命令升级：
 
@@ -126,7 +126,7 @@ curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- u
 
 ## Q: 为什么管理员（admin）和普通用户都无法创建命名空间？
 
-A: 较旧版本的 SkillHub 不支持创建命名空间。该功能是在后续版本迭代中添加的。请将您的 SkillHub 升级到最新版本（latest）。
+A: 较旧版本的 SkillCenter 不支持创建命名空间。该功能是在后续版本迭代中添加的。请将您的 SkillCenter 升级到最新版本（latest）。
 升级命令示例：
 ```bash
 curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- up --version latest
@@ -140,9 +140,9 @@ A: 使用 OpenClaw CLI 命令行工具时，可以通过 `<namespace>--<skill-na
 
 A: 可以通过以下方式获取帮助：
 
-- **GitHub Issues**: https://github.com/iflytek/skillhub/issues
+- **GitHub Issues**: mailto:admin@skillcenter.local
 - **文档**: 参考项目 README.md
-- **社区讨论**: https://github.com/iflytek/skillhub/discussions
+- **社区讨论**: mailto:admin@skillcenter.local
 
 ## Q: 本地开发启动失败怎么办？
 

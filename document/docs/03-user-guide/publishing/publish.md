@@ -1,14 +1,14 @@
 ---
 title: 发布流程
 sidebar_position: 2
-description: 发布技能到 SkillHub
+description: 发布技能到 SkillCenter
 ---
 
 # 发布流程
 
 ## 通过 Web 发布
 
-1. 登录 SkillHub
+1. 登录 SkillCenter
 2. 点击"发布技能"
 3. 选择目标命名空间
 4. 上传技能包 ZIP 文件

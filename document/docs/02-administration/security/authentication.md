@@ -6,7 +6,7 @@ description: 配置用户认证方式
 
 # 认证配置
 
-SkillHub 支持多种认证方式，满足不同企业的安全需求。
+SkillCenter 支持多种认证方式，满足不同企业的安全需求。
 
 ## OAuth2 登录
 

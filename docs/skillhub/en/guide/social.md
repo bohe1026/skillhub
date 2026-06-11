@@ -2,7 +2,7 @@
 
 ## Overview
 
-SkillHub provides a rich set of social features that allow team members to interact, share, and recommend skill packages.
+SkillCenter provides a rich set of social features that allow team members to interact, share, and recommend skill packages.
 
 ![Concept Diagram](/diagrams/social-concept.png)
 

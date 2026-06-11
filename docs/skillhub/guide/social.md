@@ -2,7 +2,7 @@
 
 ## 功能描述
 
-SkillHub 提供了丰富的社交功能，让团队成员可以互动、分享、推荐技能包。
+SkillCenter 提供了丰富的社交功能，让团队成员可以互动、分享、推荐技能包。
 
 ![概念图](/diagrams/social-concept.png)
 

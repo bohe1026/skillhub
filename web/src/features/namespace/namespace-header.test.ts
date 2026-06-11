@@ -26,8 +26,8 @@ describe('namespace-header module exports', () => {
 describe('NamespaceHeader', () => {
   const baseNamespace: Namespace = {
     id: 1,
-    slug: 'skillhub',
-    displayName: 'SkillHub',
+    slug: 'skillcenter',
+    displayName: 'SkillCenter',
     type: 'GLOBAL',
     status: 'ACTIVE',
     avatarUrl: 'https://example.com/avatar.png',
@@ -41,12 +41,12 @@ describe('NamespaceHeader', () => {
   it('renders the GLOBAL namespace header with avatar, description, slug and immutable hint', () => {
     const html = renderHeader(baseNamespace)
 
-    expect(html).toContain('SkillHub')
+    expect(html).toContain('SkillCenter')
     expect(html).toContain('img')
     expect(html).toContain('src="https://example.com/avatar.png"')
-    expect(html).toContain('alt="SkillHub"')
+    expect(html).toContain('alt="SkillCenter"')
     expect(html).toContain('Shared namespace for all skills')
-    expect(html).toContain('@skillhub')
+    expect(html).toContain('@skillcenter')
     expect(html).toContain('myNamespaces.typeGlobal')
     expect(html).toContain('namespaceStatus.active')
     expect(html).toContain('namespaceStatus.immutableHint')

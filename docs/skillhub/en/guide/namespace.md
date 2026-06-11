@@ -2,7 +2,7 @@
 
 ## Overview
 
-Namespaces are the core organizational unit in SkillHub. Each namespace represents a team or project with its own members, permissions, and skill packages.
+Namespaces are the core organizational unit in SkillCenter. Each namespace represents a team or project with its own members, permissions, and skill packages.
 
 ![Concept Diagram](/diagrams/namespace-concept.png)
 
@@ -56,8 +56,8 @@ Discover a security issue in the namespace and temporarily freeze all publish op
 1. Navigate to `/dashboard/namespaces`
 2. Click "Create Namespace"
 3. Fill in the information:
-   - Name: Team name (e.g., "iFlytek AI Team")
-   - Slug: URL identifier (e.g., "iflytek")
+   - Name: Team name (e.g., "SkillCenter AI Team")
+   - Slug: URL identifier (e.g., "team")
    - Description: Brief description of the team's responsibilities and skill package scope
 
 ![Flow Diagram](/diagrams/namespace-create-flow.png)
@@ -97,9 +97,9 @@ POST /api/v1/namespaces
 Content-Type: application/json
 
 {
-  "name": "iFlytek AI Team",
-  "slug": "iflytek",
-  "description": "iFlytek's AI agent skills"
+  "name": "SkillCenter AI Team",
+  "slug": "team",
+  "description": "SkillCenter's AI agent skills"
 }
 ```
 
@@ -121,7 +121,7 @@ PUT /api/v1/namespaces/{slug}
 Content-Type: application/json
 
 {
-  "name": "iFlytek AI Team (Updated)",
+  "name": "SkillCenter AI Team (Updated)",
   "description": "Updated description"
 }
 ```

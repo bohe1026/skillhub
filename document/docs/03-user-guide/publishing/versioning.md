@@ -8,7 +8,7 @@ description: 技能版本和标签管理
 
 ## 语义化版本
 
-SkillHub 使用语义化版本（Semantic Versioning）：`MAJOR.MINOR.PATCH`
+SkillCenter 使用语义化版本（Semantic Versioning）：`MAJOR.MINOR.PATCH`
 
 - `MAJOR`：不兼容的 API 变更
 - `MINOR`：向后兼容的功能新增

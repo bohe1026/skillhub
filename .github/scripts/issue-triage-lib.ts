@@ -101,9 +101,9 @@ export function analyzeIssue(
   const matchedCoreKeywords = coreSurfaceKeywords(searchText);
   if (matchedCoreKeywords.length > 0) {
     reasons.push(
-      `涉及 SkillHub 核心流程（${
+      `涉及 SkillCenter 核心流程（${
         matchedCoreKeywords.slice(0, 3).join(", ")
-      }） / Touches core SkillHub workflows (${
+      }） / Touches core SkillCenter workflows (${
         matchedCoreKeywords.slice(0, 3).join(", ")
       }).`,
     );

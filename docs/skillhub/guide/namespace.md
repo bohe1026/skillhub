@@ -2,7 +2,7 @@
 
 ## 功能描述
 
-命名空间（Namespace）是 SkillHub 的核心组织单元。每个命名空间代表一个团队或项目，拥有独立的成员、权限和技能包。
+命名空间（Namespace）是 SkillCenter 的核心组织单元。每个命名空间代表一个团队或项目，拥有独立的成员、权限和技能包。
 
 ![概念图](/diagrams/namespace-concept.png)
 
@@ -56,8 +56,8 @@
 1. 访问 `/dashboard/namespaces`
 2. 点击「创建命名空间」
 3. 填写信息：
-   - 名称：团队名称（例如 "iFlytek AI Team"）
-   - Slug：URL 标识符（例如 "iflytek"）
+   - 名称：团队名称（例如 "SkillCenter AI Team"）
+   - Slug：URL 标识符（例如 "team"）
    - 描述：简要说明团队职责和技能包范围
 
 ![流程图](/diagrams/namespace-create-flow.png)
@@ -97,9 +97,9 @@ POST /api/v1/namespaces
 Content-Type: application/json
 
 {
-  "name": "iFlytek AI Team",
-  "slug": "iflytek",
-  "description": "iFlytek's AI agent skills"
+  "name": "SkillCenter AI Team",
+  "slug": "team",
+  "description": "SkillCenter's AI agent skills"
 }
 ```
 
@@ -121,7 +121,7 @@ PUT /api/v1/namespaces/{slug}
 Content-Type: application/json
 
 {
-  "name": "iFlytek AI Team (Updated)",
+  "name": "SkillCenter AI Team (Updated)",
   "description": "Updated description"
 }
 ```

@@ -8,7 +8,7 @@ description: 学习如何创建符合规范的技能包
 
 ## 技能包结构
 
-一个标准的 SkillHub 技能包结构如下：
+一个标准的 SkillCenter 技能包结构如下：
 
 ```
 my-skill/

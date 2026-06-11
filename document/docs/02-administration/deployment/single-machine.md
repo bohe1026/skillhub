@@ -1,12 +1,12 @@
 ---
 title: 单机部署
 sidebar_position: 1
-description: 使用 Docker Compose 单机部署 SkillHub
+description: 使用 Docker Compose 单机部署 SkillCenter
 ---
 
 # 单机部署
 
-本文介绍如何使用 Docker Compose 在单台服务器上部署 SkillHub。
+本文介绍如何使用 Docker Compose 在单台服务器上部署 SkillCenter。
 
 ## 前置要求
 
@@ -19,7 +19,7 @@ description: 使用 Docker Compose 单机部署 SkillHub
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/iflytek/skillhub.git
+git clone https://github.com/bohe1026/skillcenter.git
 cd skillhub
 
 # 2. 复制环境变量模板

@@ -2,7 +2,7 @@
 
 ## One-Click Deployment
 
-Use the curl command to quickly deploy SkillHub (includes all services: Web UI, Backend API, PostgreSQL, Redis, MinIO, Skill Scanner):
+Use the curl command to quickly deploy SkillCenter (includes all services: Web UI, Backend API, PostgreSQL, Redis, MinIO, Skill Scanner):
 
 ```bash
 curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- up
@@ -57,7 +57,7 @@ To start the development environment from source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/iflytek/skillhub.git
+git clone https://github.com/bohe1026/skillcenter.git
 cd skillhub
 
 # Start all services (including Scanner)
@@ -83,7 +83,7 @@ If `make dev-all` fails to start the backend, common causes include:
 
 2. **Java version mismatch**
 
-   SkillHub requires Java 21+:
+   SkillCenter requires Java 21+:
    ```bash
    java -version
    ```
@@ -101,7 +101,7 @@ For detailed troubleshooting steps, see [FAQ](faq.md#local-development-startup-f
 
 ### Option 1: Use the Built-in Admin Account
 
-SkillHub comes with a built-in super admin account for direct login:
+SkillCenter comes with a built-in super admin account for direct login:
 
 - **Username**: `admin`
 - **Password**: `ChangeMe!2026`
@@ -128,10 +128,10 @@ In the browser, you can add the `X-Mock-User-Id` header via a browser extension 
 
 ## Install the CLI Tool
 
-SkillHub is compatible with the OpenClaw CLI. You can use the `npx clawhub` command to manage skill packages:
+SkillCenter is compatible with the OpenClaw CLI. You can use the `npx clawhub` command to manage skill packages:
 
 ```bash
-# Configure the SkillHub registry URL
+# Configure the SkillCenter registry URL
 export CLAWHUB_REGISTRY=http://localhost:8080
 
 # Search for skill packages
@@ -217,7 +217,7 @@ npx clawhub install my-team--pdf-parser
 3. Click a skill package to view details
 4. Click "Download" or copy the install command
 
-## Upgrade SkillHub
+## Upgrade SkillCenter
 
 Use the curl command to upgrade to the latest version:
 

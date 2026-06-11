@@ -2,7 +2,7 @@
 
 ## Overview
 
-SkillHub includes a built-in **Skill Scanner** security scanning service that automatically detects potential security risks when skill packages are published. This serves as a critical line of defense for ensuring the security of skill packages within an enterprise.
+SkillCenter includes a built-in **Skill Scanner** security scanning service that automatically detects potential security risks when skill packages are published. This serves as a critical line of defense for ensuring the security of skill packages within an enterprise.
 
 Every skill package undergoes a security scan after publication. The scan results inform review decisions and help administrators quickly assess whether a skill package is safe and reliable.
 
@@ -43,7 +43,7 @@ Enterprise administrators can configure scanning policies and severity threshold
 ```
 Developer publishes a skill package
     |
-SkillHub backend receives the upload
+SkillCenter backend receives the upload
     |
 Security scan is triggered (via Redis Stream)
     |

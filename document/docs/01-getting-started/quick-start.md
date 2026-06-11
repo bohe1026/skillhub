@@ -1,23 +1,23 @@
 ---
 title: 快速开始
 sidebar_position: 2
-description: 一键启动 SkillHub 开发环境
+description: 一键启动 SkillCenter 开发环境
 ---
 
 # 快速开始
 
 ## 一键启动
 
-使用以下命令一键启动完整的 SkillHub 环境：
+使用以下命令一键启动完整的 SkillCenter 环境：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/iflytek/skillhub/main/scripts/runtime.sh | sh -s -- up
+curl -fsSL https://raw.githubusercontent.com/bohe1026/skillcenter/main/scripts/runtime.sh | sh -s -- up
 ```
 
 或者克隆仓库后手动启动：
 
 ```bash
-git clone https://github.com/iflytek/skillhub.git
+git clone https://github.com/bohe1026/skillcenter.git
 cd skillhub
 make dev-all
 ```

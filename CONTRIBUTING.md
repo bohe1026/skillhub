@@ -1,8 +1,8 @@
-# Contributing to SkillHub
+# Contributing to SkillCenter
 
 ## Scope
 
-SkillHub is a self-hosted registry for agent skills. Contributions should
+SkillCenter is a self-hosted registry for agent skills. Contributions should
 preserve the existing architecture and product direction documented in
 [`docs/`](./docs).
 

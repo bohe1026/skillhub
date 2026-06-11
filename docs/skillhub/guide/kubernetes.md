@@ -1,6 +1,6 @@
 # Kubernetes 部署指南
 
-本文档说明如何在 Kubernetes 集群中部署 SkillHub。
+本文档说明如何在 Kubernetes 集群中部署 SkillCenter。
 
 ## 前置条件
 
@@ -216,9 +216,9 @@ skillhub-storage-s3-secret-key: your-secret-key
 
 | 组件 | 镜像 |
 |---|---|
-| 后端服务 | ghcr.io/iflytek/skillhub-server:latest |
-| 前端服务 | ghcr.io/iflytek/skillhub-web:latest |
-| 扫描器 | ghcr.io/iflytek/skillhub-scanner:latest |
+| 后端服务 | ghcr.io/bohe1026/skillcenter-server:latest |
+| 前端服务 | ghcr.io/bohe1026/skillcenter-web:latest |
+| 扫描器 | ghcr.io/bohe1026/skillcenter-scanner:latest |
 | PostgreSQL | postgres:16-alpine |
 | Redis | redis:7-alpine |
 

@@ -245,7 +245,7 @@ function generateFallback(
     chore: "## 🔧 Chore",
   };
 
-  let md = `# SkillHub ${tag}\n\n`;
+  let md = `# SkillCenter ${tag}\n\n`;
   md += `> [Auto-generated - LLM unavailable]\n\n`;
 
   for (const [type, items] of grouped.entries()) {

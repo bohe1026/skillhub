@@ -1,14 +1,14 @@
 ---
 title: 配置说明
 sidebar_position: 3
-description: SkillHub 配置项详细说明
+description: SkillCenter 配置项详细说明
 ---
 
 # 配置说明
 
 ## 环境变量
 
-SkillHub 通过环境变量进行配置，主要配置项如下：
+SkillCenter 通过环境变量进行配置，主要配置项如下：
 
 ### 基础配置
 

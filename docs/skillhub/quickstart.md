@@ -2,7 +2,7 @@
 
 ## 一键部署
 
-使用 curl 命令快速部署 SkillHub（包含所有服务：Web UI、Backend API、PostgreSQL、Redis、MinIO、Skill Scanner）：
+使用 curl 命令快速部署 SkillCenter（包含所有服务：Web UI、Backend API、PostgreSQL、Redis、MinIO、Skill Scanner）：
 
 ```bash
 curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- up
@@ -57,7 +57,7 @@ curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- c
 
 ```bash
 # 克隆仓库
-git clone https://github.com/iflytek/skillhub.git
+git clone https://github.com/bohe1026/skillcenter.git
 cd skillhub
 
 # 启动所有服务（包含 Scanner）
@@ -83,7 +83,7 @@ make dev-all
 
 2. **Java 版本不匹配**
 
-   SkillHub 要求 Java 21+：
+   SkillCenter 要求 Java 21+：
    ```bash
    java -version
    ```
@@ -101,7 +101,7 @@ make dev-all
 
 ### 方式一：使用内置管理员账号
 
-SkillHub 内置了一个超级管理员账号，可以直接登录：
+SkillCenter 内置了一个超级管理员账号，可以直接登录：
 
 - **用户名**：`admin`
 - **密码**：`ChangeMe!2026`
@@ -128,10 +128,10 @@ curl -H "X-Mock-User-Id: local-admin" http://localhost:8080/api/v1/auth/me
 
 ## 安装 CLI 工具
 
-SkillHub 兼容 OpenClaw CLI，可以使用 `npx clawhub` 命令管理技能包：
+SkillCenter 兼容 OpenClaw CLI，可以使用 `npx clawhub` 命令管理技能包：
 
 ```bash
-# 配置 SkillHub 注册中心地址
+# 配置 SkillCenter 注册中心地址
 export CLAWHUB_REGISTRY=http://localhost:8080
 
 # 搜索技能包
@@ -217,7 +217,7 @@ npx clawhub install my-team--pdf-parser
 3. 点击技能包查看详情
 4. 点击「下载」或复制安装命令
 
-## 升级 SkillHub
+## 升级 SkillCenter
 
 使用 curl 命令升级到最新版本：
 

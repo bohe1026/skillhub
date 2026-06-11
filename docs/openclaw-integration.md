@@ -1,11 +1,11 @@
 # OpenClaw 集成指南
 
-本文档说明如何配置 OpenClaw CLI 连接到 SkillHub 私有注册中心，实现技能的发布、搜索和下载。
+本文档说明如何配置 OpenClaw CLI 连接到 SkillCenter 私有注册中心，实现技能的发布、搜索和下载。
 > 不仅适用于 Openclaw，通过指定安装目录，可适用于其他的 CLI Coding Agent (Claude Code、OpenCode、Qcoder等) 或者 Agent 助手（Nanobot、CoPaw等）。
 
 ## 概述
 
-SkillHub 提供了与 ClawHub 兼容的 API 层，使得 OpenClaw CLI 可以无缝对接私有注册中心。通过简单的配置，您可以：
+SkillCenter 提供了与 ClawHub 兼容的 API 层，使得 OpenClaw CLI 可以无缝对接私有注册中心。通过简单的配置，您可以：
 
 - 🔍 搜索组织内的私有技能
 - 📥 下载和安装技能包
@@ -16,11 +16,11 @@ SkillHub 提供了与 ClawHub 兼容的 API 层，使得 OpenClaw CLI 可以无�
 
 ### 1. 配置 Registry 地址
 
-在 OpenClaw 配置文件中设置 SkillHub 注册中心地址：
+在 OpenClaw 配置文件中设置 SkillCenter 注册中心地址：
 
 ```bash
 # 通过环境变量配置（临时）
-export CLAWHUB_REGISTRY=https://skillhub.your-company.com
+export CLAWHUB_REGISTRY=https://skillcenter.your-company.com
 ```
 
 ### 2. 登录认证（可选）
@@ -48,7 +48,7 @@ npx clawhub --help
 
 #### 获取 API Token
 
-1. 登录 SkillHub Web UI
+1. 登录 SkillCenter Web UI
 2. 进入 **个人设置 → API Tokens**
 3. 点击 **创建新 Token**
 4. 设置 Token 名称和权限范围
@@ -123,12 +123,12 @@ npx clawhub sync --help
 ```
 
 说明：
-- `my-space--my-skill` 是兼容层 canonical slug，SkillHub 会将其解析为 namespace `my-space` 和 skill slug `my-skill`
+- `my-space--my-skill` 是兼容层 canonical slug，SkillCenter 会将其解析为 namespace `my-space` 和 skill slug `my-skill`
 - 为避免 CLI 展示与服务端最终坐标不一致，建议让 `SKILL.md` 中的 `name` 与 canonical slug 后半段保持一致
 
 ## API 端点说明
 
-SkillHub 兼容层提供以下端点：
+SkillCenter 兼容层提供以下端点：
 
 | 端点 | 方法 | 说明 | 认证要求 |
 |------|------|------|----------|
@@ -153,7 +153,7 @@ SkillHub 兼容层提供以下端点：
 
 ## 技能可见性说明
 
-SkillHub 支持三种技能可见性级别，下载权限规则如下：
+SkillCenter 支持三种技能可见性级别，下载权限规则如下：
 
 ### PUBLIC（公开）
 - ✅ 任何人都可以搜索和查看
@@ -177,14 +177,14 @@ SkillHub 支持三种技能可见性级别，下载权限规则如下：
 
 ## Canonical Slug 映射规则
 
-SkillHub 内部使用 `@{namespace}/{skill}` 格式，但兼容层会自动转换为 ClawHub 风格的 canonical slug：
+SkillCenter 内部使用 `@{namespace}/{skill}` 格式，但兼容层会自动转换为 ClawHub 风格的 canonical slug：
 
-| SkillHub 内部坐标 | Canonical Slug | 说明 |
+| SkillCenter 内部坐标 | Canonical Slug | 说明 |
 |-------------------|----------------|------|
 | `@global/my-skill` | `my-skill` | 全局命名空间技能 |
 | `@my-team/my-skill` | `my-team--my-skill` | 团队命名空间技能 |
 
-OpenClaw CLI 使用 canonical slug 格式，SkillHub 会自动处理转换。
+OpenClaw CLI 使用 canonical slug 格式，SkillCenter 会自动处理转换。
 
 ## 配置示例
 
@@ -194,7 +194,7 @@ ClawHub CLI 通过环境变量配置：
 
 ```bash
 # Registry 配置
-export CLAWHUB_REGISTRY=https://skillhub.your-company.com
+export CLAWHUB_REGISTRY=https://skillcenter.your-company.com
 
 # 如需认证，先登录一次
 clawhub login --token sk_your_api_token_here
@@ -204,7 +204,7 @@ clawhub login --token sk_your_api_token_here
 
 ```bash
 # Registry 配置
-export CLAWHUB_REGISTRY=https://skillhub.your-company.com
+export CLAWHUB_REGISTRY=https://skillcenter.your-company.com
 
 # 可选：登录后再执行需要认证的命令
 clawhub login --token sk_your_api_token_here
@@ -235,7 +235,7 @@ unset CLAWHUB_REGISTRY
 clawhub login --token YOUR_NEW_TOKEN
 
 # 测试连接
-curl https://skillhub.your-company.com/api/v1/whoami \
+curl https://skillcenter.your-company.com/api/v1/whoami \
   -H "Authorization: Bearer YOUR_NEW_TOKEN"
 ```
 
@@ -256,7 +256,7 @@ npx clawhub search ""
 
 ### Q: 支持哪些 OpenClaw 版本？
 
-SkillHub 兼容层设计兼容使用 ClawHub CLI 的工具。ClawHub CLI 通过 npm 分发：
+SkillCenter 兼容层设计兼容使用 ClawHub CLI 的工具。ClawHub CLI 通过 npm 分发：
 
 ```bash
 # 安装 ClawHub CLI
@@ -325,7 +325,7 @@ npx clawhub install my-skill
    - 不要在代码中硬编码 Token
    - 使用环境变量或密钥管理工具
 3. **权限最小化**：为 Token 分配最小必需权限
-4. **审计日志**：定期检查 SkillHub 审计日志
+4. **审计日志**：定期检查 SkillCenter 审计日志
 
 ## 故障排查
 
@@ -343,16 +343,16 @@ npx clawhub --verbose install my-skill
 
 ```bash
 # 测试 Registry 连接
-curl https://skillhub.your-company.com/api/v1/whoami \
+curl https://skillcenter.your-company.com/api/v1/whoami \
   -H "Authorization: Bearer YOUR_TOKEN"
 
 # 测试搜索
-curl "https://skillhub.your-company.com/api/v1/search?q=test"
+curl "https://skillcenter.your-company.com/api/v1/search?q=test"
 ```
 
 ## 进一步阅读
 
-- [SkillHub API 设计文档](./06-api-design.md)
+- [SkillCenter API 设计文档](./06-api-design.md)
 - [技能协议规范](./07-skill-protocol.md)
 - [认证与授权](./03-authentication-design.md)
 - [部署指南](./09-deployment.md)
@@ -360,6 +360,6 @@ curl "https://skillhub.your-company.com/api/v1/search?q=test"
 ## 支持
 
 如有问题或建议：
-- 📖 查看完整文档：https://zread.ai/iflytek/skillhub
-- 💬 GitHub Discussions：https://github.com/iflytek/skillhub/discussions
-- 🐛 提交 Issue：https://github.com/iflytek/skillhub/issues
+- 📖 查看完整文档：/docs/
+- 💬 GitHub Discussions：mailto:admin@skillcenter.local
+- 🐛 提交 Issue：mailto:admin@skillcenter.local

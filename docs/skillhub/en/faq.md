@@ -1,12 +1,12 @@
 # FAQ
 
-## Q: What is the difference between SkillHub and ClawHub?
+## Q: What is the difference between SkillCenter and ClawHub?
 
-A: SkillHub is an enterprise-grade, self-hosted solution that provides stronger access control, review mechanisms, and governance capabilities. ClawHub is a public registry, similar to npm.
+A: SkillCenter is an enterprise-grade, self-hosted solution that provides stronger access control, review mechanisms, and governance capabilities. ClawHub is a public registry, similar to npm.
 
 **Key Differences**:
 
-| Feature | SkillHub | ClawHub |
+| Feature | SkillCenter | ClawHub |
 |------|----------|---------|
 | **Deployment** | Self-hosted | Public cloud |
 | **Access Control** | Namespace RBAC | Basic permissions |
@@ -17,7 +17,7 @@ A: SkillHub is an enterprise-grade, self-hosted solution that provides stronger 
 
 ## Q: How do I back up data?
 
-A: SkillHub stores data in PostgreSQL and object storage. Regularly backing up these two components is sufficient.
+A: SkillCenter stores data in PostgreSQL and object storage. Regularly backing up these two components is sufficient.
 
 **Back up PostgreSQL**:
 ```bash
@@ -30,7 +30,7 @@ pg_dump -h localhost -U postgres skillhub > backup.sql
 
 ## Q: What authentication methods are supported?
 
-A: SkillHub supports multiple authentication methods:
+A: SkillCenter supports multiple authentication methods:
 
 - **OAuth2**: GitHub, Google, GitLab, etc.
 - **Local Accounts**: Username/password login (built-in administrator: admin / ChangeMe!2026)
@@ -53,11 +53,11 @@ spring:
 
 ## Q: How do I use the CLI tool to manage skill packages?
 
-A: SkillHub is compatible with the OpenClaw CLI. Use the `npx clawhub` command to interact with it:
+A: SkillCenter is compatible with the OpenClaw CLI. Use the `npx clawhub` command to interact with it:
 
 ```bash
 # Configure the registry URL
-export CLAWHUB_REGISTRY=http://your-skillhub-host:8080
+export CLAWHUB_REGISTRY=http://your-skillcenter-host:8080
 
 # Search for skill packages
 npx clawhub search email
@@ -77,7 +77,7 @@ A: For production environments, it is recommended to use Nginx or Traefik as a r
 ```nginx
 server {
     listen 443 ssl;
-    server_name skillhub.example.com;
+    server_name skillcenter.example.com;
     
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
@@ -92,9 +92,9 @@ server {
 }
 ```
 
-## Q: How do I monitor SkillHub?
+## Q: How do I monitor SkillCenter?
 
-A: SkillHub provides several monitoring options:
+A: SkillCenter provides several monitoring options:
 
 - **Health Check**: `GET /actuator/health`
 - **Scanner Health Check**: `GET http://localhost:8000/health`
@@ -104,11 +104,11 @@ A: SkillHub provides several monitoring options:
 
 ## Q: Does it support multi-tenancy?
 
-A: SkillHub achieves logical multi-tenant isolation through namespaces. Each namespace acts as a tenant with its own members, permissions, and skill packages.
+A: SkillCenter achieves logical multi-tenant isolation through namespaces. Each namespace acts as a tenant with its own members, permissions, and skill packages.
 
-For physical isolation, you can deploy a separate SkillHub instance for each tenant.
+For physical isolation, you can deploy a separate SkillCenter instance for each tenant.
 
-## Q: How do I upgrade SkillHub?
+## Q: How do I upgrade SkillCenter?
 
 A: Use the curl command to upgrade:
 
@@ -126,7 +126,7 @@ curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- u
 
 ## Q: Why can't administrators (admin) and regular users create namespaces?
 
-A: Older versions of SkillHub do not support creating namespaces, as this feature was introduced in later updates. Please upgrade your SkillHub instance to the latest version (`latest`).
+A: Older versions of SkillCenter do not support creating namespaces, as this feature was introduced in later updates. Please upgrade your SkillCenter instance to the latest version (`latest`).
 Upgrade command example:
 ```bash
 curl -fsSL https://imageless.oss-cn-beijing.aliyuncs.com/runtime.sh | sh -s -- up --version latest
@@ -140,9 +140,9 @@ A: When using the OpenClaw CLI, you can specify the namespace using the `<namesp
 
 A: You can get help through the following channels:
 
-- **GitHub Issues**: https://github.com/iflytek/skillhub/issues
+- **GitHub Issues**: https://github.com/bohe1026/skillcenter/issues
 - **Documentation**: Refer to the project README.md
-- **Community Discussions**: https://github.com/iflytek/skillhub/discussions
+- **Community Discussions**: https://github.com/bohe1026/skillcenter/discussions
 
 ## Q: What should I do if local development fails to start?
 

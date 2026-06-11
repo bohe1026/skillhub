@@ -6,7 +6,7 @@ description: 技能发布审核流程配置
 
 # 审核流程
 
-SkillHub 采用双层审核机制，保障技能质量。
+SkillCenter 采用双层审核机制，保障技能质量。
 
 ## 审核流程
 

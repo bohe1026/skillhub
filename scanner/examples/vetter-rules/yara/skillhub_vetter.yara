@@ -1,13 +1,12 @@
 //////////////////////////////////////////
-// Skill-Vetter RED FLAGS — YARA 规则
-// 来源: clawhub.ai/spclaudehome/skill-vetter
+// SkillCenter RED FLAGS — YARA 规则
 // 用法: 放入 yara_rules/ 目录，自动加载
 //////////////////////////////////////////
 
 rule vetter_agent_memory_theft {
 
     meta:
-        author = "SkillHub (derived from skill-vetter)"
+        author = "SkillCenter"
         description = "Detects skills that read agent memory, identity, or personality files to steal context or impersonate the agent"
         classification = "harmful"
         threat_type = "AGENT MEMORY THEFT"
@@ -50,7 +49,7 @@ rule vetter_agent_memory_theft {
 rule vetter_ip_exfiltration {
 
     meta:
-        author = "SkillHub (derived from skill-vetter)"
+        author = "SkillCenter"
         description = "Detects network calls to raw IP addresses instead of domain names, which may bypass DNS logging and content filtering"
         classification = "harmful"
         threat_type = "IP-BASED EXFILTRATION"
@@ -90,7 +89,7 @@ rule vetter_ip_exfiltration {
 rule vetter_browser_data_theft {
 
     meta:
-        author = "SkillHub (derived from skill-vetter)"
+        author = "SkillCenter"
         description = "Detects skills that access browser cookies, sessions, saved passwords, or profile data"
         classification = "harmful"
         threat_type = "BROWSER DATA THEFT"

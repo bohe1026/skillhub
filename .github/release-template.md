@@ -1,4 +1,4 @@
-# SkillHub {{version}}
+# SkillCenter {{version}}
 
 {{One-line summary of the key changes in this release}}
 
@@ -33,10 +33,10 @@
 - {{Maintenance work}} by @author in #PR
 
 ## 📖 Documentation
-- Docs site: https://iflytek.github.io/skillhub/
+- Docs site: /docs/
 
 ## 👥 New Contributors
 {{Keep as-is}}
 
-**Full Changelog**: https://github.com/iflytek/skillhub/compare/{{prev_tag}}...{{tag}}
+**Full Changelog**: https://github.com/bohe1026/skillhub/compare/{{prev_tag}}...{{tag}}
 

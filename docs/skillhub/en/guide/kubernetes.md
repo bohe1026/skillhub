@@ -1,6 +1,6 @@
 # Kubernetes Deployment Guide
 
-This document explains how to deploy SkillHub on a Kubernetes cluster.
+This document explains how to deploy SkillCenter on a Kubernetes cluster.
 
 ## Prerequisites
 
@@ -216,9 +216,9 @@ skillhub-storage-s3-secret-key: your-secret-key
 
 | Component | Image |
 |---|---|
-| Backend | ghcr.io/iflytek/skillhub-server:latest |
-| Frontend | ghcr.io/iflytek/skillhub-web:latest |
-| Scanner | ghcr.io/iflytek/skillhub-scanner:latest |
+| Backend | ghcr.io/bohe1026/skillcenter-server:latest |
+| Frontend | ghcr.io/bohe1026/skillcenter-web:latest |
+| Scanner | ghcr.io/bohe1026/skillcenter-scanner:latest |
 | PostgreSQL | postgres:16-alpine |
 | Redis | redis:7-alpine |
 

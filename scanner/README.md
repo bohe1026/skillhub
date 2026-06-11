@@ -33,10 +33,10 @@ curl http://localhost:8000/health
 
 ## 架构说明
 
-Scanner 服务与 SkillHub 的集成架构：
+Scanner 服务与 SkillCenter 的集成架构：
 
 ```
-SkillHub Backend
+SkillCenter Backend
     ↓
 SecurityScanService.triggerScan()
     ↓
@@ -53,7 +53,7 @@ Cisco skill-scanner API
 
 ## 相关配置
 
-SkillHub 后端的 Scanner 配置位于：
+SkillCenter 后端的 Scanner 配置位于：
 
 - `server/skillhub-app/src/main/resources/application.yml`
 - `deploy/k8s/configmap.yaml`

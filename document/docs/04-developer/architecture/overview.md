@@ -1,7 +1,7 @@
 ---
 title: 系统架构
 sidebar_position: 1
-description: SkillHub 系统架构概览
+description: SkillCenter 系统架构概览
 ---
 
 # 系统架构

@@ -1,12 +1,12 @@
 ---
 title: Kubernetes 部署
 sidebar_position: 2
-description: 在 Kubernetes 集群中部署 SkillHub
+description: 在 Kubernetes 集群中部署 SkillCenter
 ---
 
 # Kubernetes 部署
 
-本文介绍如何在 Kubernetes 集群中部署 SkillHub。
+本文介绍如何在 Kubernetes 集群中部署 SkillCenter。
 
 ## 前置要求
 

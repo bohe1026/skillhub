@@ -6,7 +6,7 @@ description: RBAC 权限系统配置
 
 # 权限管理
 
-SkillHub 采用基于角色的访问控制（RBAC）系统。
+SkillCenter 采用基于角色的访问控制（RBAC）系统。
 
 当前代码里实际存在两套并行角色体系：
 

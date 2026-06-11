@@ -11,7 +11,7 @@ describe('inferMarkdownCodeLanguage', () => {
   })
 
   it('infers json payloads', () => {
-    expect(inferMarkdownCodeLanguage('{\n  "name": "skillhub"\n}')).toBe('json')
+    expect(inferMarkdownCodeLanguage('{\n  "name": "skillcenter"\n}')).toBe('json')
   })
 
   it('infers yaml frontmatter style snippets', () => {

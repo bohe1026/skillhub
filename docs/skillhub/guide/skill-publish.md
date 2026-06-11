@@ -2,7 +2,7 @@
 
 ## 功能描述
 
-Skill 发布是 SkillHub 的核心功能。开发者可以将本地开发的 Agent 技能包一键上传到注册中心，系统会自动处理版本管理、元数据提取、文件索引等工作。
+Skill 发布是 SkillCenter 的核心功能。开发者可以将本地开发的 Agent 技能包一键上传到注册中心，系统会自动处理版本管理、元数据提取、文件索引等工作。
 
 ![概念图](/diagrams/skill-publish-concept.png)
 
@@ -14,7 +14,7 @@ Skill 发布是 SkillHub 的核心功能。开发者可以将本地开发的 Age
 - **权限失控**：无法精细控制谁能访问哪些技能包
 - **发现困难**：新成员不知道团队已有哪些可用技能
 
-SkillHub 提供了类似 npm 的发布体验，但增加了企业级的权限控制和审核机制。
+SkillCenter 提供了类似 npm 的发布体验，但增加了企业级的权限控制和审核机制。
 
 **核心特性**：
 
@@ -49,7 +49,7 @@ SkillHub 提供了类似 npm 的发布体验，但增加了企业级的权限控
 
 1. **准备技能包**
 
-确保技能包符合 SkillHub 规范：
+确保技能包符合 SkillCenter 规范：
 - 包含 `skill.md`（技能描述）
 - 包含 `package.json` 或 `SKILL.md`（元数据）
 - 文件结构清晰，无敏感信息
@@ -146,7 +146,7 @@ GET /api/v1/skills/{namespace}/{slug}/resolve?version=^1.2.0
 
 ## 注意事项
 
-> **版本号规范**：SkillHub 使用语义化版本（Semantic Versioning）。版本号格式为 `major.minor.patch`，例如 `1.2.3`。
+> **版本号规范**：SkillCenter 使用语义化版本（Semantic Versioning）。版本号格式为 `major.minor.patch`，例如 `1.2.3`。
 
 - **首次发布**：版本号建议从 `0.1.0` 或 `1.0.0` 开始
 - **标签管理**：`latest` 标签会自动指向最新的稳定版本

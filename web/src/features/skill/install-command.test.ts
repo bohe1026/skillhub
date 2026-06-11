@@ -5,7 +5,6 @@ import {
   InstallCommand,
   buildInstallCommand,
   buildInstallTarget,
-  buildSkillhubInstallCommand,
   getBaseUrl,
 } from './install-command'
 
@@ -68,18 +67,6 @@ describe('install-command', () => {
     )
   })
 
-  it('builds a one-line SkillHub npx command for the global namespace', () => {
-    expect(buildSkillhubInstallCommand('global', 'my-skill', 'https://skill.xfyun.cn')).toBe(
-      'npx @astron-team/skillhub@latest install my-skill --registry https://skill.xfyun.cn',
-    )
-  })
-
-  it('builds a one-line SkillHub npx command with namespace for team skills', () => {
-    expect(buildSkillhubInstallCommand('team-alpha', 'my-skill', 'https://skill.xfyun.cn')).toBe(
-      'npx @astron-team/skillhub@latest install my-skill --namespace team-alpha --registry https://skill.xfyun.cn',
-    )
-  })
-
   it('uses the runtime app base url when available', () => {
     setMockWindow('https://app.example.com')
 
@@ -111,7 +98,7 @@ describe('install-command', () => {
     expect(html).toContain('break-all')
   })
 
-  it('renders install method tabs with only a short active underline', () => {
+  it('renders a single neutral install command without branded method tabs', () => {
     setMockWindow('https://app.example.com')
 
     const html = renderToStaticMarkup(createElement(InstallCommand, {
@@ -119,13 +106,14 @@ describe('install-command', () => {
       slug: 'meeting-minutes-generator',
     }))
 
-    expect(html).toContain('after:w-6')
-    expect(html).toContain('after:h-0.5')
+    expect(html).toContain('npx clawhub install meeting-minutes-generator --registry https://app.example.com')
+    expect(html).not.toContain('skillDetail.installMethodSkillhub')
+    expect(html).not.toContain('@astron-team')
     expect(html).not.toContain('rounded-lg border bg-background/80 p-1')
     expect(html).not.toContain('flex-1 rounded-md')
   })
 
-  it('renders ClawHub CLI as the default install method', () => {
+  it('renders ClawHub CLI install command for namespaced skills', () => {
     setMockWindow('https://app.example.com')
 
     const html = renderToStaticMarkup(createElement(InstallCommand, {
@@ -133,10 +121,7 @@ describe('install-command', () => {
       slug: 'meeting-minutes-generator',
     }))
 
-    expect(html).toContain('skillDetail.installMethodClawhub')
-    expect(html).toContain('skillDetail.installMethodSkillhub')
-    expect(html).toContain('aria-selected="true"')
     expect(html).toContain('npx clawhub install team-alpha--meeting-minutes-generator --registry https://app.example.com')
-    expect(html).not.toContain('npx @astron-team/skillhub@latest install meeting-minutes-generator --namespace team-alpha --registry https://app.example.com')
+    expect(html).not.toContain('@astron-team')
   })
 })

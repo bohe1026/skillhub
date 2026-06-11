@@ -2,7 +2,7 @@
 
 ## Overview
 
-Skill publishing is the core feature of SkillHub. Developers can upload locally developed Agent skill packages to the registry with one click. The system automatically handles version management, metadata extraction, and file indexing.
+Skill publishing is the core feature of SkillCenter. Developers can upload locally developed Agent skill packages to the registry with one click. The system automatically handles version management, metadata extraction, and file indexing.
 
 ![Concept Diagram](/diagrams/skill-publish-concept.png)
 
@@ -14,7 +14,7 @@ Traditionally, team members distribute skill packages through Git repositories o
 - **Permission Control Lost**: Cannot finely control who can access which skill packages
 - **Discovery Difficulty**: New members don't know what skills are available
 
-SkillHub provides an npm-like publishing experience with enterprise-grade permission control and review mechanisms.
+SkillCenter provides an npm-like publishing experience with enterprise-grade permission control and review mechanisms.
 
 **Core Features**:
 
@@ -49,7 +49,7 @@ New version has serious issues, need to point `latest` tag to previous stable ve
 
 1. **Prepare Skill Package**
 
-Ensure skill package conforms to SkillHub specification:
+Ensure skill package conforms to SkillCenter specification:
 - Contains `skill.md` (skill description)
 - Contains `package.json` or `SKILL.md` (metadata)
 - Clear file structure, no sensitive information
@@ -146,7 +146,7 @@ GET /api/v1/skills/{namespace}/{slug}/resolve?version=^1.2.0
 
 ## Notes
 
-> **Version Specification**: SkillHub uses Semantic Versioning. Version format is `major.minor.patch`, e.g., `1.2.3`.
+> **Version Specification**: SkillCenter uses Semantic Versioning. Version format is `major.minor.patch`, e.g., `1.2.3`.
 
 - **First Publish**: Version should start from `0.1.0` or `1.0.0`
 - **Tag Management**: `latest` tag automatically points to the latest stable version

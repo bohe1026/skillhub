@@ -2,12 +2,12 @@
 layout: home
 
 hero:
-  name: SkillHub
+  name: SkillCenter
   text: 企业级 Agent Skill 注册中心
   tagline: 让团队的 AI 技能包管理像 npm 一样简单
   image:
     src: /diagrams/cover.png
-    alt: SkillHub
+    alt: SkillCenter
   actions:
     - theme: brand
       text: 快速开始
@@ -17,7 +17,7 @@ hero:
       link: /guide/skill-publish
     - theme: alt
       text: GitHub
-      link: https://github.com/iflytek/skillhub
+      link: https://github.com/bohe1026/skillcenter
 
 features:
   - icon: 🚀

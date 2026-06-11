@@ -14,7 +14,7 @@ function getAdminCredentials() {
 }
 
 function createCsvFile(content: string): { filePath: string; cleanup: () => void } {
-  const tempDir = mkdtempSync(path.join(tmpdir(), 'skillhub-e2e-csv-'))
+  const tempDir = mkdtempSync(path.join(tmpdir(), 'skillcenter-e2e-csv-'))
   const filePath = path.join(tempDir, 'members.csv')
   writeFileSync(filePath, content, 'utf8')
   return {
