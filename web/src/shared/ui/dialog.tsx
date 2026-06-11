@@ -115,7 +115,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
           role="dialog"
           aria-modal="true"
           className={cn(
-            'fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100vh-2rem)] w-[min(calc(100vw-2rem),32rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-2xl border border-border/60 bg-card p-8 shadow-card',
+            'fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100vh-2rem)] w-[min(calc(100vw-2rem),32rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-lg border border-white/80 bg-white/92 p-8 shadow-[0_28px_70px_-34px_rgba(15,23,42,0.42)] backdrop-blur',
             className
           )}
           onClick={(e) => e.stopPropagation()}

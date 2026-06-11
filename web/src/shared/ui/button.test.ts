@@ -4,7 +4,7 @@ import { buttonVariants } from './button'
 describe('buttonVariants', () => {
   it('applies default variant and size classes', () => {
     const classes = buttonVariants()
-    expect(classes).toContain('bg-brand-gradient')
+    expect(classes).toContain('bg-blue-600')
     expect(classes).toContain('h-10')
     expect(classes).toContain('px-5')
   })
@@ -17,17 +17,17 @@ describe('buttonVariants', () => {
   it('applies outline variant classes', () => {
     const classes = buttonVariants({ variant: 'outline' })
     expect(classes).toContain('border')
-    expect(classes).toContain('bg-transparent')
+    expect(classes).toContain('bg-white/78')
   })
 
   it('applies secondary variant classes', () => {
     const classes = buttonVariants({ variant: 'secondary' })
-    expect(classes).toContain('bg-secondary')
+    expect(classes).toContain('bg-blue-50')
   })
 
   it('applies ghost variant classes', () => {
     const classes = buttonVariants({ variant: 'ghost' })
-    expect(classes).toContain('hover:bg-secondary')
+    expect(classes).toContain('hover:bg-blue-50')
   })
 
   it('applies link variant classes', () => {

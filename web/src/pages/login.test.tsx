@@ -26,10 +26,6 @@ vi.mock('@/api/client', () => ({
   getDirectAuthRuntimeConfig: () => ({ enabled: false }),
 }))
 
-vi.mock('@/features/auth/login-button', () => ({
-  LoginButton: () => null,
-}))
-
 vi.mock('@/features/auth/session-bootstrap-entry', () => ({
   SessionBootstrapEntry: () => null,
 }))
@@ -54,13 +50,6 @@ vi.mock('@/shared/ui/input', () => ({
   Input: () => null,
 }))
 
-vi.mock('@/shared/ui/tabs', () => ({
-  Tabs: ({ children }: { children: unknown }) => children,
-  TabsContent: ({ children }: { children: unknown }) => children,
-  TabsList: ({ children }: { children: unknown }) => children,
-  TabsTrigger: ({ children }: { children: unknown }) => children,
-}))
-
 import { renderToStaticMarkup } from 'react-dom/server'
 import { LoginPage } from './login'
 
@@ -73,7 +62,7 @@ describe('LoginPage', () => {
     const html = renderToStaticMarkup(<LoginPage />)
 
     expect(html).toContain('login.title')
-    expect(html).toContain('login.subtitle')
+    expect(html).not.toContain('login.subtitle')
     expect(html).toContain('login.submit')
   })
 })

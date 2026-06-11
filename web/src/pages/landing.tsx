@@ -1,7 +1,27 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import type { RefObject } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import {
+  ArrowRight,
+  Bot,
+  Boxes,
+  CheckCircle2,
+  Cloud,
+  Database,
+  GitBranch,
+  Globe2,
+  LockKeyhole,
+  PackageOpen,
+  PlayCircle,
+  Search as SearchIcon,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  Workflow,
+} from 'lucide-react'
+import type { SkillSummary } from '@/api/types'
 import { normalizeSearchQuery } from '@/shared/lib/search-query'
-import { PackageOpen, Terminal, Shield, Users, GitBranch, Search as SearchIcon, Settings } from 'lucide-react'
 import { LandingQuickStartSection } from '@/shared/components/landing-quick-start'
 import { SkillCard } from '@/features/skill/skill-card'
 import { SkeletonList } from '@/shared/components/skeleton-loader'
@@ -9,11 +29,31 @@ import { useSearchSkills } from '@/shared/hooks/use-skill-queries'
 import { useInView } from '@/shared/hooks/use-in-view'
 import { Button } from '@/shared/ui/button'
 
+interface LandingIconItem {
+  icon: LucideIcon
+  title: string
+  description?: string
+  tone?: string
+}
+
+interface SkillShowcaseSectionProps {
+  title: string
+  description: string
+  sort: 'downloads' | 'newest'
+  skills?: SkillSummary[]
+  isLoading: boolean
+  inViewRef: RefObject<HTMLDivElement | null>
+  inView: boolean
+  onViewAll: () => void
+  onSkillClick: (namespace: string, slug: string) => void
+  viewAllLabel: string
+}
+
 /**
- * Marketing-style landing page for unauthenticated and first-time visitors.
+ * Landing page for unauthenticated and first-time visitors.
  *
- * The page mixes static positioning content with live skill queries so popular and latest skills
- * stay aligned with the current registry state.
+ * The first viewport uses a light enterprise-tech composition while keeping the existing registry
+ * actions live: search, publish, popular skills, latest skills, and quick-start commands.
  */
 export function LandingPage() {
   const { t } = useTranslation()
@@ -29,13 +69,7 @@ export function LandingPage() {
     size: 6,
   })
 
-  const handleSkillClick = (namespace: string, slug: string) => {
-    navigate({ to: `/space/${namespace}/${encodeURIComponent(slug)}` })
-  }
-
   const heroView = useInView()
-  const statsView = useInView()
-  const featuresView = useInView()
   const quickStartView = useInView()
   const popularView = useInView()
   const latestView = useInView()
@@ -48,229 +82,370 @@ export function LandingPage() {
     })
   }
 
-  const features = [
+  const handleSkillClick = (namespace: string, slug: string) => {
+    navigate({ to: `/space/${namespace}/${encodeURIComponent(slug)}` })
+  }
+
+  const capabilityTags: LandingIconItem[] = [
     {
-      icon: <Shield className="w-6 h-6 text-white" strokeWidth={2} />,
-      title: t('landing.features.secure.title'),
-      description: t('landing.features.secure.description'),
+      icon: Sparkles,
+      title: t('landing.techTags.ai', { defaultValue: 'AI skills' }),
     },
     {
-      icon: <Users className="w-6 h-6 text-white" strokeWidth={2} />,
-      title: t('landing.features.community.title'),
-      description: t('landing.features.community.description'),
+      icon: Cloud,
+      title: t('landing.techTags.cloud', { defaultValue: 'Private registry' }),
     },
     {
-      icon: <PackageOpen className="w-6 h-6 text-white" strokeWidth={2} />,
-      title: t('landing.features.integration.title'),
-      description: t('landing.features.integration.description'),
+      icon: Database,
+      title: t('landing.techTags.data', { defaultValue: 'Versioned assets' }),
     },
     {
-      icon: <GitBranch className="w-6 h-6 text-white" strokeWidth={2} />,
-      title: t('landing.features.versionControl.title', { defaultValue: 'Version control' }),
-      description: t('landing.features.versionControl.description', { defaultValue: 'Managed release flows keep skill packages traceable and easier to review.' }),
-    },
-    {
-      icon: <Terminal className="w-6 h-6 text-white" strokeWidth={2} />,
-      title: t('landing.features.cli.title', { defaultValue: 'CLI tooling' }),
-      description: t('landing.features.cli.description', { defaultValue: 'Command-line workflows support publishing, installing, and operating skills quickly.' }),
-    },
-    {
-      icon: <Settings className="w-6 h-6 text-white" strokeWidth={2} />,
-      title: t('landing.features.governance.title', { defaultValue: 'Governance' }),
-      description: t('landing.features.governance.description', { defaultValue: 'Built-in review and permission flows help teams enforce skill quality.' }),
+      icon: ShieldCheck,
+      title: t('landing.techTags.security', { defaultValue: 'Trusted review' }),
     },
   ]
 
-  const stats = [
-    { value: '1000+', label: t('landing.stats.skills', { defaultValue: 'Registry items' }) },
-    { value: '50K+', label: t('landing.stats.downloads', { defaultValue: 'Downloads' }) },
-    { value: '200+', label: t('landing.stats.teams', { defaultValue: 'Teams' }) },
+  const featureCards: LandingIconItem[] = [
+    {
+      icon: Boxes,
+      title: t('landing.features.integration.title'),
+      description: t('landing.features.integration.description'),
+      tone: 'from-blue-600 to-cyan-400',
+    },
+    {
+      icon: GitBranch,
+      title: t('landing.features.versionControl.title'),
+      description: t('landing.features.versionControl.description'),
+      tone: 'from-emerald-500 to-teal-400',
+    },
+    {
+      icon: ShieldCheck,
+      title: t('landing.features.secure.title'),
+      description: t('landing.features.secure.description'),
+      tone: 'from-blue-700 to-sky-500',
+    },
+    {
+      icon: Users,
+      title: t('landing.features.community.title'),
+      description: t('landing.features.community.description'),
+      tone: 'from-sky-500 to-blue-600',
+    },
+  ]
+
+  const stats: LandingIconItem[] = [
+    {
+      icon: PackageOpen,
+      title: '1000+',
+      description: t('landing.stats.skills', { defaultValue: 'Registry items' }),
+    },
+    {
+      icon: Workflow,
+      title: '50K+',
+      description: t('landing.stats.downloads', { defaultValue: 'Downloads' }),
+    },
+    {
+      icon: Users,
+      title: '200+',
+      description: t('landing.stats.teams', { defaultValue: 'Teams' }),
+    },
+    {
+      icon: Globe2,
+      title: '10+',
+      description: t('landing.stats.coverage', { defaultValue: 'Workflows' }),
+    },
+  ]
+
+  const missionItems: LandingIconItem[] = [
+    {
+      icon: Bot,
+      title: t('landing.mission.automation.title', { defaultValue: 'Automation' }),
+      description: t('landing.mission.automation.description', {
+        defaultValue: 'Use review and reuse workflows to keep Agent skills moving.',
+      }),
+    },
+    {
+      icon: CheckCircle2,
+      title: t('landing.mission.quality.title', { defaultValue: 'Quality first' }),
+      description: t('landing.mission.quality.description', {
+        defaultValue: 'Make every package easier to evaluate, approve, and install.',
+      }),
+    },
+    {
+      icon: LockKeyhole,
+      title: t('landing.mission.control.title', { defaultValue: 'Controlled sharing' }),
+      description: t('landing.mission.control.description', {
+        defaultValue: 'Keep enterprise skill assets discoverable without losing governance.',
+      }),
+    },
   ]
 
   return (
-    <>
-      {/* Hero Section */}
-      <main ref={heroView.ref} className={`relative z-10 flex flex-col items-center pt-16 pb-20 px-4 md:pt-24 scroll-fade-up${heroView.inView ? ' in-view' : ''}`}>
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-brand-gradient mb-4">
-          SkillHub
-        </h1>
-        <h2
-          className="text-xl md:text-2xl font-semibold tracking-tight text-center mb-3"
-          style={{ color: 'hsl(var(--foreground))' }}
-        >
-          {t('landing.hero.title')}
-        </h2>
-        <p
-          className="text-base md:text-lg text-center max-w-2xl mb-10 leading-relaxed"
-          style={{ color: 'hsl(var(--text-secondary))' }}
-        >
-          {t('landing.hero.subtitle')}
-        </p>
-
-        {/* Search box */}
-        <div className="w-full max-w-2xl mb-8">
-          <div
-            className="flex items-center bg-white rounded-xl border shadow-sm px-5 py-3.5"
-            style={{ borderColor: 'hsl(var(--border))' }}
-          >
-            <SearchIcon className="w-5 h-5 flex-shrink-0 mr-3" style={{ color: 'hsl(var(--text-placeholder))' }} strokeWidth={1.5} />
-            <input
-              type="text"
-              placeholder={t('landing.hero.searchPlaceholder')}
-              className="hero-input flex-1 bg-transparent outline-none text-base"
-              style={{ color: 'hsl(var(--foreground))' }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch((e.target as HTMLInputElement).value)
-                }
-              }}
-            />
-          </div>
-        </div>
-
-        {/* CTA buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-14">
-          <Link
-            to="/search"
-            search={{ q: '', sort: 'relevance', page: 0, starredOnly: false }}
-            className="px-8 py-3.5 rounded-xl text-base font-medium text-white bg-brand-gradient shadow-sm hover:opacity-95 transition-opacity"
-          >
-            {t('landing.hero.exploreSkills')}
-          </Link>
-          <Link
-            to="/dashboard/publish"
-            className="px-8 py-3.5 rounded-xl text-base font-medium border transition-colors"
-            style={{
-              background: 'hsl(var(--secondary))',
-              borderColor: 'hsl(var(--muted-foreground))',
-              color: 'hsl(var(--muted-foreground))',
-            }}
-          >
-            {t('landing.hero.publishSkill', { defaultValue: '开始构建' })}
-          </Link>
-        </div>
-
-        {/* Stats */}
-        <div ref={statsView.ref} className={`flex flex-row justify-center gap-16 md:gap-24 scroll-fade-up${statsView.inView ? ' in-view' : ''}`} style={{ transitionDelay: '0.15s' }}>
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-bold tracking-tight text-brand-gradient mb-1">
-                {stat.value}
-              </span>
-              <span className="text-sm font-normal" style={{ color: 'hsl(var(--foreground))' }}>
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </main>
-
-      {/* Features Section */}
-      <section ref={featuresView.ref} className={`relative z-10 w-full py-20 md:py-24 px-6 scroll-fade-up${featuresView.inView ? ' in-view' : ''}`} style={{ background: 'var(--bg-page, hsl(var(--background)))' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3" style={{ color: 'hsl(var(--foreground))' }}>
-              {t('landing.whySkillHub.title', { defaultValue: '为什么选择 SkillHub' })}
-            </h2>
-            <p className="text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'hsl(var(--text-secondary))' }}>
-              {t('landing.whySkillHub.subtitle', { defaultValue: '专为企业打造的私有化 Agent 技能管理平台' })}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <div
-                key={feature.title}
-                className="bg-white rounded-xl p-8 border shadow-sm transition-shadow hover:shadow-md"
-                style={{ borderColor: 'hsl(var(--border-card))' }}
-              >
-                <div className="feature-icon w-12 h-12 rounded-2xl flex items-center justify-center mb-6 mx-auto bg-brand-gradient">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold text-center mb-3" style={{ color: 'hsl(var(--foreground))' }}>
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-center leading-relaxed" style={{ color: 'hsl(var(--text-secondary))' }}>
-                  {feature.description}
-                </p>
+    <div className="landing-tech-page">
+      <section
+        ref={heroView.ref}
+        className="relative overflow-hidden px-4 pb-10 pt-8 md:px-8 md:pb-14 md:pt-12"
+      >
+        <div className="mx-auto max-w-[1440px]">
+          <div className="grid min-h-[560px] items-center gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
+            <div className="relative z-10 max-w-2xl pt-4 md:pt-0">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-lg border border-blue-100 bg-white/78 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
+                <Sparkles className="h-4 w-4" strokeWidth={1.8} />
+                <span>{t('landing.badge')}</span>
               </div>
-            ))}
+
+              <h1 className="whitespace-nowrap text-[clamp(2.1rem,9.5vw,3.2rem)] font-black leading-[1.08] text-slate-950 lg:text-[3.7rem]">
+                {t('landing.hero.title')}
+              </h1>
+              <p className="mt-6 max-w-xl text-base font-medium leading-8 text-slate-600 md:text-lg">
+                {t('landing.hero.subtitle')}
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  to="/search"
+                  search={{ q: '', sort: 'relevance', page: 0, starredOnly: false }}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-[0_18px_36px_-18px_rgba(37,99,235,0.75)] transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  <SearchIcon className="h-4 w-4" strokeWidth={1.9} />
+                  {t('landing.hero.exploreSkills')}
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.9} />
+                </Link>
+                <Link
+                  to="/dashboard/publish"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white/72 px-6 py-3 text-base font-semibold text-blue-700 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.5)] backdrop-blur transition hover:border-blue-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  {t('landing.hero.publishSkill')}
+                  <PlayCircle className="h-4 w-4" strokeWidth={1.9} />
+                </Link>
+              </div>
+
+              <div className="mt-8 max-w-xl rounded-lg border border-white/80 bg-white/78 p-2 shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)] backdrop-blur">
+                <div className="flex min-h-12 items-center gap-3 rounded-md border border-blue-50 bg-slate-50/85 px-4">
+                  <SearchIcon className="h-5 w-5 flex-shrink-0 text-blue-500" strokeWidth={1.8} />
+                  <input
+                    type="text"
+                    aria-label={t('landing.hero.searchPlaceholder')}
+                    placeholder={t('landing.hero.searchPlaceholder')}
+                    className="hero-input h-12 min-w-0 flex-1 bg-transparent text-base font-medium text-slate-900 outline-none"
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        handleSearch((event.target as HTMLInputElement).value)
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4">
+                {capabilityTags.map((item) => {
+                  const Icon = item.icon
+
+                  return (
+                    <div
+                      key={item.title}
+                      className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/75 bg-white/70 px-3 py-2 text-sm font-semibold text-slate-700 shadow-[0_12px_30px_-26px_rgba(15,23,42,0.45)] backdrop-blur"
+                    >
+                      <Icon className="h-4 w-4 flex-shrink-0 text-blue-600" strokeWidth={1.8} />
+                      <span className="truncate">{item.title}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            <TechHeroVisual />
           </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {featureCards.map((feature) => {
+              const Icon = feature.icon
+
+              return (
+                <article
+                  key={feature.title}
+                  className="group rounded-lg border border-white/80 bg-white/82 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.38)] backdrop-blur transition hover:-translate-y-0.5 hover:shadow-[0_24px_56px_-30px_rgba(37,99,235,0.28)]"
+                >
+                  <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${feature.tone} text-white shadow-[0_18px_30px_-18px_rgba(37,99,235,0.55)]`}>
+                    <Icon className="h-6 w-6" strokeWidth={1.8} />
+                  </div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-950">{feature.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-500">{feature.description}</p>
+                    </div>
+                    <ArrowRight className="mt-1 h-4 w-4 flex-shrink-0 text-blue-500 transition group-hover:translate-x-1" strokeWidth={1.8} />
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+
+          <div className="mt-5 grid gap-4 rounded-lg border border-white/85 bg-white/74 px-5 py-5 shadow-[0_20px_48px_-34px_rgba(15,23,42,0.36)] backdrop-blur md:grid-cols-4 md:px-8">
+            {stats.map((stat) => {
+              const Icon = stat.icon
+
+              return (
+                <div key={stat.description} className="flex items-center gap-4 md:justify-center">
+                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                    <Icon className="h-7 w-7" strokeWidth={1.75} />
+                  </div>
+                  <div>
+                    <div className="text-3xl font-black leading-none text-slate-950">{stat.title}</div>
+                    <div className="mt-1 text-sm font-medium text-slate-500">{stat.description}</div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <section className="mt-5 overflow-hidden rounded-lg border border-blue-100 bg-[linear-gradient(105deg,rgba(239,247,255,0.96)_0%,rgba(231,244,255,0.9)_54%,rgba(255,255,255,0.45)_100%)] px-6 py-7 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.35)] md:px-8">
+            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.8fr] lg:items-center">
+              <div>
+                <h2 className="text-2xl font-black text-slate-950">{t('landing.whySkillHub.title')}</h2>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600 md:text-base">
+                  {t('landing.whySkillHub.subtitle')}
+                </p>
+                <Link
+                  to="/search"
+                  search={{ q: '', sort: 'relevance', page: 0, starredOnly: false }}
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-800"
+                >
+                  {t('home.viewAll')}
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
+                </Link>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3">
+                {missionItems.map((item) => {
+                  const Icon = item.icon
+
+                  return (
+                    <div key={item.title} className="flex gap-3">
+                      <div className="mt-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/82 text-blue-600 shadow-[0_12px_26px_-22px_rgba(37,99,235,0.6)]">
+                        <Icon className="h-5 w-5" strokeWidth={1.8} />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-slate-950">{item.title}</h3>
+                        <p className="mt-1 text-sm leading-6 text-slate-600">{item.description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </section>
         </div>
       </section>
 
-      {/* Quick Start */}
       <div ref={quickStartView.ref} className={`scroll-fade-up${quickStartView.inView ? ' in-view' : ''}`}>
         <LandingQuickStartSection />
       </div>
 
-      {/* Popular Downloads Section */}
-      <section ref={popularView.ref} className={`relative z-10 w-full py-20 md:py-24 px-6 scroll-fade-up${popularView.inView ? ' in-view' : ''}`} style={{ background: 'var(--bg-page, hsl(var(--background)))' }}>
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-2" style={{ color: 'hsl(var(--foreground))' }}>
-                {t('home.popularTitle')}
-              </h2>
-              <p style={{ color: 'hsl(var(--text-secondary))' }}>{t('home.popularDescription')}</p>
-            </div>
-            <Button
-              variant="ghost"
-              onClick={() => navigate({ to: '/search', search: { q: '', sort: 'downloads', page: 0, starredOnly: false } })}
-            >
-              {t('home.viewAll')}
-            </Button>
-          </div>
-          {isLoadingPopular ? (
-            <SkeletonList count={6} />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {popularSkills?.items.map((skill, idx) => (
-                <div key={skill.id} className={`animate-fade-up delay-${Math.min(idx + 1, 6)}`}>
-                  <SkillCard
-                    skill={skill}
-                    onClick={() => handleSkillClick(skill.namespace, skill.slug)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <SkillShowcaseSection
+        title={t('home.popularTitle')}
+        description={t('home.popularDescription')}
+        sort="downloads"
+        skills={popularSkills?.items}
+        isLoading={isLoadingPopular}
+        inViewRef={popularView.ref}
+        inView={popularView.inView}
+        viewAllLabel={t('home.viewAll')}
+        onViewAll={() => navigate({ to: '/search', search: { q: '', sort: 'downloads', page: 0, starredOnly: false } })}
+        onSkillClick={handleSkillClick}
+      />
 
-      {/* Latest Releases Section */}
-      <section ref={latestView.ref} className={`relative z-10 w-full py-20 md:py-24 px-6 scroll-fade-up${latestView.inView ? ' in-view' : ''}`} style={{ background: 'var(--bg-page, hsl(var(--background)))' }}>
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-2" style={{ color: 'hsl(var(--foreground))' }}>
-                {t('home.latestTitle')}
-              </h2>
-              <p style={{ color: 'hsl(var(--text-secondary))' }}>{t('home.latestDescription')}</p>
-            </div>
-            <Button
-              variant="ghost"
-              onClick={() => navigate({ to: '/search', search: { q: '', sort: 'newest', page: 0, starredOnly: false } })}
-            >
-              {t('home.viewAll')}
-            </Button>
-          </div>
-          {isLoadingLatest ? (
-            <SkeletonList count={6} />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {latestSkills?.items.map((skill, idx) => (
-                <div key={skill.id} className={`animate-fade-up delay-${Math.min(idx + 1, 6)}`}>
-                  <SkillCard
-                    skill={skill}
-                    onClick={() => handleSkillClick(skill.namespace, skill.slug)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+      <SkillShowcaseSection
+        title={t('home.latestTitle')}
+        description={t('home.latestDescription')}
+        sort="newest"
+        skills={latestSkills?.items}
+        isLoading={isLoadingLatest}
+        inViewRef={latestView.ref}
+        inView={latestView.inView}
+        viewAllLabel={t('home.viewAll')}
+        onViewAll={() => navigate({ to: '/search', search: { q: '', sort: 'newest', page: 0, starredOnly: false } })}
+        onSkillClick={handleSkillClick}
+      />
+    </div>
+  )
+}
+
+function TechHeroVisual() {
+  return (
+    <div className="tech-hero-visual" aria-hidden="true">
+      <div className="tech-grid-plane" />
+      <div className="tech-platform">
+        <div className="tech-platform-ring tech-platform-ring-outer" />
+        <div className="tech-platform-ring tech-platform-ring-inner" />
+        <div className="tech-cube">
+          <span className="tech-cube-face tech-cube-front" />
+          <span className="tech-cube-face tech-cube-back" />
+          <span className="tech-cube-face tech-cube-right" />
+          <span className="tech-cube-face tech-cube-left" />
+          <span className="tech-cube-face tech-cube-top" />
+          <span className="tech-cube-face tech-cube-bottom" />
         </div>
-      </section>
-    </>
+      </div>
+      <div className="tech-node tech-node-cloud">
+        <Cloud className="h-8 w-8" strokeWidth={1.8} />
+      </div>
+      <div className="tech-node tech-node-shield">
+        <ShieldCheck className="h-8 w-8" strokeWidth={1.8} />
+      </div>
+      <div className="tech-node tech-node-data">
+        <Database className="h-7 w-7" strokeWidth={1.8} />
+      </div>
+      <div className="tech-node tech-node-package">
+        <PackageOpen className="h-7 w-7" strokeWidth={1.8} />
+      </div>
+    </div>
+  )
+}
+
+function SkillShowcaseSection({
+  title,
+  description,
+  sort,
+  skills,
+  isLoading,
+  inViewRef,
+  inView,
+  onViewAll,
+  onSkillClick,
+  viewAllLabel,
+}: SkillShowcaseSectionProps) {
+  return (
+    <section
+      ref={inViewRef}
+      className={`relative z-10 w-full px-4 py-14 md:px-8 md:py-16 scroll-fade-up${inView ? ' in-view' : ''}`}
+      style={{ background: sort === 'downloads' ? 'rgba(255,255,255,0.62)' : 'rgba(239,247,255,0.58)' }}
+    >
+      <div className="mx-auto max-w-6xl space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-2 text-sm font-bold uppercase text-blue-600">{sort === 'downloads' ? 'Popular' : 'Latest'}</p>
+            <h2 className="text-3xl font-black text-slate-950">{title}</h2>
+            <p className="mt-2 text-base leading-7 text-slate-600">{description}</p>
+          </div>
+          <Button variant="ghost" onClick={onViewAll}>
+            {viewAllLabel}
+          </Button>
+        </div>
+
+        {isLoading ? (
+          <SkeletonList count={6} />
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {skills?.map((skill, index) => (
+              <div key={skill.id} className={`animate-fade-up delay-${Math.min(index + 1, 6)}`}>
+                <SkillCard
+                  skill={skill}
+                  onClick={() => onSkillClick(skill.namespace, skill.slug)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   )
 }

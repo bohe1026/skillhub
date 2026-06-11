@@ -3,20 +3,20 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default:
-          'bg-brand-gradient text-white shadow-sm hover:opacity-95 active:scale-[0.98]',
+          'bg-blue-600 text-white shadow-[0_16px_34px_-22px_rgba(37,99,235,0.78)] hover:bg-blue-700 active:scale-[0.98]',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90 active:scale-[0.98]',
         outline:
-          'border border-border bg-transparent hover:bg-secondary hover:border-primary/30 hover:text-foreground active:scale-[0.98]',
+          'border border-blue-100 bg-white/78 text-blue-700 shadow-[0_12px_30px_-26px_rgba(15,23,42,0.35)] hover:border-blue-200 hover:bg-white active:scale-[0.98]',
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 active:scale-[0.98]',
+          'bg-blue-50 text-blue-700 hover:bg-blue-100 active:scale-[0.98]',
         ghost:
-          'hover:bg-secondary hover:text-foreground',
+          'text-slate-600 hover:bg-blue-50 hover:text-blue-700',
         link:
           'text-primary underline-offset-4 hover:underline',
       },

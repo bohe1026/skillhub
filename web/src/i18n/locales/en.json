@@ -13,7 +13,7 @@
   "landing": {
     "hero": {
       "title": "Discover & Share AI Skills",
-      "subtitle": "Build powerful AI agents with community-driven skills",
+      "subtitle": "Unify AI skills, private registry workflows, and automated review so teams can reuse Agent capability with confidence.",
       "searchPlaceholder": "Search skills...",
       "exploreSkills": "Explore Skills",
       "publishSkill": "Publish Skill"
@@ -47,11 +47,12 @@
     "stats": {
       "skills": "Catalogs",
       "downloads": "Downloads",
-      "teams": "Teams"
+      "teams": "Teams",
+      "coverage": "Workflows"
     },
     "whySkillHub": {
-      "title": "Why SkillHub",
-      "subtitle": "A private Agent skill platform designed for enterprise teams"
+      "title": "Our Mission",
+      "subtitle": "Turn team knowledge into reliable, installable, and continuously governed Agent skills."
     },
     "badge": "Enterprise Skill Registry",
     "tagline": "Publish, Discover, Manage",
@@ -96,6 +97,26 @@
     "footerDocs": "Docs",
     "footerGithub": "GitHub",
     "footerCommunity": "Community",
+    "techTags": {
+      "ai": "AI skills",
+      "cloud": "Private registry",
+      "data": "Versioned assets",
+      "security": "Trusted review"
+    },
+    "mission": {
+      "automation": {
+        "title": "Automated flow",
+        "description": "Connect upload, scan, review, and optimization into one clear workflow."
+      },
+      "quality": {
+        "title": "Quality first",
+        "description": "Make every package easier to evaluate, approve, install, and reuse."
+      },
+      "control": {
+        "title": "Controlled sharing",
+        "description": "Keep enterprise skill assets discoverable while preserving permissions and audit trails."
+      }
+    },
     "quickStart": {
       "title": "Quick Start",
       "subtitle": "快速开始",

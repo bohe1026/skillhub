@@ -134,7 +134,7 @@ export function CliAuthPage() {
     return (
       <div className="min-h-[70vh] flex items-center justify-center p-4">
         <Card className="w-full max-w-md p-8 space-y-6 text-center">
-          <div className="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent items-center justify-center shadow-glow mb-2 mx-auto">
+          <div className="inline-flex w-16 h-16 rounded-lg bg-blue-600 items-center justify-center shadow-[0_18px_36px_-20px_rgba(37,99,235,0.7)] mb-2 mx-auto">
             <svg className="w-8 h-8 text-primary-foreground animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
@@ -150,7 +150,7 @@ export function CliAuthPage() {
     return (
       <div className="min-h-[70vh] flex items-center justify-center p-4">
         <Card className="w-full max-w-md p-8 space-y-6 text-center">
-          <div className="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent items-center justify-center shadow-glow mb-2 mx-auto">
+          <div className="inline-flex w-16 h-16 rounded-lg bg-blue-600 items-center justify-center shadow-[0_18px_36px_-20px_rgba(37,99,235,0.7)] mb-2 mx-auto">
             <svg className="w-8 h-8 text-primary-foreground animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>

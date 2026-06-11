@@ -12,8 +12,8 @@
   },
   "landing": {
     "hero": {
-      "title": "发现与分享 AI 技能",
-      "subtitle": "使用社区驱动的技能构建强大的 AI 代理",
+      "title": "SkillHub · 智能技能中枢",
+      "subtitle": "以 AI 技能、私有化注册中心与自动审核为核心，驱动团队沉淀可复用的 Agent 能力。",
       "searchPlaceholder": "搜索技能...",
       "exploreSkills": "探索技能",
       "publishSkill": "发布技能"
@@ -47,13 +47,14 @@
     "stats": {
       "skills": "项目库",
       "downloads": "下载量",
-      "teams": "团队"
+      "teams": "团队",
+      "coverage": "流程覆盖"
     },
     "whySkillHub": {
-      "title": "为什么选择 SkillHub",
-      "subtitle": "专为企业打造的私有化 Agent 技能管理平台"
+      "title": "我们的使命",
+      "subtitle": "通过技能发布、审核、复用和治理，推动团队把经验沉淀为可靠、可安装、可持续演进的 Agent 能力。"
     },
-    "badge": "企业级技能注册中心",
+    "badge": "泛科技Skill注册中心",
     "tagline": "发布、发现、管理",
     "taglineHighlight": " Agent 技能包",
     "description": "自托管的私有技能注册平台，为团队提供安全、高效的技能共享与协作空间",
@@ -96,6 +97,26 @@
     "footerDocs": "文档",
     "footerGithub": "GitHub",
     "footerCommunity": "社区",
+    "techTags": {
+      "ai": "AI 智能",
+      "cloud": "私有注册",
+      "data": "版本资产",
+      "security": "安全可信"
+    },
+    "mission": {
+      "automation": {
+        "title": "自动流转",
+        "description": "把上传、扫描、审核和优化串成清晰流程，减少人工等待。"
+      },
+      "quality": {
+        "title": "质量优先",
+        "description": "让每个技能包更容易被评估、批准、安装和复用。"
+      },
+      "control": {
+        "title": "受控共享",
+        "description": "让企业技能资产可发现，同时保留权限、审计与治理边界。"
+      }
+    },
     "quickStart": {
       "title": "快速开始",
       "subtitle": "Quick Start",
