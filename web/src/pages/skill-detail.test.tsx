@@ -365,6 +365,7 @@ describe('SkillDetailPage', () => {
   it('falls back to rejected owner submissions when detail does not include review task id', () => {
     useSkillDetailMock.mockReturnValue({
       data: createSkill({
+        ownerId: 'display-songbo',
         canInteract: false,
         headlineVersion: { id: 11, version: '1.1.0', status: 'REJECTED' },
         publishedVersion: undefined,
@@ -382,9 +383,10 @@ describe('SkillDetailPage', () => {
         items: [
           {
             id: 100,
-            namespace: 'global',
-            skillSlug: 'demo-skill',
-            version: '1.1.0',
+            skillVersionId: 11,
+            namespace: 'another-namespace',
+            skillSlug: 'another-slug',
+            version: 'different-version',
             status: 'REJECTED',
             submittedBy: 'owner-1',
           },

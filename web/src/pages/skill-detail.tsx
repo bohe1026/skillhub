@@ -183,20 +183,21 @@ export function SkillDetailPage() {
   const shouldFindOwnerRejectedReview =
     hasRejectedOwnerPreview &&
     Boolean(user?.userId) &&
-    skill?.ownerId === user?.userId &&
     !skill?.ownerPreviewReviewTaskId
-  const { data: rejectedOwnerSubmissions } = useMyReviewSubmissions('REJECTED', 0, 50, shouldFindOwnerRejectedReview)
+  const { data: rejectedOwnerSubmissions } = useMyReviewSubmissions('REJECTED', 0, 100, shouldFindOwnerRejectedReview)
   const fallbackOwnerPreviewReviewTask = rejectedOwnerSubmissions?.items.find((review) =>
-    review.namespace === namespace &&
-    review.skillSlug === slug &&
-    review.version === ownerPreviewVersion?.version &&
+    (review.skillVersionId === ownerPreviewVersion?.id || (
+      review.namespace === namespace &&
+      review.skillSlug === slug &&
+      review.version === ownerPreviewVersion?.version
+    )) &&
     review.submittedBy === user?.userId
   )
   const ownerPreviewReviewTaskId = skill?.ownerPreviewReviewTaskId ?? fallbackOwnerPreviewReviewTask?.id
   const canOptimizeOwnerPreview =
     Boolean(ownerPreviewReviewTaskId) &&
     Boolean(user?.userId) &&
-    skill?.ownerId === user?.userId
+    (skill?.ownerId === user?.userId || Boolean(fallbackOwnerPreviewReviewTask))
   const hasPublishedPendingReview = Boolean(publishedVersion && hasPendingOwnerPreview)
   const canInteract = skill?.canInteract ?? true
   const canReport = skill?.canReport ?? true
