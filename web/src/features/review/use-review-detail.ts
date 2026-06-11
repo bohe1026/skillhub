@@ -32,6 +32,10 @@ async function optimizeReview(taskId: number): Promise<ReviewOptimizationResult>
   return reviewApi.optimize(taskId)
 }
 
+async function optimizeRejectedVersion(skillVersionId: number): Promise<ReviewOptimizationResult> {
+  return reviewApi.optimizeRejectedVersion(skillVersionId)
+}
+
 /**
  * Exposes the review detail query keyed by task id.
  */
@@ -95,7 +99,15 @@ export function useOptimizeReview(callbacks?: {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ taskId }: { taskId: number }) => optimizeReview(taskId),
+    mutationFn: ({ taskId, skillVersionId }: { taskId?: number; skillVersionId?: number }) => {
+      if (typeof taskId === 'number') {
+        return optimizeReview(taskId)
+      }
+      if (typeof skillVersionId === 'number') {
+        return optimizeRejectedVersion(skillVersionId)
+      }
+      throw new Error('Missing review task or skill version id')
+    },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['reviews'] })
       queryClient.invalidateQueries({ queryKey: ['governance'] })

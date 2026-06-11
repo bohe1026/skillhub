@@ -399,6 +399,28 @@ describe('SkillDetailPage', () => {
     expect(html).toContain('review.optimizeWithSkillJudge')
   })
 
+  it('shows one-click optimization for rejected owner preview before the review task lookup returns', () => {
+    useSkillDetailMock.mockReturnValue({
+      data: createSkill({
+        canInteract: false,
+        headlineVersion: { id: 12, version: '1.2.0', status: 'REJECTED' },
+        publishedVersion: undefined,
+        ownerPreviewVersion: { id: 12, version: '1.2.0', status: 'REJECTED' },
+        ownerPreviewReviewTaskId: undefined,
+        resolutionMode: 'OWNER_PREVIEW',
+        ownerPreviewReviewComment: '自动审核未通过，请补充触发条件和错误处理。',
+      }),
+      isLoading: false,
+      isFetching: false,
+      error: null,
+    })
+    useMyReviewSubmissionsMock.mockReturnValue({ data: null })
+
+    const html = renderToStaticMarkup(<SkillDetailPage />)
+
+    expect(html).toContain('review.optimizeWithSkillJudge')
+  })
+
   it('renders pending review status in the header for scan-failed owner preview versions', () => {
     useSkillDetailMock.mockReturnValue({
       data: createSkill({

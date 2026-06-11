@@ -195,9 +195,9 @@ export function SkillDetailPage() {
   )
   const ownerPreviewReviewTaskId = skill?.ownerPreviewReviewTaskId ?? fallbackOwnerPreviewReviewTask?.id
   const canOptimizeOwnerPreview =
-    Boolean(ownerPreviewReviewTaskId) &&
+    hasRejectedOwnerPreview &&
     Boolean(user?.userId) &&
-    (skill?.ownerId === user?.userId || Boolean(fallbackOwnerPreviewReviewTask))
+    Boolean(ownerPreviewVersion?.id)
   const hasPublishedPendingReview = Boolean(publishedVersion && hasPendingOwnerPreview)
   const canInteract = skill?.canInteract ?? true
   const canReport = skill?.canReport ?? true
@@ -617,10 +617,14 @@ export function SkillDetailPage() {
   }
 
   const handleOptimizeOwnerPreview = () => {
-    if (!ownerPreviewReviewTaskId) {
+    if (ownerPreviewReviewTaskId) {
+      optimizeMutation.mutate({ taskId: ownerPreviewReviewTaskId })
       return
     }
-    optimizeMutation.mutate({ taskId: ownerPreviewReviewTaskId })
+    if (!ownerPreviewVersion?.id) {
+      return
+    }
+    optimizeMutation.mutate({ skillVersionId: ownerPreviewVersion.id })
   }
 
   const handleViewOptimizedReview = () => {

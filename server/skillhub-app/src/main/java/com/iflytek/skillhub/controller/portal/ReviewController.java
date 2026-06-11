@@ -167,6 +167,17 @@ public class ReviewController extends BaseApiController {
         );
     }
 
+    @PostMapping("/by-version/{skillVersionId}/optimize")
+    public ApiResponse<ReviewOptimizationResponse> optimizeRejectedVersion(@PathVariable Long skillVersionId,
+                                                                          @RequestAttribute("userId") String userId,
+                                                                          @RequestAttribute(value = "userNsRoles", required = false) Map<Long, NamespaceRole> userNsRoles,
+                                                                          @RequestAttribute(value = "platformRoles", required = false) Set<String> platformRoles) {
+        return ok(
+                "response.success.created",
+                governanceWorkflowAppService.optimizeRejectedVersion(skillVersionId, userId, userNsRoles, platformRoles)
+        );
+    }
+
     /**
      * Reads a single file's content from the review-bound skill version.
      * Supports both text preview and single-file download use cases.

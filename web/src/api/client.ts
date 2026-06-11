@@ -885,6 +885,13 @@ export const reviewApi = {
     })
   },
 
+  async optimizeRejectedVersion(skillVersionId: number): Promise<ReviewOptimizationResult> {
+    return fetchJson<ReviewOptimizationResult>(`${WEB_API_PREFIX}/reviews/by-version/${skillVersionId}/optimize`, {
+      method: 'POST',
+      headers: getCsrfHeaders(),
+    })
+  },
+
   async approve(id: number, comment?: string): Promise<void> {
     await fetchJson<void>(`${WEB_API_PREFIX}/reviews/${id}/approve`, {
       method: 'POST',

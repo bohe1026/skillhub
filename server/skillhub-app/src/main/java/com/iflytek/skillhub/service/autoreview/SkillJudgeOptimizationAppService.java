@@ -62,6 +62,23 @@ public class SkillJudgeOptimizationAppService {
                                                        Set<String> platformRoles) {
         ReviewTask task = reviewTaskRepository.findById(reviewTaskId)
                 .orElseThrow(() -> new DomainNotFoundException("review_task.not_found", reviewTaskId));
+        return optimizeTask(task, actorUserId, userNamespaceRoles, platformRoles);
+    }
+
+    @Transactional
+    public SkillJudgeOptimizationResult optimizeRejectedVersion(Long skillVersionId,
+                                                                String actorUserId,
+                                                                Map<Long, NamespaceRole> userNamespaceRoles,
+                                                                Set<String> platformRoles) {
+        ReviewTask task = reviewTaskRepository.findBySkillVersionIdAndStatus(skillVersionId, ReviewTaskStatus.REJECTED)
+                .orElseThrow(() -> new DomainNotFoundException("review_task.not_found", skillVersionId));
+        return optimizeTask(task, actorUserId, userNamespaceRoles, platformRoles);
+    }
+
+    private SkillJudgeOptimizationResult optimizeTask(ReviewTask task,
+                                                      String actorUserId,
+                                                      Map<Long, NamespaceRole> userNamespaceRoles,
+                                                      Set<String> platformRoles) {
         Namespace namespace = namespaceRepository.findById(task.getNamespaceId())
                 .orElseThrow(() -> new DomainNotFoundException("namespace.not_found", task.getNamespaceId()));
         if (!reviewService.canViewReview(task, actorUserId, namespace.getType(),

@@ -138,6 +138,28 @@ public class GovernanceWorkflowAppService {
         );
     }
 
+    public ReviewOptimizationResponse optimizeRejectedVersion(Long skillVersionId,
+                                                              String userId,
+                                                              Map<Long, NamespaceRole> userNsRoles,
+                                                              Set<String> platformRoles) {
+        SkillJudgeOptimizationResult result = skillJudgeOptimizationAppService.optimizeRejectedVersion(
+                skillVersionId,
+                userId,
+                userNsRoles != null ? userNsRoles : Map.of(),
+                platformRoles != null ? platformRoles : Set.of()
+        );
+        return new ReviewOptimizationResponse(
+                result.skillId(),
+                result.namespace(),
+                result.slug(),
+                result.skillVersionId(),
+                result.reviewTaskId(),
+                result.version(),
+                result.status(),
+                result.optimizationSummary()
+        );
+    }
+
     public SkillDownloadService.DownloadResult downloadReviewPackage(Long reviewTaskId,
                                                                      String userId,
                                                                      Map<Long, NamespaceRole> userNsRoles) {

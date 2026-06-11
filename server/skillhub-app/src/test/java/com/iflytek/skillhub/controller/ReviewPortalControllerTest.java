@@ -266,6 +266,35 @@ class ReviewPortalControllerTest {
     }
 
     @Test
+    void optimizeRejectedVersion_returnsGeneratedReviewTask() throws Exception {
+        stubNamespaceRoles("user-1", List.of());
+        given(skillJudgeOptimizationAppService.optimizeRejectedVersion(11L, "user-1", Map.of(), Set.of()))
+                .willReturn(new SkillJudgeOptimizationResult(
+                        30L,
+                        "global",
+                        "demo-skill",
+                        12L,
+                        101L,
+                        "20260610.062442.opt1",
+                        "PENDING_REVIEW",
+                        new SkillJudgeOptimizationSummary(
+                                List.of("触发条件"),
+                                List.of("原始 description"),
+                                "分数：84/120",
+                                List.of()
+                        )
+                ));
+
+        mockMvc.perform(post("/api/v1/reviews/by-version/11/optimize")
+                        .with(csrf())
+                        .with(auth("user-1")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.reviewTaskId").value(101L))
+                .andExpect(jsonPath("$.data.version").value("20260610.062442.opt1"));
+    }
+
+    @Test
     void listMySubmissions_allowsRejectedStatusForSubmitter() throws Exception {
         ReviewTask task = createReviewTask(22L, 20L, "user-1", ReviewTaskStatus.REJECTED);
         PageRequest pageable = PageRequest.of(0, 50);
