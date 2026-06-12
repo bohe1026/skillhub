@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ApiError, profileApi } from '@/api/client'
@@ -39,7 +38,6 @@ function getFieldValue(
 export function ProfileSettingsPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
 
   const [isEditing, setIsEditing] = useState(false)
@@ -184,9 +182,6 @@ export function ProfileSettingsPage() {
           </div>
           {!isEditing ? (
             <div className="flex items-center gap-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => void navigate({ to: '/reset-password' })}>
-                {t('profile.resetPassword')}
-              </Button>
               {hasEditableFields ? (
                 <Button type="button" variant="outline" size="sm" onClick={handleEdit}>
                   {t('profile.edit')}

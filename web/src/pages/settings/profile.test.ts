@@ -11,10 +11,6 @@ vi.mock('react-i18next', async () => {
   }
 })
 
-vi.mock('@tanstack/react-router', () => ({
-  useNavigate: () => vi.fn(),
-}))
-
 vi.mock('@tanstack/react-query', () => ({
   useQuery: () => ({ data: null }),
   useQueryClient: () => ({ invalidateQueries: vi.fn(), setQueryData: vi.fn() }),
@@ -66,8 +62,8 @@ describe('ProfileSettingsPage', () => {
     expect(typeof ProfileSettingsPage).toBe('function')
   })
 
-  it('renders reset-password entry action', () => {
+  it('does not render the email reset-password entry action', () => {
     const html = renderToStaticMarkup(React.createElement(ProfileSettingsPage))
-    expect(html).toContain('profile.resetPassword')
+    expect(html).not.toContain('profile.resetPassword')
   })
 })

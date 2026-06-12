@@ -14,27 +14,12 @@ vi.mock('react-i18next', async () => {
   }
 })
 
-vi.mock('@/api/client', () => ({
-  authApi: {
-    requestPasswordReset: vi.fn(),
-    confirmPasswordReset: vi.fn(),
-  },
-}))
-
-vi.mock('@/shared/ui/button', () => ({
-  Button: ({ children }: { children: unknown }) => children,
-}))
-
 vi.mock('@/shared/ui/card', () => ({
   Card: ({ children }: { children: unknown }) => children,
   CardContent: ({ children }: { children: unknown }) => children,
   CardDescription: ({ children }: { children: unknown }) => children,
   CardHeader: ({ children }: { children: unknown }) => children,
   CardTitle: ({ children }: { children: unknown }) => children,
-}))
-
-vi.mock('@/shared/ui/input', () => ({
-  Input: () => null,
 }))
 
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -45,10 +30,10 @@ describe('ResetPasswordPage', () => {
     expect(typeof ResetPasswordPage).toBe('function')
   })
 
-  it('renders reset-password title and submit action', () => {
+  it('renders the private-deployment disabled state', () => {
     const html = renderToStaticMarkup(<ResetPasswordPage />)
-    expect(html).toContain('resetPassword.title')
-    expect(html).toContain('resetPassword.sendCode')
-    expect(html).toContain('resetPassword.submit')
+    expect(html).toContain('resetPassword.disabledTitle')
+    expect(html).toContain('resetPassword.disabledDescription')
+    expect(html).toContain('resetPassword.backToLogin')
   })
 })

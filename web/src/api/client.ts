@@ -38,6 +38,7 @@ import type {
   NotificationPreferenceItem,
   NotificationUnreadCount,
   SkillDeleteResult,
+  AdminUserCreateRequest,
   AdminLabelInput,
   LabelDefinition,
   LabelItem,
@@ -1197,6 +1198,14 @@ export const adminApi = {
     })
   },
 
+  async createUser(request: AdminUserCreateRequest): Promise<void> {
+    await fetchJson<void>('/api/v1/admin/users', {
+      method: 'POST',
+      headers: getCsrfHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(request),
+    })
+  },
+
   async approveUser(userId: string): Promise<void> {
     await fetchJson<void>(`/api/v1/admin/users/${userId}/approve`, {
       method: 'POST',
@@ -1218,10 +1227,11 @@ export const adminApi = {
     })
   },
 
-  async triggerPasswordReset(userId: string): Promise<void> {
-    await fetchJson<void>(`/api/v1/admin/users/${userId}/password-reset`, {
-      method: 'POST',
-      headers: getCsrfHeaders(),
+  async setUserPassword(userId: string, newPassword: string): Promise<void> {
+    await fetchJson<void>(`/api/v1/admin/users/${userId}/password`, {
+      method: 'PUT',
+      headers: getCsrfHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ newPassword }),
     })
   },
 

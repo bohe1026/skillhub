@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { adminApi } from '@/api/client'
-import type { AdminUser } from '@/api/types'
+import type { AdminUser, AdminUserCreateRequest } from '@/api/types'
 export type { AdminUser } from '@/api/types'
 
 /**
@@ -32,6 +32,10 @@ async function updateUserStatus(userId: string, status: 'ACTIVE' | 'DISABLED'): 
   await adminApi.updateUserStatus(userId, status)
 }
 
+async function createUser(request: AdminUserCreateRequest): Promise<void> {
+  await adminApi.createUser(request)
+}
+
 export function useAdminUsers(params: AdminUsersParams) {
   return useQuery({
     queryKey: ['admin', 'users', params],
@@ -61,6 +65,16 @@ export function useUpdateUserStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] })
       queryClient.invalidateQueries({ queryKey: ['auth', 'me'] })
+    },
+  })
+}
+
+export function useCreateUser() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] })
     },
   })
 }
@@ -98,10 +112,11 @@ export function useEnableUser() {
   })
 }
 
-export function useTriggerUserPasswordReset() {
+export function useSetUserPassword() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (userId: string) => adminApi.triggerPasswordReset(userId),
+    mutationFn: ({ userId, newPassword }: { userId: string; newPassword: string }) =>
+      adminApi.setUserPassword(userId, newPassword),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] })
     },

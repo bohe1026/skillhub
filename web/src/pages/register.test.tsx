@@ -2,8 +2,6 @@ import { describe, expect, it, vi } from 'vitest'
 
 vi.mock('@tanstack/react-router', () => ({
   Link: ({ children }: { children: unknown }) => children,
-  useNavigate: () => vi.fn(),
-  useSearch: () => ({ returnTo: '' }),
 }))
 
 vi.mock('react-i18next', async () => {
@@ -16,27 +14,12 @@ vi.mock('react-i18next', async () => {
   }
 })
 
-vi.mock('@/features/auth/use-local-auth', () => ({
-  useLocalRegister: () => ({
-    mutateAsync: vi.fn(),
-    isPending: false,
-    error: null,
-  }),
-}))
-
-vi.mock('@/shared/ui/button', () => ({
-  Button: ({ children }: { children: unknown }) => children,
-}))
-
 vi.mock('@/shared/ui/card', () => ({
   Card: ({ children }: { children: unknown }) => children,
   CardContent: ({ children }: { children: unknown }) => children,
+  CardDescription: ({ children }: { children: unknown }) => children,
   CardHeader: ({ children }: { children: unknown }) => children,
   CardTitle: ({ children }: { children: unknown }) => children,
-}))
-
-vi.mock('@/shared/ui/input', () => ({
-  Input: () => null,
 }))
 
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -47,11 +30,11 @@ describe('RegisterPage', () => {
     expect(typeof RegisterPage).toBe('function')
   })
 
-  it('renders the registration title and form fields', () => {
+  it('renders the private-deployment disabled state', () => {
     const html = renderToStaticMarkup(<RegisterPage />)
 
-    expect(html).toContain('register.title')
-    expect(html).not.toContain('register.subtitle')
-    expect(html).toContain('register.submit')
+    expect(html).toContain('register.disabledTitle')
+    expect(html).toContain('register.disabledDescription')
+    expect(html).toContain('register.login')
   })
 })

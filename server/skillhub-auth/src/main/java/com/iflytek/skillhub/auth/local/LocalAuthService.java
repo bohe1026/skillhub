@@ -67,6 +67,19 @@ public class LocalAuthService {
      */
     @Transactional
     public PlatformPrincipal register(String username, String password, String email) {
+        return buildPrincipal(createLocalUser(username, password, email));
+    }
+
+    /**
+     * Creates a managed local account for private deployments where public
+     * self-registration is disabled.
+     */
+    @Transactional
+    public PlatformPrincipal adminCreateUser(String username, String password, String email) {
+        return buildPrincipal(createLocalUser(username, password, email));
+    }
+
+    private UserAccount createLocalUser(String username, String password, String email) {
         String normalizedUsername = normalizeUsername(username);
         validateUsername(normalizedUsername);
 
@@ -101,7 +114,7 @@ public class LocalAuthService {
         ));
         globalNamespaceMembershipService.ensureMember(user.getId());
 
-        return buildPrincipal(user);
+        return user;
     }
 
     /**
@@ -147,6 +160,26 @@ public class LocalAuthService {
         if (!passwordEncoder.matches(currentPassword, credential.getPasswordHash())) {
             throw new AuthFlowException(HttpStatus.UNAUTHORIZED, "error.auth.local.invalidCredentials");
         }
+
+        var passwordErrors = passwordPolicyValidator.validate(newPassword);
+        if (!passwordErrors.isEmpty()) {
+            throw new AuthFlowException(HttpStatus.BAD_REQUEST, passwordErrors.getFirst());
+        }
+
+        credential.setPasswordHash(passwordEncoder.encode(newPassword));
+        credential.setFailedAttempts(0);
+        credential.setLockedUntil(null);
+        credentialRepository.save(credential);
+    }
+
+    /**
+     * Lets a user administrator set a temporary local password without relying
+     * on email-based recovery.
+     */
+    @Transactional
+    public void adminSetPassword(String userId, String newPassword) {
+        LocalCredential credential = credentialRepository.findByUserId(userId)
+            .orElseThrow(() -> new AuthFlowException(HttpStatus.BAD_REQUEST, "error.auth.local.notEnabled"));
 
         var passwordErrors = passwordPolicyValidator.validate(newPassword);
         if (!passwordErrors.isEmpty()) {

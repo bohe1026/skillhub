@@ -14,6 +14,7 @@ import com.iflytek.skillhub.auth.exception.AuthFlowException;
 import com.iflytek.skillhub.auth.local.LocalAuthService;
 import com.iflytek.skillhub.auth.local.PasswordResetService;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
+import com.iflytek.skillhub.config.LocalAuthSelfServiceProperties;
 import com.iflytek.skillhub.domain.namespace.NamespaceMemberRepository;
 import com.iflytek.skillhub.metrics.SkillHubMetrics;
 import com.iflytek.skillhub.security.AuthFailureThrottleService;
@@ -54,6 +55,9 @@ class LocalAuthControllerTest {
     @MockBean
     private PasswordResetService passwordResetService;
 
+    @MockBean
+    private LocalAuthSelfServiceProperties selfServiceProperties;
+
     @Test
     void login_returnsCurrentUserEnvelope() throws Exception {
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -82,7 +86,7 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void register_returnsCreatedEnvelope() throws Exception {
+    void register_whenEnabled_returnsCreatedEnvelope() throws Exception {
         PlatformPrincipal principal = new PlatformPrincipal(
             "usr_2",
             "bob",
@@ -91,6 +95,7 @@ class LocalAuthControllerTest {
             "local",
             Set.of()
         );
+        given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
         given(localAuthService.register("bob", "Abcd123!", "bob@example.com")).willReturn(principal);
 
         mockMvc.perform(post("/api/v1/auth/local/register")
@@ -106,7 +111,24 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void register_rejectsInvalidEmailFormat() throws Exception {
+    void register_whenDisabled_returnsForbidden() throws Exception {
+        given(selfServiceProperties.isRegistrationEnabled()).willReturn(false);
+
+        mockMvc.perform(post("/api/v1/auth/local/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"username":"bob","password":"Abcd123!","email":"bob@example.com"}
+                    """))
+            .andExpect(status().isForbidden())
+            .andExpect(jsonPath("$.code").value(403));
+
+        verify(localAuthService, never()).register("bob", "Abcd123!", "bob@example.com");
+    }
+
+    @Test
+    void register_whenEnabled_rejectsInvalidEmailFormat() throws Exception {
+        given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
         given(localAuthService.register("bob", "Abcd123!", "not-an-email"))
             .willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.invalid"));
 
@@ -124,7 +146,8 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void register_rejectsBlankEmail() throws Exception {
+    void register_whenEnabled_rejectsBlankEmail() throws Exception {
+        given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
         given(localAuthService.register("bob", "Abcd123!", " "))
             .willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.notBlank"));
 
@@ -198,7 +221,9 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void requestPasswordReset_returnsGenericSuccessEnvelope() throws Exception {
+    void requestPasswordReset_whenEnabled_returnsGenericSuccessEnvelope() throws Exception {
+        given(selfServiceProperties.isPasswordResetEnabled()).willReturn(true);
+
         mockMvc.perform(post("/api/v1/auth/local/password-reset/request")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -212,7 +237,24 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void requestPasswordReset_rejectsInvalidEmailFormat() throws Exception {
+    void requestPasswordReset_whenDisabled_returnsForbidden() throws Exception {
+        given(selfServiceProperties.isPasswordResetEnabled()).willReturn(false);
+
+        mockMvc.perform(post("/api/v1/auth/local/password-reset/request")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"email":"alice@example.com"}
+                    """))
+            .andExpect(status().isForbidden())
+            .andExpect(jsonPath("$.code").value(403));
+
+        verify(passwordResetService, never()).requestPasswordReset("alice@example.com");
+    }
+
+    @Test
+    void requestPasswordReset_whenEnabled_rejectsInvalidEmailFormat() throws Exception {
+        given(selfServiceProperties.isPasswordResetEnabled()).willReturn(true);
         willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.password.reset.email.invalid"))
             .given(passwordResetService).requestPasswordReset("alice");
 
@@ -229,7 +271,9 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void confirmPasswordReset_returnsUpdatedEnvelope() throws Exception {
+    void confirmPasswordReset_whenEnabled_returnsUpdatedEnvelope() throws Exception {
+        given(selfServiceProperties.isPasswordResetEnabled()).willReturn(true);
+
         mockMvc.perform(post("/api/v1/auth/local/password-reset/confirm")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -243,7 +287,24 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void confirmPasswordReset_rejectsInvalidEmailFormat() throws Exception {
+    void confirmPasswordReset_whenDisabled_returnsForbidden() throws Exception {
+        given(selfServiceProperties.isPasswordResetEnabled()).willReturn(false);
+
+        mockMvc.perform(post("/api/v1/auth/local/password-reset/confirm")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"email":"alice@example.com","code":"123456","newPassword":"Abcd123!"}
+                    """))
+            .andExpect(status().isForbidden())
+            .andExpect(jsonPath("$.code").value(403));
+
+        verify(passwordResetService, never()).confirmPasswordReset("alice@example.com", "123456", "Abcd123!");
+    }
+
+    @Test
+    void confirmPasswordReset_whenEnabled_rejectsInvalidEmailFormat() throws Exception {
+        given(selfServiceProperties.isPasswordResetEnabled()).willReturn(true);
         willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.password.reset.email.invalid"))
             .given(passwordResetService).confirmPasswordReset("alice", "123456", "Abcd123!");
 

@@ -1,6 +1,7 @@
 package com.iflytek.skillhub.controller.admin;
 
 import com.iflytek.skillhub.TestRedisConfig;
+import com.iflytek.skillhub.auth.local.LocalAuthService;
 import com.iflytek.skillhub.auth.local.PasswordResetService;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
 import com.iflytek.skillhub.auth.device.DeviceAuthService;
@@ -55,6 +56,9 @@ class UserManagementControllerTest {
 
     @MockBean
     private PasswordResetService passwordResetService;
+
+    @MockBean
+    private LocalAuthService localAuthService;
 
     @Test
     void listUsers_unauthenticated_returns401() throws Exception {
@@ -126,6 +130,28 @@ class UserManagementControllerTest {
         mockMvc.perform(get("/api/v1/admin/users").with(authentication(auth)))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value(403));
+    }
+
+    @Test
+    void createUser_withUserAdminRole_returns200() throws Exception {
+        PlatformPrincipal principal = new PlatformPrincipal(
+                "user-42", "admin", "admin@example.com", "", "github", Set.of("USER_ADMIN")
+        );
+        var auth = new UsernamePasswordAuthenticationToken(
+                principal, null, List.of(new SimpleGrantedAuthority("ROLE_USER_ADMIN"))
+        );
+
+        mockMvc.perform(post("/api/v1/admin/users")
+                        .with(authentication(auth))
+                        .with(csrf())
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                            {"username":"newuser","email":"newuser@example.com","password":"TempPass123!"}
+                            """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0));
+
+        verify(localAuthService).adminCreateUser("newuser", "TempPass123!", "newuser@example.com");
     }
 
     @Test
@@ -264,5 +290,27 @@ class UserManagementControllerTest {
                 .andExpect(jsonPath("$.code").value(0));
 
         verify(passwordResetService).adminTriggerPasswordReset("user-123", "user-42");
+    }
+
+    @Test
+    void setPassword_withUserAdminRole_returns200() throws Exception {
+        PlatformPrincipal principal = new PlatformPrincipal(
+                "user-42", "admin", "admin@example.com", "", "github", Set.of("USER_ADMIN")
+        );
+        var auth = new UsernamePasswordAuthenticationToken(
+                principal, null, List.of(new SimpleGrantedAuthority("ROLE_USER_ADMIN"))
+        );
+
+        mockMvc.perform(put("/api/v1/admin/users/user-123/password")
+                        .with(authentication(auth))
+                        .with(csrf())
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                            {"newPassword":"TempPass123!"}
+                            """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0));
+
+        verify(localAuthService).adminSetPassword("user-123", "TempPass123!");
     }
 }

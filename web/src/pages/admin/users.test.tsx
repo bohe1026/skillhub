@@ -62,9 +62,10 @@ const useAdminUsersMock = vi.fn()
 vi.mock('@/features/admin/use-admin-users', () => ({
   useAdminUsers: () => useAdminUsersMock(),
   useApproveUser: () => ({ mutate: vi.fn(), isPending: false }),
+  useCreateUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useDisableUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useEnableUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
-  useTriggerUserPasswordReset: () => ({ mutateAsync: vi.fn(), isPending: false }),
+  useSetUserPassword: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useUpdateUserRole: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }))
 
@@ -95,5 +96,6 @@ describe('AdminUsersPage', () => {
     const html = renderToStaticMarkup(<AdminUsersPage />)
     expect(html).toContain('adminUsers.title')
     expect(html).toContain('adminUsers.subtitle')
+    expect(html).toContain('adminUsers.createUser')
   })
 })

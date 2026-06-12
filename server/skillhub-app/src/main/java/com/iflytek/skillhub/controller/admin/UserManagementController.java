@@ -1,9 +1,12 @@
 package com.iflytek.skillhub.controller.admin;
 
 import com.iflytek.skillhub.controller.BaseApiController;
+import com.iflytek.skillhub.auth.local.LocalAuthService;
 import com.iflytek.skillhub.auth.local.PasswordResetService;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
+import com.iflytek.skillhub.dto.AdminUserCreateRequest;
 import com.iflytek.skillhub.dto.AdminUserMutationResponse;
+import com.iflytek.skillhub.dto.AdminUserPasswordUpdateRequest;
 import com.iflytek.skillhub.dto.AdminUserRoleUpdateRequest;
 import com.iflytek.skillhub.dto.AdminUserStatusUpdateRequest;
 import com.iflytek.skillhub.dto.AdminUserSummaryResponse;
@@ -27,13 +30,16 @@ public class UserManagementController extends BaseApiController {
 
     private final AdminUserAppService adminUserAppService;
     private final PasswordResetService passwordResetService;
+    private final LocalAuthService localAuthService;
 
     public UserManagementController(AdminUserAppService adminUserAppService,
                                     PasswordResetService passwordResetService,
+                                    LocalAuthService localAuthService,
                                     ApiResponseFactory responseFactory) {
         super(responseFactory);
         this.adminUserAppService = adminUserAppService;
         this.passwordResetService = passwordResetService;
+        this.localAuthService = localAuthService;
     }
 
     @GetMapping
@@ -44,6 +50,13 @@ public class UserManagementController extends BaseApiController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ok("response.success.read", adminUserAppService.listUsers(search, status, page, size));
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('USER_ADMIN', 'SUPER_ADMIN')")
+    public ApiResponse<Void> createUser(@Valid @RequestBody AdminUserCreateRequest request) {
+        localAuthService.adminCreateUser(request.username(), request.password(), request.email());
+        return ok("response.success.created", null);
     }
 
     @PutMapping("/{userId}/role")
@@ -91,5 +104,13 @@ public class UserManagementController extends BaseApiController {
         }
         passwordResetService.adminTriggerPasswordReset(userId, principal.userId());
         return ok("response.auth.password.reset.requested", null);
+    }
+
+    @PutMapping("/{userId}/password")
+    @PreAuthorize("hasAnyRole('USER_ADMIN', 'SUPER_ADMIN')")
+    public ApiResponse<Void> setPassword(@PathVariable String userId,
+                                         @Valid @RequestBody AdminUserPasswordUpdateRequest request) {
+        localAuthService.adminSetPassword(userId, request.newPassword());
+        return ok("response.success.updated", null);
     }
 }

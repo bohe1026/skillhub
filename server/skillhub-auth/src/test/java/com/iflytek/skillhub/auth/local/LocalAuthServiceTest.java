@@ -247,4 +247,34 @@ class LocalAuthServiceTest {
             .isInstanceOf(AuthFlowException.class)
             .hasMessageContaining("validation.auth.local.email.notBlank");
     }
+
+    @Test
+    void adminSetPassword_updatesPasswordAndClearsLock() {
+        LocalCredential credential = new LocalCredential("usr_1", "alice", "old-encoded");
+        credential.setFailedAttempts(5);
+        credential.setLockedUntil(Instant.now(CLOCK).plusSeconds(300));
+
+        given(credentialRepository.findByUserId("usr_1")).willReturn(Optional.of(credential));
+        given(passwordEncoder.encode("Newpass123!")).willReturn("new-encoded");
+
+        service.adminSetPassword("usr_1", "Newpass123!");
+
+        assertThat(credential.getPasswordHash()).isEqualTo("new-encoded");
+        assertThat(credential.getFailedAttempts()).isZero();
+        assertThat(credential.getLockedUntil()).isNull();
+        verify(credentialRepository).save(credential);
+    }
+
+    @Test
+    void adminSetPassword_rejectsWeakPassword() {
+        LocalCredential credential = new LocalCredential("usr_1", "alice", "old-encoded");
+        given(credentialRepository.findByUserId("usr_1")).willReturn(Optional.of(credential));
+
+        assertThatThrownBy(() -> service.adminSetPassword("usr_1", "weak"))
+            .isInstanceOf(AuthFlowException.class)
+            .hasMessageContaining("error.auth.local.password.tooShort");
+
+        verify(passwordEncoder, never()).encode(any());
+        verify(credentialRepository, never()).save(credential);
+    }
 }
