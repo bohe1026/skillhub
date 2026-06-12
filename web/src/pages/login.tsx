@@ -151,6 +151,12 @@ export function LoginPage() {
               <p className="text-center text-sm text-muted-foreground">
                 {t('login.privateAccountNotice')}
               </p>
+              <p className="text-center text-sm text-muted-foreground">
+                {t('login.noAccount')}{' '}
+                <Link to="/register" search={{ returnTo: '' }} className="font-medium text-primary hover:underline">
+                  {t('login.register')}
+                </Link>
+              </p>
             </form>
           </div>
         </div>

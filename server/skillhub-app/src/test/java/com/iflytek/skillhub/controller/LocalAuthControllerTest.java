@@ -18,6 +18,7 @@ import com.iflytek.skillhub.config.LocalAuthSelfServiceProperties;
 import com.iflytek.skillhub.domain.namespace.NamespaceMemberRepository;
 import com.iflytek.skillhub.metrics.SkillHubMetrics;
 import com.iflytek.skillhub.security.AuthFailureThrottleService;
+import com.iflytek.skillhub.service.LocalRegistrationAppService;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,9 @@ class LocalAuthControllerTest {
 
     @MockBean
     private PasswordResetService passwordResetService;
+
+    @MockBean
+    private LocalRegistrationAppService localRegistrationAppService;
 
     @MockBean
     private LocalAuthSelfServiceProperties selfServiceProperties;
@@ -96,13 +100,14 @@ class LocalAuthControllerTest {
             Set.of()
         );
         given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
+        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
         given(localAuthService.register("bob", "Abcd123!", "bob@example.com")).willReturn(principal);
 
         mockMvc.perform(post("/api/v1/auth/local/register")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":"bob@example.com"}
+                    {"username":"bob","password":"Abcd123!","email":"bob@example.com","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(0))
@@ -111,24 +116,69 @@ class LocalAuthControllerTest {
     }
 
     @Test
-    void register_whenDisabled_returnsForbidden() throws Exception {
+    void register_whenInviteEnabled_returnsCreatedEnvelope() throws Exception {
+        PlatformPrincipal principal = new PlatformPrincipal(
+            "usr_2",
+            "bob",
+            "bob@example.com",
+            "",
+            "local",
+            Set.of()
+        );
         given(selfServiceProperties.isRegistrationEnabled()).willReturn(false);
+        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(true);
+        given(localRegistrationAppService.registerWithInvite(
+            "bob",
+            "Abcd123!",
+            "bob@example.com",
+            "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
+        )).willReturn(principal);
 
         mockMvc.perform(post("/api/v1/auth/local/register")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":"bob@example.com"}
+                    {"username":"bob","password":"Abcd123!","email":"bob@example.com","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(0))
+            .andExpect(jsonPath("$.data.displayName").value("bob"));
+        verify(skillHubMetrics).incrementUserRegister();
+        verify(localRegistrationAppService).registerWithInvite(
+            "bob",
+            "Abcd123!",
+            "bob@example.com",
+            "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
+        );
+    }
+
+    @Test
+    void register_whenBothModesDisabled_returnsForbidden() throws Exception {
+        given(selfServiceProperties.isRegistrationEnabled()).willReturn(false);
+        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
+
+        mockMvc.perform(post("/api/v1/auth/local/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"username":"bob","password":"Abcd123!","email":"bob@example.com","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isForbidden())
             .andExpect(jsonPath("$.code").value(403));
 
         verify(localAuthService, never()).register("bob", "Abcd123!", "bob@example.com");
+        verify(localRegistrationAppService, never()).registerWithInvite(
+            "bob",
+            "Abcd123!",
+            "bob@example.com",
+            "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
+        );
     }
 
     @Test
     void register_whenEnabled_rejectsInvalidEmailFormat() throws Exception {
         given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
+        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
         given(localAuthService.register("bob", "Abcd123!", "not-an-email"))
             .willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.invalid"));
 
@@ -137,7 +187,7 @@ class LocalAuthControllerTest {
                 .header("Accept-Language", "zh-CN")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":"not-an-email"}
+                    {"username":"bob","password":"Abcd123!","email":"not-an-email","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.code").value(400));
@@ -148,6 +198,7 @@ class LocalAuthControllerTest {
     @Test
     void register_whenEnabled_rejectsBlankEmail() throws Exception {
         given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
+        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
         given(localAuthService.register("bob", "Abcd123!", " "))
             .willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.notBlank"));
 
@@ -155,7 +206,7 @@ class LocalAuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":" "}
+                    {"username":"bob","password":"Abcd123!","email":" ","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.code").value(400));

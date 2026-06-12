@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { adminApi } from '@/api/client'
-import type { AdminUser, AdminUserCreateRequest } from '@/api/types'
-export type { AdminUser } from '@/api/types'
+import type { AdminUser, AdminUserCreateRequest, RegistrationInviteCreateRequest } from '@/api/types'
+export type { AdminUser, RegistrationInvite } from '@/api/types'
 
 /**
  * Admin user-management hooks for listing users and mutating their role or account status.
@@ -119,6 +119,33 @@ export function useSetUserPassword() {
       adminApi.setUserPassword(userId, newPassword),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] })
+    },
+  })
+}
+
+export function useRegistrationInvites(params: { page?: number; size?: number }) {
+  return useQuery({
+    queryKey: ['admin', 'registration-invites', params],
+    queryFn: () => adminApi.getRegistrationInvites(params),
+  })
+}
+
+export function useCreateRegistrationInvite() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (request: RegistrationInviteCreateRequest) => adminApi.createRegistrationInvite(request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'registration-invites'] })
+    },
+  })
+}
+
+export function useRevokeRegistrationInvite() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (inviteId: number) => adminApi.revokeRegistrationInvite(inviteId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'registration-invites'] })
     },
   })
 }

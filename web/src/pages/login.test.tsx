@@ -64,5 +64,6 @@ describe('LoginPage', () => {
     expect(html).toContain('login.title')
     expect(html).not.toContain('login.subtitle')
     expect(html).toContain('login.submit')
+    expect(html).toContain('login.register')
   })
 })

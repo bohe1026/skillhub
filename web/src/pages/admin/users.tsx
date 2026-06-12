@@ -33,9 +33,12 @@ import { CopyButton } from '@/shared/components/copy-button'
 import {
   useAdminUsers,
   useApproveUser,
+  useCreateRegistrationInvite,
   useCreateUser,
   useDisableUser,
   useEnableUser,
+  useRegistrationInvites,
+  useRevokeRegistrationInvite,
   useSetUserPassword,
   useUpdateUserRole,
 } from '@/features/admin/use-admin-users'
@@ -75,6 +78,10 @@ export function AdminUsersPage() {
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [createUserForm, setCreateUserForm] = useState<CreateUserForm>({ username: '', email: '', password: '' })
   const [createUserError, setCreateUserError] = useState<string | null>(null)
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
+  const [inviteLabel, setInviteLabel] = useState('')
+  const [inviteMaxUses, setInviteMaxUses] = useState('')
+  const [inviteError, setInviteError] = useState<string | null>(null)
   const [actionType, setActionType] = useState<'ban' | 'unban'>('ban')
 
   const { data, isLoading } = useAdminUsers({
@@ -90,6 +97,9 @@ export function AdminUsersPage() {
   const disableUserMutation = useDisableUser()
   const enableUserMutation = useEnableUser()
   const setUserPasswordMutation = useSetUserPassword()
+  const invitesQuery = useRegistrationInvites({ page: 0, size: 20 })
+  const createInviteMutation = useCreateRegistrationInvite()
+  const revokeInviteMutation = useRevokeRegistrationInvite()
 
   const formatDate = (dateString: string) => {
     return formatLocalDateTime(dateString, i18n.language)
@@ -139,6 +149,13 @@ export function AdminUsersPage() {
     setCreateUserForm({ username: '', email: '', password: '' })
     setCreateUserError(null)
     setCreateDialogOpen(true)
+  }
+
+  const openInviteDialog = () => {
+    setInviteLabel('')
+    setInviteMaxUses('')
+    setInviteError(null)
+    setInviteDialogOpen(true)
   }
 
   const confirmRoleChange = async () => {
@@ -203,6 +220,28 @@ export function AdminUsersPage() {
     }
   }
 
+  const createInvite = async () => {
+    const trimmedMaxUses = inviteMaxUses.trim()
+    const maxUses = trimmedMaxUses ? Number(trimmedMaxUses) : undefined
+    if (maxUses !== undefined && (!Number.isInteger(maxUses) || maxUses <= 0)) {
+      setInviteError(t('adminUsers.inviteMaxUsesInvalid'))
+      return
+    }
+    try {
+      await createInviteMutation.mutateAsync({
+        label: inviteLabel.trim() || undefined,
+        maxUses,
+      })
+      setInviteLabel('')
+      setInviteMaxUses('')
+      setInviteError(null)
+    } catch (error) {
+      setInviteError(error instanceof Error ? error.message : t('adminUsers.inviteCreateFailed'))
+    }
+  }
+
+  const isInviteExpired = (expiresAt: string) => new Date(expiresAt).getTime() <= Date.now()
+
   return (
     <div className="space-y-8 animate-fade-up">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -210,9 +249,14 @@ export function AdminUsersPage() {
           <h1 className="text-4xl font-bold font-heading mb-2">{t('adminUsers.title')}</h1>
           <p className="text-muted-foreground text-lg">{t('adminUsers.subtitle')}</p>
         </div>
-        <Button type="button" onClick={openCreateUserDialog}>
-          {t('adminUsers.createUser')}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" onClick={openInviteDialog}>
+            {t('adminUsers.inviteManage')}
+          </Button>
+          <Button type="button" onClick={openCreateUserDialog}>
+            {t('adminUsers.createUser')}
+          </Button>
+        </div>
       </div>
 
       <Card className="p-5">
@@ -429,6 +473,125 @@ export function AdminUsersPage() {
             </Button>
             <Button onClick={confirmCreateUser} disabled={createUserMutation.isPending}>
               {t('dialog.confirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>{t('adminUsers.inviteManageTitle')}</DialogTitle>
+            <DialogDescription>{t('adminUsers.inviteManageDesc')}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-5 py-4">
+            <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_160px_auto] md:items-end">
+              <div className="space-y-2">
+                <Label htmlFor="invite-label">{t('adminUsers.inviteLabel')}</Label>
+                <Input
+                  id="invite-label"
+                  value={inviteLabel}
+                  onChange={(event) => {
+                    setInviteLabel(event.target.value)
+                    setInviteError(null)
+                  }}
+                  placeholder={t('adminUsers.inviteLabelPlaceholder')}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="invite-max-uses">{t('adminUsers.inviteMaxUses')}</Label>
+                <Input
+                  id="invite-max-uses"
+                  inputMode="numeric"
+                  value={inviteMaxUses}
+                  onChange={(event) => {
+                    setInviteMaxUses(event.target.value)
+                    setInviteError(null)
+                  }}
+                  placeholder={t('adminUsers.inviteMaxUsesPlaceholder')}
+                />
+              </div>
+              <Button onClick={createInvite} disabled={createInviteMutation.isPending}>
+                {t('adminUsers.inviteCreate')}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">{t('adminUsers.inviteCreateHint')}</p>
+            {inviteError ? <p className="text-sm text-red-600">{inviteError}</p> : null}
+
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t('adminUsers.inviteCode')}</TableHead>
+                    <TableHead>{t('adminUsers.inviteLabelColumn')}</TableHead>
+                    <TableHead>{t('adminUsers.inviteUsage')}</TableHead>
+                    <TableHead>{t('adminUsers.inviteExpiresAt')}</TableHead>
+                    <TableHead>{t('adminUsers.inviteStatus')}</TableHead>
+                    <TableHead>{t('adminUsers.colActions')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {invitesQuery.isLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={6}>{t('adminUsers.inviteLoading')}</TableCell>
+                    </TableRow>
+                  ) : !invitesQuery.data || invitesQuery.data.items.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6}>{t('adminUsers.inviteEmpty')}</TableCell>
+                    </TableRow>
+                  ) : (
+                    invitesQuery.data.items.map((invite) => {
+                      const expired = isInviteExpired(invite.expiresAt)
+                      const exhausted = invite.maxUses != null && invite.usedCount >= invite.maxUses
+                      const active = !invite.revoked && !expired && !exhausted
+                      return (
+                        <TableRow key={invite.id}>
+                          <TableCell>
+                            <div className="flex max-w-[24rem] items-center gap-2">
+                              <span className="truncate font-mono text-xs" title={invite.code}>{invite.code}</span>
+                              <CopyButton text={invite.code} ariaLabel={t('adminUsers.inviteCopy', { code: invite.code })} />
+                            </div>
+                          </TableCell>
+                          <TableCell>{invite.label || '-'}</TableCell>
+                          <TableCell>{invite.maxUses ? `${invite.usedCount}/${invite.maxUses}` : `${invite.usedCount}/∞`}</TableCell>
+                          <TableCell>{formatDate(invite.expiresAt)}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${
+                              active
+                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700'
+                                : 'border-slate-300 bg-slate-100 text-slate-600'
+                            }`}
+                            >
+                              {invite.revoked
+                                ? t('adminUsers.inviteRevoked')
+                                : expired
+                                  ? t('adminUsers.inviteExpired')
+                                  : exhausted
+                                    ? t('adminUsers.inviteExhausted')
+                                    : t('adminUsers.inviteActive')}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => revokeInviteMutation.mutate(invite.id)}
+                              disabled={invite.revoked || revokeInviteMutation.isPending}
+                            >
+                              {t('adminUsers.inviteRevoke')}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </Card>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setInviteDialogOpen(false)}>
+              {t('dialog.close')}
             </Button>
           </DialogFooter>
         </DialogContent>

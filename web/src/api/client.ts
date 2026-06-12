@@ -39,6 +39,8 @@ import type {
   NotificationUnreadCount,
   SkillDeleteResult,
   AdminUserCreateRequest,
+  RegistrationInvite,
+  RegistrationInviteCreateRequest,
   AdminLabelInput,
   LabelDefinition,
   LabelItem,
@@ -1232,6 +1234,33 @@ export const adminApi = {
       method: 'PUT',
       headers: getCsrfHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ newPassword }),
+    })
+  },
+
+  async getRegistrationInvites(params: { page?: number; size?: number }) {
+    const searchParams = new URLSearchParams()
+    searchParams.set('page', String(params.page ?? 0))
+    searchParams.set('size', String(params.size ?? 20))
+    return fetchJson<PagedResponse<RegistrationInvite>>(
+      `/api/v1/admin/registration-invites?${searchParams.toString()}`,
+    )
+  },
+
+  async createRegistrationInvite(request: RegistrationInviteCreateRequest): Promise<RegistrationInvite> {
+    return fetchJson<RegistrationInvite>('/api/v1/admin/registration-invites', {
+      method: 'POST',
+      headers: getCsrfHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        label: request.label?.trim() || undefined,
+        maxUses: request.maxUses,
+      }),
+    })
+  },
+
+  async revokeRegistrationInvite(inviteId: number): Promise<RegistrationInvite> {
+    return fetchJson<RegistrationInvite>(`/api/v1/admin/registration-invites/${inviteId}/revoke`, {
+      method: 'POST',
+      headers: getCsrfHeaders(),
     })
   },
 

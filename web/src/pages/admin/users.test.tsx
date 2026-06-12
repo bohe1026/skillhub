@@ -65,6 +65,9 @@ vi.mock('@/features/admin/use-admin-users', () => ({
   useCreateUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useDisableUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useEnableUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
+  useRegistrationInvites: () => ({ data: { items: [], total: 0, page: 0, size: 20 }, isLoading: false }),
+  useCreateRegistrationInvite: () => ({ mutateAsync: vi.fn(), isPending: false }),
+  useRevokeRegistrationInvite: () => ({ mutate: vi.fn(), isPending: false }),
   useSetUserPassword: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useUpdateUserRole: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }))
@@ -97,5 +100,6 @@ describe('AdminUsersPage', () => {
     expect(html).toContain('adminUsers.title')
     expect(html).toContain('adminUsers.subtitle')
     expect(html).toContain('adminUsers.createUser')
+    expect(html).toContain('adminUsers.inviteManage')
   })
 })

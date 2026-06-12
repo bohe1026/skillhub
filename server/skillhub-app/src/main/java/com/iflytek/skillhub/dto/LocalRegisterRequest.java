@@ -10,5 +10,6 @@ public record LocalRegisterRequest(
     String password,
     @NotBlank(message = "{validation.auth.local.email.notBlank}")
     @Email(message = "{validation.auth.local.email.invalid}")
-    String email
+    String email,
+    String inviteCode
 ) {}

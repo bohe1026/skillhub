@@ -54,6 +54,7 @@ export interface LocalLoginRequest {
 
 export interface LocalRegisterRequest extends LocalLoginRequest {
   email: string
+  inviteCode: string
 }
 
 export interface ChangePasswordRequest {
@@ -75,6 +76,26 @@ export interface AdminUserCreateRequest {
   username: string
   email: string
   password: string
+}
+
+export interface RegistrationInvite {
+  id: number
+  code: string
+  label: string
+  maxUses?: number | null
+  usedCount: number
+  expiresAt: string
+  revoked: boolean
+  createdBy?: string
+  revokedBy?: string
+  revokedAt?: string
+  lastUsedAt?: string
+  createdAt: string
+}
+
+export interface RegistrationInviteCreateRequest {
+  label?: string
+  maxUses?: number
 }
 
 export type CreateNamespaceRequest = Omit<components['schemas']['NamespaceRequest'], 'slug' | 'displayName'> & {
