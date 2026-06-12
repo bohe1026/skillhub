@@ -1,12 +1,22 @@
 import { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { ApiError, profileApi } from '@/api/client'
+import { ApiError, authApi, profileApi } from '@/api/client'
 import { useAuth } from '@/features/auth/use-auth'
+import { clearSessionScopedQueries } from '@/features/notification/notification-session'
 import { truncateErrorMessage } from '@/shared/lib/error-display'
 import { toast } from '@/shared/lib/toast'
 import { Button } from '@/shared/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/ui/dialog'
 import { Input } from '@/shared/ui/input'
 
 /** Regex matching allowed display name characters: Chinese, English, digits, spaces, underscore, hyphen. */
@@ -38,12 +48,19 @@ function getFieldValue(
 export function ProfileSettingsPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
 
   const [isEditing, setIsEditing] = useState(false)
   const [formValues, setFormValues] = useState<Record<string, string>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false)
 
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
@@ -78,6 +95,61 @@ export function ProfileSettingsPage() {
   function handleCancel() {
     setIsEditing(false)
     setErrors({})
+  }
+
+  function openPasswordDialog() {
+    setCurrentPassword('')
+    setNewPassword('')
+    setConfirmPassword('')
+    setPasswordError('')
+    setPasswordDialogOpen(true)
+  }
+
+  async function handleChangePassword() {
+    setPasswordError('')
+
+    if (!currentPassword) {
+      setPasswordError(t('profile.currentPasswordRequired'))
+      return
+    }
+    if (!newPassword) {
+      setPasswordError(t('profile.newPasswordRequired'))
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError(t('profile.passwordMismatch'))
+      return
+    }
+
+    setIsPasswordSubmitting(true)
+    try {
+      await authApi.changePassword({ currentPassword, newPassword })
+      toast.success(t('profile.passwordSuccessTitle'), t('profile.passwordSuccessDescription'))
+      setPasswordDialogOpen(false)
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      try {
+        await authApi.logout()
+      } catch (error) {
+        console.error('Logout after password change failed:', error)
+      } finally {
+        clearSessionScopedQueries(queryClient)
+        queryClient.setQueryData(['auth', 'me'], null)
+      }
+      await navigate({ to: '/login', search: { returnTo: '' } })
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) {
+        setPasswordError(t('profile.invalidCurrentPassword'))
+      } else {
+        setPasswordError(
+          truncateErrorMessage(error instanceof Error ? error.message : t('profile.passwordDefaultError'))
+            ?? t('profile.passwordDefaultError'),
+        )
+      }
+    } finally {
+      setIsPasswordSubmitting(false)
+    }
   }
 
   function handleFieldChange(field: string, value: string) {
@@ -182,6 +254,9 @@ export function ProfileSettingsPage() {
           </div>
           {!isEditing ? (
             <div className="flex items-center gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={openPasswordDialog}>
+                {t('profile.changePassword')}
+              </Button>
               {hasEditableFields ? (
                 <Button type="button" variant="outline" size="sm" onClick={handleEdit}>
                   {t('profile.edit')}
@@ -276,6 +351,72 @@ export function ProfileSettingsPage() {
           ) : null}
         </CardContent>
       </Card>
+
+      <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('profile.changePasswordTitle')}</DialogTitle>
+            <DialogDescription>{t('profile.changePasswordDescription')}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="profile-current-password">
+                {t('profile.currentPassword')}
+              </label>
+              <Input
+                id="profile-current-password"
+                type="password"
+                autoComplete="current-password"
+                value={currentPassword}
+                onChange={(event) => {
+                  setCurrentPassword(event.target.value)
+                  setPasswordError('')
+                }}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="profile-new-password">
+                {t('profile.newPassword')}
+              </label>
+              <Input
+                id="profile-new-password"
+                type="password"
+                autoComplete="new-password"
+                value={newPassword}
+                onChange={(event) => {
+                  setNewPassword(event.target.value)
+                  setPasswordError('')
+                }}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="profile-confirm-password">
+                {t('profile.confirmPassword')}
+              </label>
+              <Input
+                id="profile-confirm-password"
+                type="password"
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(event) => {
+                  setConfirmPassword(event.target.value)
+                  setPasswordError('')
+                }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">{t('profile.passwordPolicyHint')}</p>
+            {passwordError ? <p className="text-sm text-red-600">{passwordError}</p> : null}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPasswordDialogOpen(false)} disabled={isPasswordSubmitting}>
+              {t('dialog.cancel')}
+            </Button>
+            <Button onClick={handleChangePassword} disabled={isPasswordSubmitting}>
+              {isPasswordSubmitting ? t('profile.passwordSubmitting') : t('dialog.confirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

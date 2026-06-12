@@ -11,6 +11,10 @@ vi.mock('react-i18next', async () => {
   }
 })
 
+vi.mock('@tanstack/react-router', () => ({
+  useNavigate: () => vi.fn(),
+}))
+
 vi.mock('@tanstack/react-query', () => ({
   useQuery: () => ({ data: null }),
   useQueryClient: () => ({ invalidateQueries: vi.fn(), setQueryData: vi.fn() }),
@@ -23,6 +27,10 @@ vi.mock('@/api/client', () => ({
   profileApi: {
     getProfile: vi.fn(),
     updateProfile: vi.fn(),
+  },
+  authApi: {
+    changePassword: vi.fn(),
+    logout: vi.fn(),
   },
 }))
 
@@ -50,6 +58,15 @@ vi.mock('@/shared/ui/card', () => ({
   CardTitle: ({ children }: { children: unknown }) => children,
 }))
 
+vi.mock('@/shared/ui/dialog', () => ({
+  Dialog: ({ children }: { children: unknown }) => children,
+  DialogContent: ({ children }: { children: unknown }) => children,
+  DialogDescription: ({ children }: { children: unknown }) => children,
+  DialogFooter: ({ children }: { children: unknown }) => children,
+  DialogHeader: ({ children }: { children: unknown }) => children,
+  DialogTitle: ({ children }: { children: unknown }) => children,
+}))
+
 vi.mock('@/shared/ui/input', () => ({
   Input: () => null,
 }))
@@ -65,5 +82,10 @@ describe('ProfileSettingsPage', () => {
   it('does not render the email reset-password entry action', () => {
     const html = renderToStaticMarkup(React.createElement(ProfileSettingsPage))
     expect(html).not.toContain('profile.resetPassword')
+  })
+
+  it('renders the local password change action', () => {
+    const html = renderToStaticMarkup(React.createElement(ProfileSettingsPage))
+    expect(html).toContain('profile.changePassword')
   })
 })
