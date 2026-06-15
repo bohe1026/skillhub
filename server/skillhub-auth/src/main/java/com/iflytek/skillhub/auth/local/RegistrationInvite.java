@@ -31,7 +31,7 @@ public class RegistrationInvite {
     @Column(name = "used_count", nullable = false)
     private int usedCount;
 
-    @Column(name = "expires_at", nullable = false)
+    @Column(name = "expires_at")
     private Instant expiresAt;
 
     @Column(nullable = false)

@@ -84,7 +84,7 @@ export interface RegistrationInvite {
   label: string
   maxUses?: number | null
   usedCount: number
-  expiresAt: string
+  expiresAt?: string | null
   revoked: boolean
   createdBy?: string
   revokedBy?: string

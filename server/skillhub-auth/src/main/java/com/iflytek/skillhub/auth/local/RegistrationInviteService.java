@@ -75,7 +75,7 @@ public class RegistrationInviteService {
         if (invite.isRevoked()) {
             throw new AuthFlowException(HttpStatus.FORBIDDEN, "error.auth.invite.revoked");
         }
-        if (!invite.getExpiresAt().isAfter(now)) {
+        if (invite.getExpiresAt() != null && !invite.getExpiresAt().isAfter(now)) {
             throw new AuthFlowException(HttpStatus.FORBIDDEN, "error.auth.invite.expired");
         }
         if (invite.getMaxUses() != null && invite.getUsedCount() >= invite.getMaxUses()) {

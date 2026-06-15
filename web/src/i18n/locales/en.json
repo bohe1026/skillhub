@@ -651,7 +651,7 @@
     "passwordUpdateFailed": "Failed to set password",
     "inviteManage": "Invite Codes",
     "inviteManageTitle": "Invite Code Management",
-    "inviteManageDesc": "Create invite codes for self-service registration. Administrators can revoke them at any time. New invite codes expire after 7 days by default.",
+    "inviteManageDesc": "The department invite code never expires. Newly generated invite codes expire after 7 days by default and can be revoked at any time.",
     "inviteLabel": "Label",
     "inviteLabelPlaceholder": "Example: AI team 2026 batch",
     "inviteMaxUses": "Usage Limit",
@@ -665,6 +665,7 @@
     "inviteLabelColumn": "Label",
     "inviteUsage": "Usage",
     "inviteExpiresAt": "Expires At",
+    "inviteCreatedAt": "Created At",
     "inviteStatus": "Status",
     "inviteLoading": "Loading invite codes...",
     "inviteEmpty": "No invite codes yet",
@@ -672,6 +673,8 @@
     "inviteExpired": "Expired",
     "inviteRevoked": "Revoked",
     "inviteExhausted": "Exhausted",
+    "inviteNeverExpires": "Never expires",
+    "inviteUntitled": "Untitled invite",
     "inviteRevoke": "Revoke"
   },
   "adminLabels": {

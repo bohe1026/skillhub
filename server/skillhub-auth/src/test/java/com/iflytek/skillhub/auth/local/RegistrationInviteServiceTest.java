@@ -56,6 +56,25 @@ class RegistrationInviteServiceTest {
     }
 
     @Test
+    void consumeInvite_allowsPermanentInviteWithoutExpiry() {
+        RegistrationInvite invite = new RegistrationInvite(
+            "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6",
+            "AI department permanent invite",
+            null,
+            null,
+            "system-bootstrap"
+        );
+        given(inviteRepository.findByCodeForUpdate("TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"))
+            .willReturn(Optional.of(invite));
+        given(inviteRepository.save(invite)).willReturn(invite);
+
+        RegistrationInvite consumed = service.consumeInvite("TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6");
+
+        assertThat(consumed.getUsedCount()).isEqualTo(1);
+        assertThat(consumed.getExpiresAt()).isNull();
+    }
+
+    @Test
     void consumeInvite_rejectsExpiredInvite() {
         RegistrationInvite invite = new RegistrationInvite(
             "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6",

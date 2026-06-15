@@ -59,13 +59,14 @@ vi.mock('@/shared/ui/label', () => ({
 }))
 
 const useAdminUsersMock = vi.fn()
+const useRegistrationInvitesMock = vi.fn()
 vi.mock('@/features/admin/use-admin-users', () => ({
   useAdminUsers: () => useAdminUsersMock(),
   useApproveUser: () => ({ mutate: vi.fn(), isPending: false }),
   useCreateUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useDisableUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useEnableUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
-  useRegistrationInvites: () => ({ data: { items: [], total: 0, page: 0, size: 20 }, isLoading: false }),
+  useRegistrationInvites: () => useRegistrationInvitesMock(),
   useCreateRegistrationInvite: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useRevokeRegistrationInvite: () => ({ mutate: vi.fn(), isPending: false }),
   useSetUserPassword: () => ({ mutateAsync: vi.fn(), isPending: false }),
@@ -85,6 +86,10 @@ describe('AdminUsersPage', () => {
       data: { items: [], total: 0, page: 0, size: 20 },
       isLoading: false,
     })
+    useRegistrationInvitesMock.mockReturnValue({
+      data: { items: [], total: 0, page: 0, size: 20 },
+      isLoading: false,
+    })
 
     const html = renderToStaticMarkup(<AdminUsersPage />)
     expect(html).toContain('adminUsers.empty')
@@ -95,11 +100,44 @@ describe('AdminUsersPage', () => {
       data: null,
       isLoading: true,
     })
+    useRegistrationInvitesMock.mockReturnValue({
+      data: { items: [], total: 0, page: 0, size: 20 },
+      isLoading: false,
+    })
 
     const html = renderToStaticMarkup(<AdminUsersPage />)
     expect(html).toContain('adminUsers.title')
     expect(html).toContain('adminUsers.subtitle')
     expect(html).toContain('adminUsers.createUser')
     expect(html).toContain('adminUsers.inviteManage')
+  })
+
+  it('renders permanent invite metadata without table overflow labels', () => {
+    useAdminUsersMock.mockReturnValue({
+      data: { items: [], total: 0, page: 0, size: 20 },
+      isLoading: false,
+    })
+    useRegistrationInvitesMock.mockReturnValue({
+      data: {
+        items: [{
+          id: 1,
+          code: 'TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6',
+          label: 'AI department permanent invite',
+          maxUses: null,
+          usedCount: 0,
+          expiresAt: null,
+          revoked: false,
+          createdAt: '2026-06-12T00:00:00Z',
+        }],
+        total: 1,
+        page: 0,
+        size: 20,
+      },
+      isLoading: false,
+    })
+
+    const html = renderToStaticMarkup(<AdminUsersPage />)
+    expect(html).toContain('TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6')
+    expect(html).toContain('adminUsers.inviteNeverExpires')
   })
 })

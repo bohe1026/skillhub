@@ -651,7 +651,7 @@
     "passwordUpdateFailed": "设置密码失败",
     "inviteManage": "邀请码管理",
     "inviteManageTitle": "邀请码管理",
-    "inviteManageDesc": "创建可自助注册的邀请码，管理员可以随时撤销。新邀请码默认 7 天过期。",
+    "inviteManageDesc": "部门邀请码永久有效；管理员新生成的邀请码默认 7 天过期，也可以随时撤销。",
     "inviteLabel": "备注",
     "inviteLabelPlaceholder": "例如 AI 团队 2026 批次",
     "inviteMaxUses": "可用次数",
@@ -665,6 +665,7 @@
     "inviteLabelColumn": "备注",
     "inviteUsage": "使用次数",
     "inviteExpiresAt": "过期时间",
+    "inviteCreatedAt": "创建时间",
     "inviteStatus": "状态",
     "inviteLoading": "正在加载邀请码...",
     "inviteEmpty": "暂无邀请码",
@@ -672,6 +673,8 @@
     "inviteExpired": "已过期",
     "inviteRevoked": "已撤销",
     "inviteExhausted": "已用完",
+    "inviteNeverExpires": "永久有效",
+    "inviteUntitled": "未命名邀请码",
     "inviteRevoke": "撤销"
   },
   "adminLabels": {
