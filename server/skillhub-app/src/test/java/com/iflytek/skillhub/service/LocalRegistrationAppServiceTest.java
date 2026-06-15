@@ -25,23 +25,22 @@ class LocalRegistrationAppServiceTest {
         PlatformPrincipal principal = new PlatformPrincipal(
             "usr_1",
             "bob",
-            "bob@example.com",
+            null,
             "",
             "local",
             Set.of()
         );
-        given(localAuthService.register("bob", "Abcd123!", "bob@example.com")).willReturn(principal);
+        given(localAuthService.register("bob", "Abcd123!", null)).willReturn(principal);
 
         PlatformPrincipal result = service.registerWithInvite(
             "bob",
             "Abcd123!",
-            "bob@example.com",
             "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
         );
 
         assertThat(result).isSameAs(principal);
         InOrder order = inOrder(registrationInviteService, localAuthService);
         order.verify(registrationInviteService).consumeInvite("TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6");
-        order.verify(localAuthService).register("bob", "Abcd123!", "bob@example.com");
+        order.verify(localAuthService).register("bob", "Abcd123!", null);
     }
 }

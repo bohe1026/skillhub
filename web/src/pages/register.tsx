@@ -9,7 +9,6 @@ import { Input } from '@/shared/ui/input'
 
 type RegisterErrors = {
   username?: string
-  email?: string
   password?: string
   inviteCode?: string
 }
@@ -23,7 +22,6 @@ export function RegisterPage() {
   const navigate = useNavigate()
   const registerMutation = useLocalRegister()
   const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [inviteCode, setInviteCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -32,18 +30,12 @@ export function RegisterPage() {
   function validateForm(): RegisterErrors {
     const nextErrors: RegisterErrors = {}
     const trimmedUsername = username.trim()
-    const trimmedEmail = email.trim()
     const trimmedInviteCode = inviteCode.trim()
 
     if (!trimmedUsername) {
       nextErrors.username = t('register.usernameRequired')
     } else if (!/^[A-Za-z0-9_]{3,64}$/.test(trimmedUsername)) {
       nextErrors.username = t('register.usernameInvalid')
-    }
-    if (!trimmedEmail) {
-      nextErrors.email = t('register.emailRequired')
-    } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail)) {
-      nextErrors.email = t('register.emailInvalid')
     }
     if (!password) {
       nextErrors.password = t('register.passwordRequired')
@@ -69,7 +61,6 @@ export function RegisterPage() {
     try {
       await registerMutation.mutateAsync({
         username: username.trim(),
-        email: email.trim().toLowerCase(),
         password,
         inviteCode: inviteCode.trim(),
       })
@@ -102,22 +93,6 @@ export function RegisterPage() {
                 aria-invalid={fieldErrors.username ? 'true' : 'false'}
               />
               {fieldErrors.username ? <p className="text-sm text-red-600">{fieldErrors.username}</p> : null}
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="register-email">{t('register.email')}</label>
-              <Input
-                id="register-email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value)
-                  setFieldErrors((current) => ({ ...current, email: undefined }))
-                }}
-                placeholder={t('register.emailPlaceholder')}
-                aria-invalid={fieldErrors.email ? 'true' : 'false'}
-              />
-              {fieldErrors.email ? <p className="text-sm text-red-600">{fieldErrors.email}</p> : null}
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="register-password">{t('register.password')}</label>

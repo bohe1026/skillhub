@@ -67,20 +67,20 @@ class LocalAuthServiceTest {
     }
 
     @Test
-    void register_createsUserAndCredential() {
+    void register_createsUserAndCredentialWithoutEmail() {
         given(credentialRepository.existsByUsernameIgnoreCase("alice")).willReturn(false);
-        given(userAccountRepository.findByEmailIgnoreCase("alice@example.com")).willReturn(Optional.empty());
         given(passwordEncoder.encode("Abcd123!")).willReturn("encoded");
         given(userAccountRepository.save(any(UserAccount.class))).willAnswer(invocation -> invocation.getArgument(0));
         given(userRoleBindingRepository.findByUserId(any())).willReturn(List.of());
 
-        var principal = service.register("Alice", "Abcd123!", "alice@example.com");
+        var principal = service.register("Alice", "Abcd123!", null);
 
         ArgumentCaptor<UserAccount> userCaptor = ArgumentCaptor.forClass(UserAccount.class);
         verify(userAccountRepository).save(userCaptor.capture());
         assertThat(userCaptor.getValue().getDisplayName()).isEqualTo("alice");
+        assertThat(userCaptor.getValue().getEmail()).isNull();
         assertThat(principal.displayName()).isEqualTo("alice");
-        assertThat(principal.email()).isEqualTo("alice@example.com");
+        assertThat(principal.email()).isNull();
         assertThat(principal.platformRoles()).containsExactly("USER");
         verify(credentialRepository).save(any(LocalCredential.class));
         verify(globalNamespaceMembershipService).ensureMember(userCaptor.getValue().getId());
@@ -240,10 +240,25 @@ class LocalAuthServiceTest {
     }
 
     @Test
-    void register_rejectsBlankEmail() {
+    void register_withBlankEmailStoresNull() {
+        given(credentialRepository.existsByUsernameIgnoreCase("alice")).willReturn(false);
+        given(passwordEncoder.encode("Abcd123!")).willReturn("encoded");
+        given(userAccountRepository.save(any(UserAccount.class))).willAnswer(invocation -> invocation.getArgument(0));
+        given(userRoleBindingRepository.findByUserId(any())).willReturn(List.of());
+
+        var principal = service.register("Alice", "Abcd123!", "   ");
+
+        ArgumentCaptor<UserAccount> userCaptor = ArgumentCaptor.forClass(UserAccount.class);
+        verify(userAccountRepository).save(userCaptor.capture());
+        assertThat(userCaptor.getValue().getEmail()).isNull();
+        assertThat(principal.email()).isNull();
+    }
+
+    @Test
+    void adminCreateUser_rejectsBlankEmail() {
         given(credentialRepository.existsByUsernameIgnoreCase("alice")).willReturn(false);
 
-        assertThatThrownBy(() -> service.register("Alice", "Abcd123!", "   "))
+        assertThatThrownBy(() -> service.adminCreateUser("Alice", "Abcd123!", "   "))
             .isInstanceOf(AuthFlowException.class)
             .hasMessageContaining("validation.auth.local.email.notBlank");
     }

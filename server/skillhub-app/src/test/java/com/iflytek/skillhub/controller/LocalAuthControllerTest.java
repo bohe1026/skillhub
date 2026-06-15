@@ -94,20 +94,20 @@ class LocalAuthControllerTest {
         PlatformPrincipal principal = new PlatformPrincipal(
             "usr_2",
             "bob",
-            "bob@example.com",
+            null,
             "",
             "local",
             Set.of()
         );
         given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
         given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
-        given(localAuthService.register("bob", "Abcd123!", "bob@example.com")).willReturn(principal);
+        given(localAuthService.register("bob", "Abcd123!", null)).willReturn(principal);
 
         mockMvc.perform(post("/api/v1/auth/local/register")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":"bob@example.com","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
+                    {"username":"bob","password":"Abcd123!","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(0))
@@ -120,7 +120,7 @@ class LocalAuthControllerTest {
         PlatformPrincipal principal = new PlatformPrincipal(
             "usr_2",
             "bob",
-            "bob@example.com",
+            null,
             "",
             "local",
             Set.of()
@@ -130,7 +130,6 @@ class LocalAuthControllerTest {
         given(localRegistrationAppService.registerWithInvite(
             "bob",
             "Abcd123!",
-            "bob@example.com",
             "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
         )).willReturn(principal);
 
@@ -138,7 +137,7 @@ class LocalAuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":"bob@example.com","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
+                    {"username":"bob","password":"Abcd123!","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(0))
@@ -147,7 +146,6 @@ class LocalAuthControllerTest {
         verify(localRegistrationAppService).registerWithInvite(
             "bob",
             "Abcd123!",
-            "bob@example.com",
             "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
         );
     }
@@ -161,57 +159,17 @@ class LocalAuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"username":"bob","password":"Abcd123!","email":"bob@example.com","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
+                    {"username":"bob","password":"Abcd123!","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
                     """))
             .andExpect(status().isForbidden())
             .andExpect(jsonPath("$.code").value(403));
 
-        verify(localAuthService, never()).register("bob", "Abcd123!", "bob@example.com");
+        verify(localAuthService, never()).register("bob", "Abcd123!", null);
         verify(localRegistrationAppService, never()).registerWithInvite(
             "bob",
             "Abcd123!",
-            "bob@example.com",
             "TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"
         );
-    }
-
-    @Test
-    void register_whenEnabled_rejectsInvalidEmailFormat() throws Exception {
-        given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
-        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
-        given(localAuthService.register("bob", "Abcd123!", "not-an-email"))
-            .willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.invalid"));
-
-        mockMvc.perform(post("/api/v1/auth/local/register")
-                .with(csrf())
-                .header("Accept-Language", "zh-CN")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {"username":"bob","password":"Abcd123!","email":"not-an-email","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
-                    """))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value(400));
-
-        verify(localAuthService).register("bob", "Abcd123!", "not-an-email");
-    }
-
-    @Test
-    void register_whenEnabled_rejectsBlankEmail() throws Exception {
-        given(selfServiceProperties.isRegistrationEnabled()).willReturn(true);
-        given(selfServiceProperties.isInviteRegistrationEnabled()).willReturn(false);
-        given(localAuthService.register("bob", "Abcd123!", " "))
-            .willThrow(new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.notBlank"));
-
-        mockMvc.perform(post("/api/v1/auth/local/register")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {"username":"bob","password":"Abcd123!","email":" ","inviteCode":"TEAM-AI-2026-7D-M9Q4-X7K2-P8VN-L3R6"}
-                    """))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value(400));
-
-        verify(localAuthService).register("bob", "Abcd123!", " ");
     }
 
     @Test

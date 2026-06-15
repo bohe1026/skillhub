@@ -53,7 +53,6 @@ export interface LocalLoginRequest {
 }
 
 export interface LocalRegisterRequest extends LocalLoginRequest {
-  email: string
   inviteCode: string
 }
 

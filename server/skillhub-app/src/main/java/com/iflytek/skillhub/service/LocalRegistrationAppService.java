@@ -25,9 +25,8 @@ public class LocalRegistrationAppService {
     @Transactional
     public PlatformPrincipal registerWithInvite(String username,
                                                 String password,
-                                                String email,
                                                 String inviteCode) {
         registrationInviteService.consumeInvite(inviteCode);
-        return localAuthService.register(username, password, email);
+        return localAuthService.register(username, password, null);
     }
 }

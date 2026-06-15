@@ -72,10 +72,9 @@ public class LocalAuthController extends BaseApiController {
             ? localRegistrationAppService.registerWithInvite(
                 request.username(),
                 request.password(),
-                request.email(),
                 request.inviteCode()
             )
-            : localAuthService.register(request.username(), request.password(), request.email());
+            : localAuthService.register(request.username(), request.password(), null);
         skillHubMetrics.incrementUserRegister();
         platformSessionService.establishSession(principal, httpRequest);
         return ok("response.success.created", AuthMeResponse.from(principal));

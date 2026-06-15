@@ -59,5 +59,6 @@ describe('RegisterPage', () => {
     expect(html).toContain('register.inviteCode')
     expect(html).toContain('register.submit')
     expect(html).toContain('register.login')
+    expect(html).not.toContain('register.email')
   })
 })

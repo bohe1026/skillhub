@@ -67,7 +67,7 @@ public class LocalAuthService {
      */
     @Transactional
     public PlatformPrincipal register(String username, String password, String email) {
-        return buildPrincipal(createLocalUser(username, password, email));
+        return buildPrincipal(createLocalUser(username, password, email, false));
     }
 
     /**
@@ -76,10 +76,10 @@ public class LocalAuthService {
      */
     @Transactional
     public PlatformPrincipal adminCreateUser(String username, String password, String email) {
-        return buildPrincipal(createLocalUser(username, password, email));
+        return buildPrincipal(createLocalUser(username, password, email, true));
     }
 
-    private UserAccount createLocalUser(String username, String password, String email) {
+    private UserAccount createLocalUser(String username, String password, String email, boolean emailRequired) {
         String normalizedUsername = normalizeUsername(username);
         validateUsername(normalizedUsername);
 
@@ -88,7 +88,7 @@ public class LocalAuthService {
         }
 
         String normalizedEmail = normalizeEmail(email);
-        validateEmail(normalizedEmail);
+        validateEmail(normalizedEmail, emailRequired);
         if (normalizedEmail != null && userAccountRepository.findByEmailIgnoreCase(normalizedEmail).isPresent()) {
             throw new AuthFlowException(HttpStatus.CONFLICT, "error.auth.local.email.exists");
         }
@@ -261,11 +261,11 @@ public class LocalAuthService {
         }
     }
 
-    private void validateEmail(String email) {
-        if (email == null) {
+    private void validateEmail(String email, boolean required) {
+        if (email == null && required) {
             throw new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.notBlank");
         }
-        if (!EMAIL_PATTERN.matcher(email).matches()) {
+        if (email != null && !EMAIL_PATTERN.matcher(email).matches()) {
             throw new AuthFlowException(HttpStatus.BAD_REQUEST, "validation.auth.local.email.invalid");
         }
     }
