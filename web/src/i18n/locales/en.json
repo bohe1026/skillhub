@@ -96,12 +96,6 @@
     "footerDocs": "Docs",
     "footerGithub": "GitHub",
     "footerCommunity": "Support",
-    "techTags": {
-      "ai": "AI skills",
-      "cloud": "Private registry",
-      "data": "Versioned assets",
-      "security": "Trusted review"
-    },
     "mission": {
       "automation": {
         "title": "Automated flow",

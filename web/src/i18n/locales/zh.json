@@ -96,12 +96,6 @@
     "footerDocs": "文档",
     "footerGithub": "GitHub",
     "footerCommunity": "支持",
-    "techTags": {
-      "ai": "AI 智能",
-      "cloud": "私有注册",
-      "data": "版本资产",
-      "security": "安全可信"
-    },
     "mission": {
       "automation": {
         "title": "自动流转",

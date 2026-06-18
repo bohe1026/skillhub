@@ -29,7 +29,6 @@ interface LandingIconItem {
   icon: LucideIcon
   title: string
   description?: string
-  tone?: string
 }
 
 interface SkillShowcaseSectionProps {
@@ -81,25 +80,6 @@ export function LandingPage() {
   const handleSkillClick = (namespace: string, slug: string) => {
     navigate({ to: `/space/${namespace}/${encodeURIComponent(slug)}` })
   }
-
-  const capabilityTags: LandingIconItem[] = [
-    {
-      icon: Sparkles,
-      title: t('landing.techTags.ai', { defaultValue: 'AI skills' }),
-    },
-    {
-      icon: Cloud,
-      title: t('landing.techTags.cloud', { defaultValue: 'Private registry' }),
-    },
-    {
-      icon: Database,
-      title: t('landing.techTags.data', { defaultValue: 'Versioned assets' }),
-    },
-    {
-      icon: ShieldCheck,
-      title: t('landing.techTags.security', { defaultValue: 'Trusted review' }),
-    },
-  ]
 
   const missionItems: LandingIconItem[] = [
     {
@@ -182,21 +162,6 @@ export function LandingPage() {
                 </div>
               </div>
 
-              <div className="mt-8 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4">
-                {capabilityTags.map((item) => {
-                  const Icon = item.icon
-
-                  return (
-                    <div
-                      key={item.title}
-                      className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/75 bg-white/70 px-3 py-2 text-sm font-semibold text-slate-700 shadow-[0_12px_30px_-26px_rgba(15,23,42,0.45)] backdrop-blur"
-                    >
-                      <Icon className="h-4 w-4 flex-shrink-0 text-blue-600" strokeWidth={1.8} />
-                      <span className="truncate">{item.title}</span>
-                    </div>
-                  )
-                })}
-              </div>
             </div>
 
             <TechHeroVisual />
