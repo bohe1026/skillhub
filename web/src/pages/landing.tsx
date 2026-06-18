@@ -5,19 +5,15 @@ import type { LucideIcon } from 'lucide-react'
 import {
   ArrowRight,
   Bot,
-  Boxes,
   CheckCircle2,
   Cloud,
   Database,
-  GitBranch,
-  Globe2,
   LockKeyhole,
   PackageOpen,
   PlayCircle,
   Search as SearchIcon,
   ShieldCheck,
   Sparkles,
-  Users,
   Workflow,
 } from 'lucide-react'
 import type { SkillSummary } from '@/api/types'
@@ -102,56 +98,6 @@ export function LandingPage() {
     {
       icon: ShieldCheck,
       title: t('landing.techTags.security', { defaultValue: 'Trusted review' }),
-    },
-  ]
-
-  const featureCards: LandingIconItem[] = [
-    {
-      icon: Boxes,
-      title: t('landing.features.integration.title'),
-      description: t('landing.features.integration.description'),
-      tone: 'from-blue-600 to-cyan-400',
-    },
-    {
-      icon: GitBranch,
-      title: t('landing.features.versionControl.title'),
-      description: t('landing.features.versionControl.description'),
-      tone: 'from-emerald-500 to-teal-400',
-    },
-    {
-      icon: ShieldCheck,
-      title: t('landing.features.secure.title'),
-      description: t('landing.features.secure.description'),
-      tone: 'from-blue-700 to-sky-500',
-    },
-    {
-      icon: Users,
-      title: t('landing.features.community.title'),
-      description: t('landing.features.community.description'),
-      tone: 'from-sky-500 to-blue-600',
-    },
-  ]
-
-  const stats: LandingIconItem[] = [
-    {
-      icon: PackageOpen,
-      title: '1000+',
-      description: t('landing.stats.skills', { defaultValue: 'Registry items' }),
-    },
-    {
-      icon: Workflow,
-      title: '50K+',
-      description: t('landing.stats.downloads', { defaultValue: 'Reuse Events' }),
-    },
-    {
-      icon: Users,
-      title: '200+',
-      description: t('landing.stats.teams', { defaultValue: 'Namespaces' }),
-    },
-    {
-      icon: Globe2,
-      title: '10+',
-      description: t('landing.stats.coverage', { defaultValue: 'Governed Flows' }),
     },
   ]
 
@@ -256,48 +202,7 @@ export function LandingPage() {
             <TechHeroVisual />
           </div>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {featureCards.map((feature) => {
-              const Icon = feature.icon
-
-              return (
-                <article
-                  key={feature.title}
-                  className="group rounded-lg border border-white/80 bg-white/90 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.38)] backdrop-blur transition hover:-translate-y-0.5 hover:shadow-[0_24px_56px_-30px_rgba(37,99,235,0.28)]"
-                >
-                  <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${feature.tone} text-white shadow-[0_18px_30px_-18px_rgba(37,99,235,0.55)]`}>
-                    <Icon className="h-6 w-6" strokeWidth={1.8} />
-                  </div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-950">{feature.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-500">{feature.description}</p>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
-
-          <div className="mt-5 grid gap-4 rounded-lg border border-white/80 bg-white/75 px-5 py-5 shadow-[0_20px_48px_-34px_rgba(15,23,42,0.36)] backdrop-blur md:grid-cols-4 md:px-8">
-            {stats.map((stat) => {
-              const Icon = stat.icon
-
-              return (
-                <div key={stat.description} className="flex items-center gap-4 md:justify-center">
-                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                    <Icon className="h-7 w-7" strokeWidth={1.75} />
-                  </div>
-                  <div>
-                    <div className="text-3xl font-black leading-none text-slate-950">{stat.title}</div>
-                    <div className="mt-1 text-sm font-medium text-slate-500">{stat.description}</div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-
-          <section className="mt-5 overflow-hidden rounded-lg border border-blue-100 bg-[linear-gradient(105deg,rgba(239,247,255,0.96)_0%,rgba(231,244,255,0.9)_54%,rgba(255,255,255,0.45)_100%)] px-6 py-7 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.35)] md:px-8">
+          <section className="mt-4 overflow-hidden rounded-lg border border-blue-100 bg-[linear-gradient(105deg,rgba(239,247,255,0.96)_0%,rgba(231,244,255,0.9)_54%,rgba(255,255,255,0.45)_100%)] px-6 py-7 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.35)] md:px-8">
             <div className="grid gap-8 lg:grid-cols-[0.95fr_1.8fr] lg:items-center">
               <div>
                 <h2 className="text-2xl font-black text-slate-950">{t('landing.whySkillCenter.title')}</h2>
