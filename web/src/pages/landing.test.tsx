@@ -17,25 +17,7 @@ vi.mock('react-i18next', async () => {
 
 vi.mock('lucide-react', () => ({
   ArrowRight: () => null,
-  Bot: () => null,
-  Boxes: () => null,
-  CheckCircle2: () => null,
-  Cloud: () => null,
-  Database: () => null,
-  PackageOpen: () => null,
-  GitBranch: () => null,
-  Globe2: () => null,
-  LockKeyhole: () => null,
-  PlayCircle: () => null,
   Search: () => null,
-  ShieldCheck: () => null,
-  Sparkles: () => null,
-  Users: () => null,
-  Workflow: () => null,
-}))
-
-vi.mock('@/shared/components/landing-quick-start', () => ({
-  LandingQuickStartSection: () => null,
 }))
 
 vi.mock('@/features/skill/skill-card', () => ({
