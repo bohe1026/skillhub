@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const useSearchMock = vi.fn()
 const selectRecords: Array<{ value?: string }> = []
+const buttonRecords: Array<{ label: string; disabled?: boolean }> = []
 
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => vi.fn(),
@@ -25,7 +26,11 @@ vi.mock('@/features/publish/upload-zone', () => ({
 }))
 
 vi.mock('@/shared/ui/button', () => ({
-  Button: ({ children }: { children: unknown }) => children,
+  Button: ({ children, disabled }: { children: unknown; disabled?: boolean }) => {
+    const label = Array.isArray(children) ? children.join('') : String(children ?? '')
+    buttonRecords.push({ label, disabled })
+    return children
+  },
 }))
 
 vi.mock('@/shared/ui/select', () => ({
@@ -68,6 +73,9 @@ vi.mock('@/api/client', () => ({
   ApiError: class ApiError extends Error {
     serverMessageKey?: string
   },
+  labelApi: {
+    attachSkillLabel: vi.fn(),
+  },
 }))
 
 import { PublishPage } from './publish'
@@ -75,6 +83,7 @@ import { PublishPage } from './publish'
 describe('PublishPage', () => {
   beforeEach(() => {
     selectRecords.length = 0
+    buttonRecords.length = 0
     useSearchMock.mockReturnValue({
       namespace: '  team-ai  ',
       visibility: 'private',
@@ -95,6 +104,17 @@ describe('PublishPage', () => {
 
     expect(selectRecords[0]?.value).toBe('__select_namespace__')
     expect(selectRecords[1]?.value).toBe('PUBLIC')
+  })
+
+  it('renders required business category choices before publishing', () => {
+    const html = renderToStaticMarkup(createElement(PublishPage))
+
+    expect(html).toContain('publish.category.title')
+    expect(html).toContain('search.discovery.groups.content')
+    expect(html).toContain('search.discovery.groups.document')
+    const publishButton = buttonRecords[buttonRecords.length - 1]
+    expect(publishButton?.label).toBe('publish.confirm')
+    expect(publishButton?.disabled).toBe(true)
   })
 
   it('exports a named component function', () => {

@@ -1450,6 +1450,13 @@
       "loggedInUsersOnly": "仅登录用户可见",
       "private": "私有"
     },
+    "category": {
+      "title": "业务分类",
+      "description": "请选择最贴近这个 Skill 的业务方向。发布后会写入真实标签，用户可以在搜索页按分类找到它。",
+      "groupHint": "必选大类",
+      "scenarioTitle": "细分场景（可选）",
+      "noScenario": "暂不选择细分场景"
+    },
     "file": "技能包文件",
     "removeSelectedFile": "删除已选文件",
     "publishing": "发布中...",
@@ -1460,6 +1467,10 @@
     "publishedDescription": "{{skill}} 已发布，现在可以下载使用",
     "pendingReviewTitle": "已提交审核",
     "pendingReviewDescription": "{{skill}} 已提交审核，等待管理员批准后即可使用",
+    "categoryRequiredTitle": "请选择业务分类",
+    "categoryRequiredDescription": "业务分类会帮助使用人员按场景找到这个 Skill。",
+    "categorySaveWarningTitle": "分类保存失败",
+    "categorySaveWarningDescription": "技能已发布成功，但业务分类没有保存成功。可在技能详情页重新添加标签。",
     "error": "发布失败",
     "timeoutTitle": "发布请求超时",
     "timeoutDescription": "本次发布等待时间过长，请稍后到技能列表确认结果，或重新尝试发布。",

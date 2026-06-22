@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { BarChart3, Briefcase, Check, Code2, FileText, Image, ShieldCheck } from 'lucide-react'
 import { UploadZone } from '@/features/publish/upload-zone'
 import {
   extractPrecheckWarnings,
@@ -26,9 +27,23 @@ import { useMyNamespaces } from '@/shared/hooks/use-namespace-queries'
 import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 import { DashboardPageHeader } from '@/shared/components/dashboard-page-header'
 import { toast } from '@/shared/lib/toast'
-import { ApiError } from '@/api/client'
+import { ApiError, labelApi } from '@/api/client'
+import { cn } from '@/shared/lib/utils'
+import {
+  getPublishCategoryLabelSlugs,
+  SKILL_DISCOVERY_GROUPS,
+} from '@/shared/lib/skill-discovery-taxonomy'
 
 const EMPTY_NAMESPACE_VALUE = '__select_namespace__'
+
+const CATEGORY_ICONS = {
+  content: Image,
+  document: FileText,
+  data: BarChart3,
+  development: Code2,
+  office: Briefcase,
+  opsSecurity: ShieldCheck,
+}
 
 export function PublishPage() {
   const { t } = useTranslation()
@@ -40,6 +55,8 @@ export function PublishPage() {
   const [visibility, setVisibility] = useState<string>(prefill.visibility)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const [precheckWarnings, setPrecheckWarnings] = useState<string[]>([])
+  const [categorySlug, setCategorySlug] = useState('')
+  const [scenarioSlug, setScenarioSlug] = useState('')
 
   const { data: namespaces, isLoading: isLoadingNamespaces } = useMyNamespaces()
   const publishMutation = usePublishSkill()
@@ -47,6 +64,7 @@ export function PublishPage() {
   const namespaceOnlyLabel = selectedNamespace?.type === 'GLOBAL'
     ? t('publish.visibilityOptions.loggedInUsersOnly')
     : t('publish.visibilityOptions.namespaceOnly')
+  const selectedCategory = SKILL_DISCOVERY_GROUPS.find((group) => group.slug === categorySlug)
 
   useEffect(() => {
     setNamespaceSlug(prefill.namespace)
@@ -70,6 +88,10 @@ export function PublishPage() {
       toast.error(t('publish.selectRequired'))
       return
     }
+    if (!categorySlug) {
+      toast.error(t('publish.categoryRequiredTitle'), t('publish.categoryRequiredDescription'))
+      return
+    }
 
     try {
       const result = await publishMutation.mutateAsync({
@@ -78,6 +100,15 @@ export function PublishPage() {
         visibility,
         confirmWarnings,
       })
+      let classificationSaved = true
+      const labelSlugs = getPublishCategoryLabelSlugs(categorySlug, scenarioSlug)
+      try {
+        await Promise.all(labelSlugs.map((labelSlug) =>
+          labelApi.attachSkillLabel(result.namespace, result.slug, labelSlug)
+        ))
+      } catch {
+        classificationSaved = false
+      }
       setPrecheckWarnings([])
       setWarningDialogOpen(false)
       const skillLabel = `${result.namespace}/${result.slug}@${result.version}`
@@ -91,6 +122,9 @@ export function PublishPage() {
           t('publish.pendingReviewTitle'),
           t('publish.pendingReviewDescription', { skill: skillLabel })
         )
+      }
+      if (!classificationSaved) {
+        toast.warning(t('publish.categorySaveWarningTitle'), t('publish.categorySaveWarningDescription'))
       }
       navigate({ to: '/dashboard/skills' })
     } catch (error) {
@@ -194,6 +228,74 @@ export function PublishPage() {
           </Select>
         </div>
 
+        <section className="space-y-4 rounded-lg border border-blue-100 bg-[linear-gradient(135deg,rgba(239,247,255,0.95)_0%,rgba(255,255,255,0.96)_58%,rgba(232,245,255,0.92)_100%)] p-5">
+          <div>
+            <Label className="text-sm font-semibold font-heading">{t('publish.category.title')}</Label>
+            <p className="mt-1 text-sm leading-6 text-slate-600">{t('publish.category.description')}</p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {SKILL_DISCOVERY_GROUPS.map((group) => {
+              const Icon = CATEGORY_ICONS[group.iconKey]
+              const selected = categorySlug === group.slug
+
+              return (
+                <button
+                  key={group.slug}
+                  type="button"
+                  className={cn(
+                    'flex min-h-[76px] items-center gap-3 rounded-lg border bg-white/85 p-3 text-left transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_18px_42px_-32px_rgba(37,99,235,0.52)]',
+                    selected ? 'border-blue-400 ring-2 ring-blue-100' : 'border-white/90'
+                  )}
+                  aria-pressed={selected}
+                  onClick={() => {
+                    setCategorySlug(group.slug)
+                    setScenarioSlug('')
+                  }}
+                >
+                  <span className={cn('flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg', group.accentClassName)}>
+                    <Icon className="h-5 w-5" strokeWidth={1.9} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-black text-slate-950">
+                      {t(group.labelKey, { defaultValue: group.fallbackLabel })}
+                    </span>
+                    <span className="mt-1 block text-xs text-slate-500">{t('publish.category.groupHint')}</span>
+                  </span>
+                  {selected ? <Check className="h-4 w-4 flex-shrink-0 text-blue-600" strokeWidth={2.2} /> : null}
+                </button>
+              )
+            })}
+          </div>
+
+          {selectedCategory ? (
+            <div className="space-y-2">
+              <div className="text-sm font-semibold text-slate-700">{t('publish.category.scenarioTitle')}</div>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant={!scenarioSlug ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setScenarioSlug('')}
+                >
+                  {t('publish.category.noScenario')}
+                </Button>
+                {selectedCategory.scenarios.map((scenario) => (
+                  <Button
+                    key={scenario.slug}
+                    type="button"
+                    variant={scenarioSlug === scenario.slug ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setScenarioSlug(scenario.slug)}
+                  >
+                    {t(scenario.labelKey, { defaultValue: scenario.fallbackLabel })}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </section>
+
         <div className="space-y-3">
           <Label className="text-sm font-semibold font-heading">{t('publish.file')}</Label>
           <UploadZone
@@ -228,7 +330,7 @@ export function PublishPage() {
           className="w-full text-primary-foreground disabled:text-primary-foreground"
           size="lg"
           onClick={handlePublish}
-          disabled={!selectedFile || !namespaceSlug || publishMutation.isPending}
+          disabled={!selectedFile || !namespaceSlug || !categorySlug || publishMutation.isPending}
         >
           {publishMutation.isPending ? t('publish.publishing') : t('publish.confirm')}
         </Button>

@@ -1449,6 +1449,13 @@
       "loggedInUsersOnly": "Logged-in Users Only",
       "private": "Private"
     },
+    "category": {
+      "title": "Business Category",
+      "description": "Choose the closest business direction for this Skill. After publishing, it is saved as real labels so users can find it by category on the search page.",
+      "groupHint": "Required category",
+      "scenarioTitle": "Scenario (optional)",
+      "noScenario": "No scenario yet"
+    },
     "file": "Skill Package File",
     "removeSelectedFile": "Remove selected file",
     "publishing": "Publishing...",
@@ -1459,6 +1466,10 @@
     "publishedDescription": "{{skill}} is now live and available for download",
     "pendingReviewTitle": "Submitted for Review",
     "pendingReviewDescription": "{{skill}} has been submitted for review and will be available after admin approval",
+    "categoryRequiredTitle": "Choose a business category",
+    "categoryRequiredDescription": "The category helps users find this Skill by scenario.",
+    "categorySaveWarningTitle": "Category was not saved",
+    "categorySaveWarningDescription": "The skill was published, but its business category could not be saved. You can add labels from the skill detail page.",
     "error": "Publish Failed",
     "timeoutTitle": "Publish timed out",
     "timeoutDescription": "The publish request took too long. Please check the skill list later or try again.",
