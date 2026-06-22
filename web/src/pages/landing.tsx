@@ -61,7 +61,7 @@ export function LandingPage() {
             {t('landing.badge')}
           </div>
 
-          <h1 className="max-w-4xl text-[clamp(2.5rem,7vw,4.8rem)] font-black leading-[1.05] text-slate-950">
+          <h1 className="max-w-none whitespace-nowrap text-center text-[clamp(2rem,4.2vw,3.7rem)] font-black leading-[1.08] text-slate-950">
             {t('landing.hero.title')}
           </h1>
           <p className="mt-6 max-w-2xl text-base font-medium leading-8 text-slate-600 md:text-lg">
