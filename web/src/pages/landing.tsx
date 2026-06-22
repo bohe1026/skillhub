@@ -56,12 +56,12 @@ export function LandingPage() {
   return (
     <div className="landing-tech-page">
       <section className="relative overflow-hidden px-4 pb-14 pt-12 md:px-8 md:pb-20 md:pt-16">
-        <div className="mx-auto flex min-h-[520px] max-w-5xl flex-col items-center justify-center text-center">
+        <div className="mx-auto flex min-h-[520px] max-w-5xl flex-col items-start justify-center text-left">
           <div className="mb-5 inline-flex items-center rounded-lg border border-blue-100 bg-white/80 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
             {t('landing.badge')}
           </div>
 
-          <h1 className="max-w-none whitespace-nowrap text-center text-[clamp(2rem,4.2vw,3.7rem)] font-black leading-[1.08] text-slate-950">
+          <h1 className="max-w-none whitespace-nowrap text-left text-[clamp(2rem,4.2vw,3.7rem)] font-black leading-[1.08] text-slate-950">
             {t('landing.hero.title')}
           </h1>
           <p className="mt-6 max-w-2xl text-base font-medium leading-8 text-slate-600 md:text-lg">
@@ -90,7 +90,7 @@ export function LandingPage() {
             </Button>
           </div>
 
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <div className="mt-5 flex flex-wrap justify-start gap-2">
             {QUICK_SCENARIOS.map((scenario) => (
               <button
                 key={scenario}
