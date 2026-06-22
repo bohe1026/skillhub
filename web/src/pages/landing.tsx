@@ -56,68 +56,70 @@ export function LandingPage() {
   return (
     <div className="landing-tech-page">
       <section className="relative overflow-hidden px-4 pb-14 pt-12 md:px-8 md:pb-20 md:pt-16">
-        <div className="mx-auto flex min-h-[520px] max-w-5xl flex-col items-start justify-center text-left">
-          <div className="mb-5 inline-flex items-center rounded-lg border border-blue-100 bg-white/80 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
-            {t('landing.badge')}
-          </div>
+        <div className="mx-auto flex min-h-[520px] max-w-6xl flex-col items-start justify-center text-left">
+          <div className="w-full max-w-5xl">
+            <div className="mb-5 inline-flex items-center rounded-lg border border-blue-100 bg-white/80 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
+              {t('landing.badge')}
+            </div>
 
-          <h1 className="max-w-none whitespace-nowrap text-left text-[clamp(2rem,4.2vw,3.7rem)] font-black leading-[1.08] text-slate-950">
-            {t('landing.hero.title')}
-          </h1>
-          <p className="mt-6 max-w-2xl text-base font-medium leading-8 text-slate-600 md:text-lg">
-            {t('landing.hero.subtitle')}
-          </p>
+            <h1 className="max-w-none whitespace-nowrap text-left text-[clamp(2rem,4.2vw,3.7rem)] font-black leading-[1.08] text-slate-950">
+              {t('landing.hero.title')}
+            </h1>
+            <p className="mt-6 max-w-2xl text-base font-medium leading-8 text-slate-600 md:text-lg">
+              {t('landing.hero.subtitle')}
+            </p>
 
-          <div className="mt-8 flex w-full max-w-2xl items-center gap-2 rounded-lg border border-white/80 bg-white/86 p-2 shadow-[0_24px_64px_-38px_rgba(37,99,235,0.5)] backdrop-blur">
-            <SearchIcon className="ml-3 h-5 w-5 flex-shrink-0 text-blue-500" strokeWidth={1.9} />
-            <input
-              type="text"
-              aria-label={t('landing.hero.searchPlaceholder')}
-              placeholder={t('landing.hero.searchPlaceholder')}
-              className="hero-input h-12 min-w-0 flex-1 bg-transparent text-base font-medium text-slate-900 outline-none"
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  handleSearch((event.target as HTMLInputElement).value)
-                }
-              }}
-            />
-            <Button
-              type="button"
-              className="hidden sm:inline-flex"
-              onClick={() => navigate({ to: '/search', search: { q: '', sort: 'relevance', page: 0, starredOnly: false } })}
-            >
-              {t('landing.hero.exploreSkills')}
-            </Button>
-          </div>
-
-          <div className="mt-5 flex flex-wrap justify-start gap-2">
-            {QUICK_SCENARIOS.map((scenario) => (
-              <button
-                key={scenario}
+            <div className="mt-8 flex w-full max-w-2xl items-center gap-2 rounded-lg border border-white/80 bg-white/86 p-2 shadow-[0_24px_64px_-38px_rgba(37,99,235,0.5)] backdrop-blur">
+              <SearchIcon className="ml-3 h-5 w-5 flex-shrink-0 text-blue-500" strokeWidth={1.9} />
+              <input
+                type="text"
+                aria-label={t('landing.hero.searchPlaceholder')}
+                placeholder={t('landing.hero.searchPlaceholder')}
+                className="hero-input h-12 min-w-0 flex-1 bg-transparent text-base font-medium text-slate-900 outline-none"
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSearch((event.target as HTMLInputElement).value)
+                  }
+                }}
+              />
+              <Button
                 type="button"
-                className="rounded-lg border border-blue-100 bg-white/72 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-white"
-                onClick={() => handleSearch(scenario)}
+                className="hidden sm:inline-flex"
+                onClick={() => navigate({ to: '/search', search: { q: '', sort: 'relevance', page: 0, starredOnly: false } })}
               >
-                {scenario}
-              </button>
-            ))}
-          </div>
+                {t('landing.hero.exploreSkills')}
+              </Button>
+            </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              to="/search"
-              search={{ q: '', sort: 'relevance', page: 0, starredOnly: false }}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-[0_18px_36px_-18px_rgba(37,99,235,0.75)] transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            >
-              {t('landing.hero.exploreSkills')}
-              <ArrowRight className="h-4 w-4" strokeWidth={1.9} />
-            </Link>
-            <Link
-              to="/dashboard/publish"
-              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-slate-200 bg-white/75 px-6 py-3 text-base font-semibold text-blue-700 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.5)] backdrop-blur transition hover:border-blue-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            >
-              {t('landing.hero.publishSkill')}
-            </Link>
+            <div className="mt-5 flex flex-wrap justify-start gap-2">
+              {QUICK_SCENARIOS.map((scenario) => (
+                <button
+                  key={scenario}
+                  type="button"
+                  className="rounded-lg border border-blue-100 bg-white/72 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-white"
+                  onClick={() => handleSearch(scenario)}
+                >
+                  {scenario}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                to="/search"
+                search={{ q: '', sort: 'relevance', page: 0, starredOnly: false }}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-[0_18px_36px_-18px_rgba(37,99,235,0.75)] transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              >
+                {t('landing.hero.exploreSkills')}
+                <ArrowRight className="h-4 w-4" strokeWidth={1.9} />
+              </Link>
+              <Link
+                to="/dashboard/publish"
+                className="inline-flex min-h-12 items-center justify-center rounded-lg border border-slate-200 bg-white/75 px-6 py-3 text-base font-semibold text-blue-700 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.5)] backdrop-blur transition hover:border-blue-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              >
+                {t('landing.hero.publishSkill')}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
