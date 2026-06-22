@@ -190,6 +190,43 @@
     "filters": {
       "label": "Filter:"
     },
+    "discovery": {
+      "badge": "Find Skill by Scenario",
+      "title": "Not sure what to search? Start from a category",
+      "description": "Common scenarios are surfaced here so users can find text-to-image, contract review, log analysis, and similar skills immediately.",
+      "clear": "Clear category",
+      "groupHint": "Open this skill category",
+      "labelMatched": "Open this scenario",
+      "keywordFallback": "Open this scenario",
+      "groups": {
+        "content": "Content Generation",
+        "document": "Docs & Knowledge",
+        "data": "Data Analysis",
+        "development": "Developer Productivity",
+        "office": "Business Office",
+        "opsSecurity": "Ops & Security"
+      },
+      "scenarios": {
+        "textToImage": "Text to Image",
+        "imageToImage": "Image to Image",
+        "textToVideo": "Text to Video",
+        "contractReview": "Contract Review",
+        "knowledgeQa": "Knowledge Q&A",
+        "reportWriting": "Report Writing",
+        "sql": "SQL Generation",
+        "reportAnalysis": "Report Analysis",
+        "charting": "Charting",
+        "codeReview": "Code Review",
+        "unitTest": "Unit Tests",
+        "logAnalysis": "Log Analysis",
+        "meeting": "Meeting Notes",
+        "email": "Email Writing",
+        "customerService": "Customer Service",
+        "alert": "Alert Analysis",
+        "securityScan": "Security Scan",
+        "riskReport": "Risk Report"
+      }
+    },
     "sort": {
       "label": "Sort:",
       "relevance": "Relevance",

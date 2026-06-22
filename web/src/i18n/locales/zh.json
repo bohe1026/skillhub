@@ -190,6 +190,43 @@
     "filters": {
       "label": "筛选:"
     },
+    "discovery": {
+      "badge": "按场景找 Skill",
+      "title": "不知道搜什么？直接按分类进入",
+      "description": "常用场景放在这里，文生图、合同审查、日志分析这些入口一眼就能看到。",
+      "clear": "清空分类",
+      "groupHint": "点击查看该类技能",
+      "labelMatched": "查看该场景",
+      "keywordFallback": "查看该场景",
+      "groups": {
+        "content": "内容生成",
+        "document": "文档知识",
+        "data": "数据分析",
+        "development": "研发提效",
+        "office": "业务办公",
+        "opsSecurity": "运维安全"
+      },
+      "scenarios": {
+        "textToImage": "文生图",
+        "imageToImage": "图生图",
+        "textToVideo": "文生视频",
+        "contractReview": "合同审查",
+        "knowledgeQa": "知识问答",
+        "reportWriting": "报告生成",
+        "sql": "SQL 生成",
+        "reportAnalysis": "报表分析",
+        "charting": "图表生成",
+        "codeReview": "代码审查",
+        "unitTest": "单测生成",
+        "logAnalysis": "日志分析",
+        "meeting": "会议纪要",
+        "email": "邮件撰写",
+        "customerService": "客服回复",
+        "alert": "告警分析",
+        "securityScan": "安全扫描",
+        "riskReport": "风险报告"
+      }
+    },
     "sort": {
       "label": "排序:",
       "relevance": "相关性",

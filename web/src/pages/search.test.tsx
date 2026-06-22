@@ -142,9 +142,28 @@ describe('SearchPage', () => {
   it('marks the selected label button as active on initial render', () => {
     const html = renderToStaticMarkup(<SearchPage />)
 
+    expect(html).toContain('search.discovery.title')
+    expect(html).toContain('search.discovery.scenarios.textToImage')
     expect(html).toContain('Code Generation')
     expect(findButton('Code Generation').variant).toBe('default')
     expect(findButton('Official').variant).toBe('outline')
+  })
+
+  it('uses keyword fallback when a discovery scenario label is not configured', () => {
+    renderToStaticMarkup(<SearchPage />)
+
+    findButton('search.discovery.scenarios.textToImage').onClick?.()
+
+    expect(navigateMock).toHaveBeenCalledWith({
+      to: '/search',
+      search: {
+        q: '文生图',
+        label: '',
+        sort: 'relevance',
+        page: 0,
+        starredOnly: false,
+      },
+    })
   })
 
   it('toggles the selected label off and resets paging', () => {
