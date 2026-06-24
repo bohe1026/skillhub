@@ -576,7 +576,6 @@ class SkillQueryServiceTest {
         when(skillRepository.findByNamespaceIdAndSlug(1L, skillSlug)).thenReturn(List.of(skill));
         when(skillVersionRepository.findBySkillIdAndStatus(1L, SkillVersionStatus.PUBLISHED))
                 .thenReturn(List.of(version100, version110));
-        when(skillVersionRepository.findById(10L)).thenReturn(Optional.of(version110));
         when(skillFileRepository.findByVersionId(9L)).thenReturn(List.of(version100File));
         when(skillFileRepository.findByVersionId(10L)).thenReturn(List.of(version110File));
 
@@ -615,7 +614,6 @@ class SkillQueryServiceTest {
 
         when(namespaceRepository.findBySlug(namespaceSlug)).thenReturn(Optional.of(namespace));
         when(skillRepository.findByNamespaceIdAndSlug(1L, skillSlug)).thenReturn(List.of(skill));
-        when(skillVersionRepository.findById(11L)).thenReturn(Optional.of(version));
         when(skillVersionRepository.findBySkillIdAndStatus(3L, SkillVersionStatus.PUBLISHED)).thenReturn(List.of(version));
         when(skillFileRepository.findByVersionId(11L)).thenReturn(List.of(file));
 
@@ -630,6 +628,45 @@ class SkillQueryServiceTest {
         );
 
         assertEquals("/api/v1/skills/global/smoke-skill-two/versions/1.0.0%20beta/download", result.downloadUrl());
+    }
+
+    @Test
+    void testResolveVersion_ShouldUseLatestPublishedVersionWhenLatestPointerIsPreview() throws Exception {
+        String namespaceSlug = "global";
+        String skillSlug = "skill-judge";
+        Map<Long, NamespaceRole> userNsRoles = Map.of();
+
+        Namespace namespace = new Namespace(namespaceSlug, "Global", "user-1");
+        setId(namespace, 1L);
+        Skill skill = new Skill(1L, skillSlug, "user-100", SkillVisibility.PUBLIC);
+        setId(skill, 7L);
+        skill.setStatus(SkillStatus.ACTIVE);
+        skill.setLatestVersionId(12L);
+
+        SkillVersion publishedVersion = new SkillVersion(7L, "20260609.094323", "user-100");
+        setId(publishedVersion, 11L);
+        publishedVersion.setStatus(SkillVersionStatus.PUBLISHED);
+        SkillVersion previewVersion = new SkillVersion(7L, "2.02606100415011E7", "user-100");
+        setId(previewVersion, 12L);
+        previewVersion.setStatus(SkillVersionStatus.REJECTED);
+
+        when(namespaceRepository.findBySlug(namespaceSlug)).thenReturn(Optional.of(namespace));
+        when(skillRepository.findByNamespaceIdAndSlug(1L, skillSlug)).thenReturn(List.of(skill));
+        when(skillVersionRepository.findBySkillIdAndStatus(7L, SkillVersionStatus.PUBLISHED))
+                .thenReturn(List.of(publishedVersion));
+
+        SkillQueryService.ResolvedVersionDTO result = service.resolveVersion(
+                namespaceSlug,
+                skillSlug,
+                null,
+                null,
+                null,
+                null,
+                userNsRoles
+        );
+
+        assertEquals("20260609.094323", result.version());
+        assertTrue(result.downloadUrl().contains("/versions/20260609.094323/download"));
     }
 
     @Test

@@ -793,13 +793,14 @@ public class SkillQueryService {
     }
 
     private SkillVersion resolveLatestVersion(Skill skill) {
-        if (skill.getLatestVersionId() == null) {
+        List<SkillVersion> publishedVersions = skillVersionRepository.findBySkillIdAndStatus(
+                skill.getId(), SkillVersionStatus.PUBLISHED);
+        if (publishedVersions.isEmpty()) {
             throw new DomainBadRequestException("error.skill.version.latest.unavailable", skill.getSlug());
         }
-        SkillVersion latestVersion = skillVersionRepository.findById(skill.getLatestVersionId())
-                .orElseThrow(() -> new DomainBadRequestException("error.skill.version.latest.notFound"));
-        assertPublishedVersion(latestVersion, latestVersion.getVersion());
-        return latestVersion;
+        return publishedVersions.stream()
+                .max(versionComparator())
+                .orElseThrow(() -> new DomainBadRequestException("error.skill.version.latest.unavailable", skill.getSlug()));
     }
 
     private String computeFingerprint(SkillVersion version) {

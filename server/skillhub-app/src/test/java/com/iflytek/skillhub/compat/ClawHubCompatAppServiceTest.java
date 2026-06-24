@@ -77,4 +77,48 @@ class ClawHubCompatAppServiceTest {
 
         assertThat(location).isEqualTo("/api/v1/skills/team-a/my-skill/download");
     }
+
+    @Test
+    void downloadLocationByQuery_treatsBlankVersionAsLatest() {
+        Namespace namespace = new Namespace("team-a", "Team A", "owner-1");
+        Skill publicSkill = new Skill(1L, "my-skill", "owner-1", SkillVisibility.PUBLIC);
+        CompatSkillLookupService.CompatSkillContext context = new CompatSkillLookupService.CompatSkillContext(
+                namespace,
+                publicSkill,
+                Optional.empty()
+        );
+
+        when(compatSkillLookupService.findByLegacySlug("my-skill")).thenReturn(context);
+        when(compatSkillLookupService.canAccess(publicSkill, null, Map.of())).thenReturn(true);
+
+        String location = service.downloadLocationByQuery("my-skill", "", null, null);
+
+        assertThat(location).isEqualTo("/api/v1/skills/team-a/my-skill/download");
+    }
+
+    @Test
+    void resolveByQuery_withSpecificPlainSlugVersionUsesGlobalCanonicalSkillBeforeLegacyLookup() {
+        when(skillQueryService.resolveVersion("global", "skill-judge", "2.0.0", null, null, null, Map.of()))
+                .thenReturn(new SkillQueryService.ResolvedVersionDTO(
+                        1L,
+                        "global",
+                        "skill-judge",
+                        "2.0.0",
+                        10L,
+                        "sha",
+                        true,
+                        "/api/v1/skills/global/skill-judge/versions/2.0.0/download"
+                ));
+
+        var response = service.resolveByQuery("skill-judge", "2.0.0", null, null, null);
+
+        assertThat(response.match().version()).isEqualTo("2.0.0");
+    }
+
+    @Test
+    void downloadLocationByQuery_withSpecificPlainSlugVersionUsesGlobalCanonicalSkillBeforeLegacyLookup() {
+        String location = service.downloadLocationByQuery("skill-judge", "2.0.0", null, null);
+
+        assertThat(location).isEqualTo("/api/v1/skills/global/skill-judge/versions/2.0.0/download");
+    }
 }

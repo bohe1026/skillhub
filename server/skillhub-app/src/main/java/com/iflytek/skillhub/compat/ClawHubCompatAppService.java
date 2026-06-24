@@ -97,7 +97,7 @@ public class ClawHubCompatAppService {
                                                  String hash,
                                                  String userId,
                                                  Map<Long, NamespaceRole> userNsRoles) {
-        SkillCoordinate coord = resolveQueryCoordinate(slug, userId, userNsRoles);
+        SkillCoordinate coord = resolveQueryCoordinate(slug, version, userId, userNsRoles);
         Map<Long, NamespaceRole> roles = normalizeRoles(userNsRoles);
 
         SkillQueryService.ResolvedVersionDTO resolved = skillQueryService.resolveVersion(
@@ -140,15 +140,19 @@ public class ClawHubCompatAppService {
                                           String version,
                                           String userId,
                                           Map<Long, NamespaceRole> userNsRoles) {
-        SkillCoordinate coord = resolveQueryCoordinate(slug, userId, userNsRoles);
-        return "latest".equals(version)
+        SkillCoordinate coord = resolveQueryCoordinate(slug, version, userId, userNsRoles);
+        return isLatestVersion(version)
                 ? "/api/v1/skills/" + coord.namespace() + "/" + coord.slug() + "/download"
                 : "/api/v1/skills/" + coord.namespace() + "/" + coord.slug() + "/versions/" + version + "/download";
     }
 
     private SkillCoordinate resolveQueryCoordinate(String slug,
+                                                   String version,
                                                    String userId,
                                                    Map<Long, NamespaceRole> userNsRoles) {
+        if (!isLatestVersion(version)) {
+            return mapper.fromCanonical(slug);
+        }
         if (slug != null && slug.contains("--")) {
             return mapper.fromCanonical(slug);
         }
@@ -163,6 +167,10 @@ public class ClawHubCompatAppService {
             throw new DomainNotFoundException("error.skill.notFound", slug);
         }
         return new SkillCoordinate(context.namespace().getSlug(), context.skill().getSlug());
+    }
+
+    private boolean isLatestVersion(String version) {
+        return version == null || version.isBlank() || "latest".equals(version);
     }
 
     private Map<Long, NamespaceRole> normalizeRoles(Map<Long, NamespaceRole> userNsRoles) {
