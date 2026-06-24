@@ -56,7 +56,7 @@ export function PublishPage() {
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const [precheckWarnings, setPrecheckWarnings] = useState<string[]>([])
   const [categorySlug, setCategorySlug] = useState('')
-  const [scenarioSlug, setScenarioSlug] = useState('')
+  const [scenarioSlugs, setScenarioSlugs] = useState<string[]>([])
 
   const { data: namespaces, isLoading: isLoadingNamespaces } = useMyNamespaces()
   const publishMutation = usePublishSkill()
@@ -101,7 +101,7 @@ export function PublishPage() {
         confirmWarnings,
       })
       let classificationSaved = true
-      const labelSlugs = getPublishCategoryLabelSlugs(categorySlug, scenarioSlug)
+      const labelSlugs = getPublishCategoryLabelSlugs(categorySlug, scenarioSlugs)
       try {
         await Promise.all(labelSlugs.map((labelSlug) =>
           labelApi.attachSkillLabel(result.namespace, result.slug, labelSlug)
@@ -250,7 +250,7 @@ export function PublishPage() {
                   aria-pressed={selected}
                   onClick={() => {
                     setCategorySlug(group.slug)
-                    setScenarioSlug('')
+                    setScenarioSlugs([])
                   }}
                 >
                   <span className={cn('flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg', group.accentClassName)}>
@@ -274,23 +274,34 @@ export function PublishPage() {
               <div className="flex flex-wrap gap-2">
                 <Button
                   type="button"
-                  variant={!scenarioSlug ? 'default' : 'outline'}
+                  variant={scenarioSlugs.length === 0 ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setScenarioSlug('')}
+                  onClick={() => setScenarioSlugs([])}
                 >
                   {t('publish.category.noScenario')}
                 </Button>
-                {selectedCategory.scenarios.map((scenario) => (
-                  <Button
-                    key={scenario.slug}
-                    type="button"
-                    variant={scenarioSlug === scenario.slug ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setScenarioSlug(scenario.slug)}
-                  >
-                    {t(scenario.labelKey, { defaultValue: scenario.fallbackLabel })}
-                  </Button>
-                ))}
+                {selectedCategory.scenarios.map((scenario) => {
+                  const selected = scenarioSlugs.includes(scenario.slug)
+
+                  return (
+                    <Button
+                      key={scenario.slug}
+                      type="button"
+                      variant={selected ? 'default' : 'outline'}
+                      size="sm"
+                      aria-pressed={selected}
+                      onClick={() => {
+                        setScenarioSlugs((current) =>
+                          current.includes(scenario.slug)
+                            ? current.filter((slug) => slug !== scenario.slug)
+                            : [...current, scenario.slug]
+                        )
+                      }}
+                    >
+                      {t(scenario.labelKey, { defaultValue: scenario.fallbackLabel })}
+                    </Button>
+                  )
+                })}
               </div>
             </div>
           ) : null}

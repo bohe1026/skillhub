@@ -96,6 +96,6 @@ export const SKILL_DISCOVERY_LABEL_SLUGS = new Set(
   SKILL_DISCOVERY_GROUPS.flatMap((group) => [group.slug, ...group.scenarios.map((scenario) => scenario.slug)])
 )
 
-export function getPublishCategoryLabelSlugs(categorySlug: string, scenarioSlug: string) {
-  return [categorySlug, scenarioSlug].filter(Boolean)
+export function getPublishCategoryLabelSlugs(categorySlug: string, scenarioSlugs: string[]) {
+  return [categorySlug, ...scenarioSlugs].filter(Boolean)
 }

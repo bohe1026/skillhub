@@ -1454,8 +1454,8 @@
       "title": "业务分类",
       "description": "请选择最贴近这个 Skill 的业务方向。发布后会写入真实标签，用户可以在搜索页按分类找到它。",
       "groupHint": "必选大类",
-      "scenarioTitle": "细分场景（可选）",
-      "noScenario": "暂不选择细分场景"
+      "scenarioTitle": "细分场景（可多选，可不选）",
+      "noScenario": "不选择细分场景"
     },
     "file": "技能包文件",
     "removeSelectedFile": "删除已选文件",

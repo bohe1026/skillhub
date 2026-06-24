@@ -1453,8 +1453,8 @@
       "title": "Business Category",
       "description": "Choose the closest business direction for this Skill. After publishing, it is saved as real labels so users can find it by category on the search page.",
       "groupHint": "Required category",
-      "scenarioTitle": "Scenario (optional)",
-      "noScenario": "No scenario yet"
+      "scenarioTitle": "Scenarios (optional, multi-select)",
+      "noScenario": "No scenarios"
     },
     "file": "Skill Package File",
     "removeSelectedFile": "Remove selected file",

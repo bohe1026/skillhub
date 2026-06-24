@@ -13,10 +13,14 @@ describe('skill discovery taxonomy', () => {
   })
 
   it('builds publish label slugs from required category and optional scenario', () => {
-    expect(getPublishCategoryLabelSlugs('cat-content-generation', 'scene-text-to-image')).toEqual([
+    expect(getPublishCategoryLabelSlugs('cat-content-generation', [
+      'scene-text-to-image',
+      'scene-image-to-image',
+    ])).toEqual([
       'cat-content-generation',
       'scene-text-to-image',
+      'scene-image-to-image',
     ])
-    expect(getPublishCategoryLabelSlugs('cat-content-generation', '')).toEqual(['cat-content-generation'])
+    expect(getPublishCategoryLabelSlugs('cat-content-generation', [])).toEqual(['cat-content-generation'])
   })
 })
