@@ -803,6 +803,13 @@ public class SkillQueryService {
                 .orElseThrow(() -> new DomainBadRequestException("error.skill.version.latest.unavailable", skill.getSlug()));
     }
 
+    private Comparator<SkillVersion> versionComparator() {
+        return Comparator
+                .comparing(SkillVersion::getPublishedAt, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(SkillVersion::getCreatedAt, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(SkillVersion::getId, Comparator.nullsLast(Comparator.naturalOrder()));
+    }
+
     private String computeFingerprint(SkillVersion version) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
