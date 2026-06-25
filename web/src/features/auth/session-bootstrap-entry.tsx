@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ShieldCheck } from 'lucide-react'
 import { ApiError, getSessionBootstrapRuntimeConfig } from '@/api/client'
 import { Button } from '@/shared/ui/button'
 import { useSessionBootstrap } from './use-session-bootstrap'
@@ -18,6 +19,7 @@ export function SessionBootstrapEntry({ onAuthenticated, methodDisplayName }: Se
   const config = getSessionBootstrapRuntimeConfig()
   const bootstrapMutation = useSessionBootstrap()
   const attemptedRef = useRef(false)
+  const [manualAttempted, setManualAttempted] = useState(false)
   const providerName = methodDisplayName || t('login.enterpriseSsoTitle')
 
   useEffect(() => {
@@ -41,31 +43,20 @@ export function SessionBootstrapEntry({ onAuthenticated, methodDisplayName }: Se
     return null
   }
 
-  const manualError = bootstrapMutation.error instanceof ApiError
-    && bootstrapMutation.error.status !== 401
-    && bootstrapMutation.error.status !== 403
-    ? bootstrapMutation.error.message
+  const manualError = manualAttempted && bootstrapMutation.error instanceof ApiError
+    ? bootstrapMutation.error.status === 401 || bootstrapMutation.error.status === 403
+      ? t('login.enterpriseSsoUnavailable')
+      : bootstrapMutation.error.message
     : null
 
   return (
-    <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-3">
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-foreground">
-          {providerName}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          {config.auto
-            ? t('login.enterpriseSsoAutoHint', { name: providerName })
-            : t('login.enterpriseSsoHint', { name: providerName })}
-        </p>
-      </div>
-
+    <div className="space-y-3">
       <Button
-        className="w-full"
+        className="h-12 w-full gap-2 rounded-lg"
         type="button"
-        variant="outline"
         disabled={bootstrapMutation.isPending}
         onClick={() => {
+          setManualAttempted(true)
           void bootstrapMutation.mutateAsync(config.provider!, {
             onSuccess: async () => {
               await onAuthenticated()
@@ -76,10 +67,18 @@ export function SessionBootstrapEntry({ onAuthenticated, methodDisplayName }: Se
           })
         }}
       >
+        <ShieldCheck className="h-4 w-4" />
         {bootstrapMutation.isPending
           ? t('login.enterpriseSsoSubmitting', { name: providerName })
           : t('login.enterpriseSsoAction', { name: providerName })}
       </Button>
+      <div className="space-y-1 rounded-lg border border-blue-100 bg-blue-50/70 p-3">
+        <p className="text-sm text-muted-foreground">
+          {config.auto
+            ? t('login.enterpriseSsoAutoHint', { name: providerName })
+            : t('login.enterpriseSsoHint', { name: providerName })}
+        </p>
+      </div>
 
       {manualError ? (
         <p className="text-sm text-red-600">{manualError}</p>

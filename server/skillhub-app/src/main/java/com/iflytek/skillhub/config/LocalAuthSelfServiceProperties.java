@@ -16,7 +16,7 @@ public class LocalAuthSelfServiceProperties {
     /**
      * Allows users to self-register only when they provide a valid invite code.
      */
-    private boolean inviteRegistrationEnabled = true;
+    private boolean inviteRegistrationEnabled = false;
 
     /**
      * Email-based password recovery is disabled by default because private

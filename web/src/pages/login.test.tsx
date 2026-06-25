@@ -18,8 +18,10 @@ vi.mock('react-i18next', async () => {
 })
 
 vi.mock('lucide-react', () => ({
+  ChevronDown: () => null,
   Eye: () => null,
   EyeOff: () => null,
+  KeyRound: () => null,
 }))
 
 vi.mock('@/api/client', () => ({
@@ -63,7 +65,7 @@ describe('LoginPage', () => {
 
     expect(html).toContain('login.title')
     expect(html).not.toContain('login.subtitle')
-    expect(html).toContain('login.submit')
-    expect(html).toContain('login.register')
+    expect(html).toContain('login.passwordFallbackTitle')
+    expect(html).not.toContain('login.register')
   })
 })

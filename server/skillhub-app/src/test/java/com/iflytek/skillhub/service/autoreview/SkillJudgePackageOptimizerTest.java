@@ -13,12 +13,12 @@ class SkillJudgePackageOptimizerTest {
     void preservesChineseDescriptionAndAddsOnlyMissingOptimizationSections() {
         String source = """
                 ---
-                name: baidu-vod-t2v
-                description: 百度 VOD 平台视频生成与图片生成技能。触发场景：用户要求文生视频、图生视频、文生图、图生图，或指定 VQ3P、K26、VE3.1 等模型生成内容。
+                name: media-vod-t2v
+                description: 媒体生成平台视频生成与图片生成技能。触发场景：用户要求文生视频、图生视频、文生图、图生图，或指定 VQ3P、K26、VE3.1 等模型生成内容。
                 version: 20260610.072404
                 ---
 
-                # 百度 VOD 视频生成与图片生成
+                # 媒体生成平台视频生成与图片生成
 
                 ## 使用前置条件
                 - 已配置 VOD_ACCESS_KEY 和 VOD_SECRET_KEY。
@@ -29,7 +29,7 @@ class SkillJudgePackageOptimizerTest {
 
         String optimized = optimizer.optimizeSkillMarkdown(source, "20260610.072404.opt1");
 
-        assertTrue(optimized.contains("description: 百度 VOD 平台视频生成与图片生成技能。触发场景"));
+        assertTrue(optimized.contains("description: 媒体生成平台视频生成与图片生成技能。触发场景"));
         assertFalse(optimized.contains("Use when executing, reviewing, or improving"));
         assertTrue(optimized.contains("version: 20260610.072404.opt1"));
         assertTrue(optimized.contains("## 触发条件"));
