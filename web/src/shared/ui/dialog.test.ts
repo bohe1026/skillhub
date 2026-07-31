@@ -35,10 +35,10 @@ describe('Dialog components', () => {
   })
 
   it('keeps modal panels readable over busy pages', () => {
-    expect(DIALOG_OVERLAY_CLASS_NAME).toContain('bg-slate-950/50')
+    expect(DIALOG_OVERLAY_CLASS_NAME).toContain('bg-[#161616]/50')
     expect(DIALOG_OVERLAY_CLASS_NAME).not.toContain('backdrop-blur')
     expect(DIALOG_CONTENT_CLASS_NAME).toContain('bg-white')
-    expect(DIALOG_CONTENT_CLASS_NAME).toContain('text-slate-950')
+    expect(DIALOG_CONTENT_CLASS_NAME).toContain('text-[#161616]')
     expect(DIALOG_CONTENT_CLASS_NAME).not.toContain('backdrop-blur')
   })
 })

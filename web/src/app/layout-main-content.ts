@@ -24,6 +24,13 @@ export function getAppMainContentLayout(pathname: string): AppMainContentLayout 
     }
   }
 
+  if (pathname.startsWith('/resources/')) {
+    return {
+      mainClassName: LANDING_MAIN_CLASS_NAME,
+      contentClassName: '',
+    }
+  }
+
   if (pathname === '/search') {
     return {
       mainClassName: CENTERED_MAIN_CLASS_NAME,

@@ -17,6 +17,9 @@ vi.mock('react-i18next', async () => {
 
 vi.mock('lucide-react', () => ({
   ArrowRight: () => null,
+  Boxes: () => null,
+  Building2: () => null,
+  CloudCog: () => null,
   Search: () => null,
 }))
 
@@ -60,5 +63,6 @@ describe('LandingPage', () => {
 
     expect(html).not.toContain('SkillHub')
     expect(html).toContain('landing.hero.title')
+    expect(html).toContain('泛科技解决方案中心')
   })
 })

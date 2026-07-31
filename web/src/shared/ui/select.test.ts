@@ -9,27 +9,27 @@ import {
 
 describe('shared select contract', () => {
   it('keeps the trigger aligned with the existing input styling language', () => {
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('h-11')
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('rounded-lg')
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('border-blue-100')
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('bg-white/90')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('h-10')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('rounded-none')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('border-[#8d8d8d]')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('bg-[#f4f4f4]')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:outline-none')
     expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:ring-2')
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:ring-blue-500/35')
-    expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:border-blue-300')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:ring-[#0f62fe]')
+    expect(SELECT_TRIGGER_CLASS_NAME).toContain('focus-visible:border-[#0f62fe]')
   })
 
   it('uses themed panel and item classes for the floating listbox', () => {
     expect(SELECT_CONTENT_CLASS_NAME).toContain('bg-white')
     expect(SELECT_CONTENT_CLASS_NAME).toContain('text-popover-foreground')
-    expect(SELECT_ITEM_CLASS_NAME).toContain('focus:bg-blue-50')
+    expect(SELECT_ITEM_CLASS_NAME).toContain('focus:bg-[#e8e8e8]')
     expect(SELECT_ITEM_CLASS_NAME).toContain('data-[disabled]:opacity-50')
   })
 
   it('keeps the dropdown and selected items visually discoverable', () => {
-    expect(SELECT_CONTENT_CLASS_NAME).toContain('shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)]')
+    expect(SELECT_CONTENT_CLASS_NAME).toContain('shadow-[0_4px_8px_rgba(0,0,0,0.2)]')
     expect(SELECT_ITEM_CLASS_NAME).toContain('pl-8')
-    expect(SELECT_ITEM_CLASS_NAME).toContain('rounded-md')
+    expect(SELECT_ITEM_CLASS_NAME).toContain('rounded-none')
   })
 
   it('uses pointer cursors for expanded select interactions', () => {
