@@ -4,30 +4,30 @@ import { buttonVariants } from './button'
 describe('buttonVariants', () => {
   it('applies default variant and size classes', () => {
     const classes = buttonVariants()
-    expect(classes).toContain('bg-blue-600')
+    expect(classes).toContain('bg-[#0f62fe]')
     expect(classes).toContain('h-10')
-    expect(classes).toContain('px-5')
+    expect(classes).toContain('px-4')
   })
 
   it('applies destructive variant classes', () => {
     const classes = buttonVariants({ variant: 'destructive' })
-    expect(classes).toContain('bg-destructive')
+    expect(classes).toContain('bg-[#da1e28]')
   })
 
   it('applies outline variant classes', () => {
     const classes = buttonVariants({ variant: 'outline' })
     expect(classes).toContain('border')
-    expect(classes).toContain('bg-white/80')
+    expect(classes).toContain('bg-transparent')
   })
 
   it('applies secondary variant classes', () => {
     const classes = buttonVariants({ variant: 'secondary' })
-    expect(classes).toContain('bg-blue-50')
+    expect(classes).toContain('bg-[#393939]')
   })
 
   it('applies ghost variant classes', () => {
     const classes = buttonVariants({ variant: 'ghost' })
-    expect(classes).toContain('hover:bg-blue-50')
+    expect(classes).toContain('hover:bg-[#e8e8e8]')
   })
 
   it('applies link variant classes', () => {
@@ -57,6 +57,7 @@ describe('buttonVariants', () => {
     const classes = buttonVariants()
     expect(classes).toContain('focus-visible:outline-none')
     expect(classes).toContain('disabled:pointer-events-none')
-    expect(classes).toContain('disabled:opacity-50')
+    expect(classes).toContain('disabled:bg-[#c6c6c6]')
+    expect(classes).toContain('disabled:text-[#8d8d8d]')
   })
 })

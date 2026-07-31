@@ -251,10 +251,10 @@ export function SearchPage() {
       </div>
 
       {!starredOnly && (
-        <section className="overflow-hidden rounded-lg border border-blue-100 bg-[linear-gradient(135deg,rgba(239,247,255,0.98)_0%,rgba(255,255,255,0.96)_52%,rgba(232,245,255,0.92)_100%)] p-5 shadow-[0_24px_70px_-46px_rgba(37,99,235,0.55)] md:p-6">
+        <section className="overflow-hidden border border-[#c6c6c6] bg-[#f4f4f4] p-5 md:p-6">
           <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-blue-100 bg-white/80 px-3 py-1.5 text-sm font-bold text-blue-700">
+              <div className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#0f62fe]">
                 <SearchCheck className="h-4 w-4" strokeWidth={1.9} />
                 {t('search.discovery.badge')}
               </div>
@@ -283,7 +283,7 @@ export function SearchPage() {
               return (
                 <article
                   key={group.slug}
-                  className={`rounded-lg border bg-white/92 p-4 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.36)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_24px_58px_-38px_rgba(37,99,235,0.45)] ${isGroupActive ? 'border-blue-300 ring-2 ring-blue-100' : 'border-white/80'}`}
+                  className={`border bg-white p-4 transition-colors hover:bg-[#e8e8e8] ${isGroupActive ? 'border-[#0f62fe] ring-2 ring-inset ring-[#0f62fe]' : 'border-[#c6c6c6]'}`}
                 >
                   <button
                     type="button"

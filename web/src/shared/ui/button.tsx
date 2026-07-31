@@ -3,28 +3,28 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-none text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring disabled:pointer-events-none disabled:bg-[#c6c6c6] disabled:text-[#8d8d8d]',
   {
     variants: {
       variant: {
         default:
-          'bg-blue-600 text-white shadow-[0_16px_34px_-22px_rgba(37,99,235,0.78)] hover:bg-blue-700 active:scale-[0.98]',
+          'bg-[#0f62fe] text-white hover:bg-[#0353e9] active:bg-[#002d9c]',
         destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90 active:scale-[0.98]',
+          'bg-[#da1e28] text-white hover:bg-[#ba1b23] active:bg-[#750e13]',
         outline:
-          'border border-blue-100 bg-white/80 text-blue-700 shadow-[0_12px_30px_-26px_rgba(15,23,42,0.35)] hover:border-blue-200 hover:bg-white active:scale-[0.98]',
+          'border border-[#0f62fe] bg-transparent text-[#0f62fe] hover:bg-[#edf5ff] active:bg-[#d0e2ff]',
         secondary:
-          'bg-blue-50 text-blue-700 hover:bg-blue-100 active:scale-[0.98]',
+          'bg-[#393939] text-white hover:bg-[#4c4c4c] active:bg-[#6f6f6f]',
         ghost:
-          'text-slate-600 hover:bg-blue-50 hover:text-blue-700',
+          'text-[#0f62fe] hover:bg-[#e8e8e8] hover:text-[#0043ce]',
         link:
           'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-10 px-5 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-12 rounded-xl px-8 text-base',
-        icon: 'h-10 w-10',
+        default: 'h-10 px-4 py-2',
+        sm: 'h-8 px-3 text-xs',
+        lg: 'h-12 px-6 text-base',
+        icon: 'h-10 w-10 px-0',
       },
     },
     defaultVariants: {

@@ -65,17 +65,17 @@ export function LoginPage() {
   return (
     <div className="flex min-h-[70vh] items-center justify-center">
       <div className="w-full max-w-md space-y-8 animate-fade-up">
-        <div className="text-center space-y-3">
-          <div className="inline-flex w-16 h-16 rounded-lg bg-blue-600 items-center justify-center shadow-[0_18px_36px_-20px_rgba(37,99,235,0.7)] mb-4">
-            <span className="text-primary-foreground font-bold text-2xl">S</span>
+        <div className="space-y-3 text-center">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center bg-[#0f62fe]">
+            <span className="text-2xl font-semibold text-white">S</span>
           </div>
-          <h1 className="text-4xl font-bold font-heading text-foreground">{t('login.title')}</h1>
+          <h1 className="font-heading text-4xl font-light text-foreground">{t('login.title')}</h1>
         </div>
 
-        <div className="glass-strong p-8 rounded-lg">
+        <div className="border border-[#c6c6c6] bg-white p-8">
           <div className="space-y-6">
             {disabledMessage ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="border-l-4 border-[#da1e28] bg-[#fff1f1] px-4 py-3 text-sm text-[#a2191f]">
                 {disabledMessage}
               </div>
             ) : null}
@@ -84,7 +84,7 @@ export function LoginPage() {
               onAuthenticated={() => navigate({ to: returnTo })}
             />
 
-            <div className="rounded-lg border border-blue-100 bg-white/70">
+            <div className="border border-[#c6c6c6] bg-white">
               <button
                 type="button"
                 className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
@@ -92,8 +92,8 @@ export function LoginPage() {
                 aria-controls="password-login-panel"
                 onClick={() => setPasswordPanelOpen((current) => !current)}
               >
-                <span className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-                  <KeyRound className="h-4 w-4 text-blue-600" />
+                <span className="flex items-center gap-2 text-sm font-medium text-[#161616]">
+                  <KeyRound className="h-4 w-4 text-[#0f62fe]" />
                   {t('login.passwordFallbackTitle')}
                 </span>
                 <ChevronDown
@@ -105,7 +105,7 @@ export function LoginPage() {
               </button>
 
               {passwordPanelOpen ? (
-                <form id="password-login-panel" className="space-y-4 border-t border-blue-100 px-4 py-4" onSubmit={handleSubmit}>
+                <form id="password-login-panel" className="space-y-4 border-t border-[#e0e0e0] px-4 py-4" onSubmit={handleSubmit}>
                   {directAuthConfig.enabled ? (
                     <p className="text-sm text-muted-foreground">
                       {t('login.passwordCompatHint', {

@@ -25,8 +25,7 @@ export function SkillCard({ skill, onClick, highlightStarred = true }: SkillCard
 
   return (
     <Card
-      className="h-full p-5 cursor-pointer group relative overflow-hidden bg-white border shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2"
-      style={{ borderColor: 'hsl(var(--border-card))' }}
+      className="group relative h-full cursor-pointer overflow-hidden border-0 bg-white p-6 transition-colors hover:bg-[#e8e8e8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0f62fe]"
       onClick={onClick}
       onKeyDown={(event) => {
         if (!isInteractive) {
@@ -44,7 +43,7 @@ export function SkillCard({ skill, onClick, highlightStarred = true }: SkillCard
       <div className="flex h-full flex-col">
         <div className="flex items-start justify-between mb-3">
           <div className="space-y-2">
-            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors" style={{ color: 'hsl(var(--foreground))' }}>
+            <h3 className="text-lg font-normal text-[#161616] transition-colors group-hover:text-[#0f62fe]">
               {skill.displayName}
             </h3>
           </div>
@@ -54,14 +53,14 @@ export function SkillCard({ skill, onClick, highlightStarred = true }: SkillCard
         </div>
 
         {skill.summary && (
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
+          <p className="mb-4 line-clamp-2 text-sm leading-6 text-[#525252]">
             {skill.summary}
           </p>
         )}
 
-        <div className="mt-auto flex items-center gap-4 text-xs text-muted-foreground">
+        <div className="mt-auto flex items-center gap-4 text-xs text-[#6f6f6f]">
           {headlineVersion && (
-            <span className="px-2.5 py-1 rounded-full bg-secondary/60 font-mono">
+            <span className="rounded-full bg-[#e0e0e0] px-2.5 py-1 font-mono text-[#393939]">
               v{headlineVersion.version}
             </span>
           )}

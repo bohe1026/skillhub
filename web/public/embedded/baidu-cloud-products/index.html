@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DuMate - 你的专属 AI 搭子</title>
+    <meta
+      name="description"
+      content="DuMate 以自然语言驱动任务全流程自动化，本地沙箱安全执行，自主拆解任务、调度工具、交付结果。"
+    />
+    <link rel="stylesheet" href="./styles.css?v=hidden-header" />
+  </head>
+  <body>
+    <main>
+      <section class="hero" id="overview">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow">百度首个 AI 桌面助理</p>
+            <h1>DuMate</h1>
+            <p class="hero-title">你的专属 AI 搭子</p>
+            <p class="hero-desc">
+              面向企业员工、知识工作者与 ToC 用户的桌面级 AI 智能体。DuMate
+              可以看见屏幕、处理文件、串联业务系统，以自然语言驱动任务全流程自动化，
+              从指令下达、任务规划到成果交付一站完成。
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="https://www.dumate.cn/download">下载客户端</a>
+              <a class="btn btn-outline" href="#scenes">查看应用场景</a>
+            </div>
+          </div>
+          <div class="hero-art" aria-label="DuMate 产品演示视频">
+            <video autoplay muted loop playsinline preload="metadata" poster="./assets/dumate-hero.jpg">
+              <source src="./assets/dumate-demo.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
+      <section class="container overview-strip" aria-label="产品优势">
+        <article class="overview-item">
+          <div class="adv-icon command-icon"></div>
+          <div>
+            <h3>指令驱动</h3>
+            <p>给出目标和工作文件夹，AI 自主规划路径、调度技能、闭环交付。</p>
+          </div>
+        </article>
+        <article class="overview-item">
+          <div class="adv-icon shield-icon"></div>
+          <div>
+            <h3>本地沙箱</h3>
+            <p>文件夹级权限、风险操作二次确认，数据不出设备。</p>
+          </div>
+        </article>
+        <article class="overview-item">
+          <div class="adv-icon skill-icon"></div>
+          <div>
+            <h3>Skills 扩展</h3>
+            <p>内置优质技能，支持自动创建与引入新技能，覆盖更多业务需求。</p>
+          </div>
+        </article>
+        <article class="overview-item">
+          <div class="adv-icon flow-icon"></div>
+          <div>
+            <h3>全程可审计</h3>
+            <p>执行过程流式输出，用户可查看文件、网页、操作与结果。</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="features">
+        <div class="section-title">
+          <p class="eyebrow">Core Capabilities</p>
+          <h2>智能执行，解放双手</h2>
+          <span></span>
+        </div>
+
+        <div class="container feature-grid">
+          <article class="feature-card">
+            <div class="feature-index">01</div>
+            <h3>极致易用，零门槛上手</h3>
+            <p>无需复杂配置，App 一键安装、开箱即用。会说话就能用，自然语言交互让 AI 帮你搞定一切。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-index">02</div>
+            <h3>灵活扩展，场景无边界</h3>
+            <p>内置百度搜索等优质 Skills，可按业务场景安装、创建或导入技能，持续扩展自动化边界。</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-index">03</div>
+            <h3>本地运行，数据不外流</h3>
+            <p>预置安全沙箱，未经授权不访问设备资源，高风险操作需要用户确认，保障隐私与企业数据安全。</p>
+          </article>
+        </div>
+
+        <div class="container assistant-panel" id="security">
+          <div class="feature-copy">
+            <p class="eyebrow">Enterprise Ready</p>
+            <h3>从“人用工具”到“AI 替你做事”</h3>
+            <p>
+              DuMate 不止回答问题，而是理解意图、规划步骤、调用工具并交付结果。
+              它可以处理 Word、Excel、PPT、PDF、本地文件夹、网页和业务系统，把重复操作沉淀为可复用流程。
+            </p>
+            <ul class="check-list">
+              <li>自然语言下达任务，复杂流程自动拆解</li>
+              <li>支持多个 Session 并行，执行中可随时打断</li>
+              <li>记忆用户偏好与历史信息，越用越懂你</li>
+              <li>计划对接 IM、邮箱、团队管理后台与企业 Skill 管理</li>
+            </ul>
+          </div>
+          <div class="assistant-preview" aria-hidden="true">
+            <div class="mock-shell">
+              <aside>
+                <b></b>
+                <i class="selected"></i>
+                <i></i>
+                <i></i>
+                <i></i>
+              </aside>
+              <div class="chat-panel">
+                <strong>DuMate 正在执行</strong>
+                <div class="bubble question">把桌面合同整理成结构化摘要，并生成汇报 PPT。</div>
+                <div class="robot"></div>
+                <div class="bubble answer">
+                  已读取授权文件夹：<br />
+                  1. 提取关键条款<br />
+                  2. 生成风险清单<br />
+                  3. 输出汇报文档<br />
+                  等待确认高风险操作
+                </div>
+                <div class="chat-input"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section compact" id="scenes">
+        <div class="section-title">
+          <p class="eyebrow">Scenarios</p>
+          <h2>场景落地，高效办公</h2>
+          <span></span>
+        </div>
+        <div class="container scenario-list">
+          <article class="scenario-card">
+            <img src="./assets/dumate-files.png" alt="文件智能管理" />
+            <div>
+              <h3>文件智能管理</h3>
+              <p class="scenario-lead">杂乱文件夹秒变有序知识库。</p>
+              <ul>
+                <li>按类型、项目、时间自动分类，清理重复和无效文件</li>
+                <li>Word / Excel / PPT 与 PDF 跨文档读取、解析和转换</li>
+                <li>从合同、纪要、报告中提取条款，生成结构化摘要</li>
+              </ul>
+            </div>
+          </article>
+          <article class="scenario-card reverse">
+            <img src="./assets/dumate-data.png" alt="多源数据分析" />
+            <div>
+              <h3>多源数据分析</h3>
+              <p class="scenario-lead">原始数据直出决策报告。</p>
+              <ul>
+                <li>自动剔除空值、重复项，统一多格式数据标准</li>
+                <li>跨表关联计算、自动透视汇总，生成多维数据看板</li>
+                <li>依据月度或季度数据，自动生成逻辑严谨的汇报 PPT</li>
+              </ul>
+            </div>
+          </article>
+          <article class="scenario-card">
+            <img src="./assets/dumate-auto.png" alt="办公操作自动化" />
+            <div>
+              <h3>办公操作自动化</h3>
+              <p class="scenario-lead">重复操作交给 AI 代劳。</p>
+              <ul>
+                <li>自动填表、信息查询、资料下载及页面截图</li>
+                <li>自动登录周报、报销、审批系统，完成数据填报与同步</li>
+                <li>自动读取、分类、总结与回复邮件，未读内容即刻清空</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section compact" id="proof">
+        <div class="section-title">
+          <p class="eyebrow">Proof</p>
+          <h2>评测与案例佐证</h2>
+          <span></span>
+        </div>
+        <div class="container proof-grid">
+          <article class="metric-card">
+            <strong>92%</strong>
+            <h3>端到端任务完成度</h3>
+            <p>50 个评测 case 中，DuMate 1.0.19 / 1.0.20 在有人干预情况下完成任务比例达到 92%。</p>
+          </article>
+          <article class="metric-card">
+            <strong>86</strong>
+            <h3>人机协同体验得分</h3>
+            <p>评测中 DuMate 的协作体验得分领先多个国内竞品，体现更高自主程度与更少干预成本。</p>
+          </article>
+          <article class="metric-card">
+            <strong>L0-L2</strong>
+            <h3>分级评测体系</h3>
+            <p>覆盖单一应用原子操作、跨应用流水线工作和开放式复杂任务，综合衡量交付质量。</p>
+          </article>
+        </div>
+        <div class="container case-grid">
+          <article>
+            <h3>比特币 MACD 策略回测</h3>
+            <p>两次运行均获取真实 API 数据，一次完整交付包含年化收益率和夏普比率的可视化报告。</p>
+          </article>
+          <article>
+            <h3>书籍内容整理成 Word</h3>
+            <p>从指定网站整理书籍内容，仅需一次纠偏即可完整还原内容格式与目录结构。</p>
+          </article>
+          <article>
+            <h3>持仓股票周报生成</h3>
+            <p>三轮均一次生成，无需纠偏，输出可读性、数据准确性和排版质量更稳定。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta">
+        <div class="container cta-inner">
+          <div>
+            <h2>真干活，用搭子</h2>
+            <p>让 DuMate 帮你理清思路、处理琐事、交付结果。</p>
+          </div>
+          <a class="btn cta-button" href="https://www.dumate.cn/download">立即下载</a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const heroVideo = document.querySelector(".hero-art video");
+        if (heroVideo) {
+          heroVideo.play().catch(() => {});
+        }
+      });
+    </script>
+    <script src="../embed-resize.js?v=3"></script>
+  </body>
+</html>

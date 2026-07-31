@@ -7,12 +7,12 @@ const DropdownMenu = DropdownMenuPrimitive.Root
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
 
 export const DROPDOWN_MENU_CONTENT_CLASS_NAME = cn(
-  'z-50 min-w-[8rem] overflow-hidden rounded-lg border border-blue-100 bg-white p-1 text-slate-900 shadow-[0_22px_52px_-34px_rgba(15,23,42,0.5)]',
+  'z-50 min-w-[8rem] overflow-hidden rounded-none border border-[#c6c6c6] bg-white p-1 text-[#161616] shadow-[0_4px_8px_rgba(0,0,0,0.2)]',
   'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2'
 )
 
 export const DROPDOWN_MENU_ITEM_CLASS_NAME = cn(
-  'relative flex cursor-default select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-blue-50 focus:text-blue-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
+  'relative flex cursor-default select-none items-center rounded-none px-2 py-1.5 text-sm outline-none transition-colors focus:bg-[#e8e8e8] focus:text-[#161616] data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
 )
 
 const DropdownMenuContent = React.forwardRef<
@@ -57,7 +57,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-blue-100', className)}
+    className={cn('-mx-1 my-1 h-px bg-[#e0e0e0]', className)}
     {...props}
   />
 ))

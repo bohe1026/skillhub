@@ -52,7 +52,7 @@ export function SessionBootstrapEntry({ onAuthenticated, methodDisplayName }: Se
   return (
     <div className="space-y-3">
       <Button
-        className="h-12 w-full gap-2 rounded-lg"
+        className="h-12 w-full gap-2"
         type="button"
         disabled={bootstrapMutation.isPending}
         onClick={() => {
@@ -72,7 +72,7 @@ export function SessionBootstrapEntry({ onAuthenticated, methodDisplayName }: Se
           ? t('login.enterpriseSsoSubmitting', { name: providerName })
           : t('login.enterpriseSsoAction', { name: providerName })}
       </Button>
-      <div className="space-y-1 rounded-lg border border-blue-100 bg-blue-50/70 p-3">
+      <div className="space-y-1 border-l-4 border-[#0f62fe] bg-[#edf5ff] p-3">
         <p className="text-sm text-muted-foreground">
           {config.auto
             ? t('login.enterpriseSsoAutoHint', { name: providerName })

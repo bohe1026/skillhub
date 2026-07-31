@@ -10,15 +10,15 @@ interface DialogContextValue {
 const DialogContext = React.createContext<DialogContextValue | undefined>(undefined)
 
 export const DIALOG_OVERLAY_CLASS_NAME = cn(
-  'fixed inset-0 z-50 bg-slate-950/50'
+  'fixed inset-0 z-50 bg-[#161616]/50'
 )
 
 export const DIALOG_CONTENT_CLASS_NAME = cn(
-  'fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100vh-2rem)] w-[min(calc(100vw-2rem),32rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto rounded-lg border border-blue-100 bg-white p-8 text-slate-950 shadow-[0_30px_80px_-38px_rgba(15,23,42,0.58)]'
+  'fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100vh-2rem)] w-[min(calc(100vw-2rem),32rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto rounded-none border border-[#c6c6c6] bg-white p-8 text-[#161616] shadow-[0_12px_24px_rgba(0,0,0,0.24)]'
 )
 
 export const DIALOG_CLOSE_BUTTON_CLASS_NAME = cn(
-  'absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/35 focus:ring-offset-2 disabled:pointer-events-none'
+  'absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-none text-[#525252] transition-colors hover:bg-[#e8e8e8] hover:text-[#0f62fe] focus:outline-none focus:ring-2 focus:ring-[#0f62fe] disabled:pointer-events-none'
 )
 
 function useDialog() {

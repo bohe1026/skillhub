@@ -6,11 +6,11 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Inter', 'system-ui', 'sans-serif'],
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['IBM Plex Sans', 'Noto Sans SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        heading: ['IBM Plex Sans', 'Noto Sans SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        sans: ['IBM Plex Sans', 'Noto Sans SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
         mono: [
-          'JetBrains Mono',
+          'IBM Plex Mono',
           'SF Mono',
           'Monaco',
           'Inconsolata',
@@ -27,12 +27,25 @@ const config: Config = {
       },
       borderRadius: {
         lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-        xl: 'calc(var(--radius) + 4px)',
-        '2xl': 'calc(var(--radius) + 8px)',
+        md: 'var(--radius)',
+        sm: 'var(--radius)',
+        xl: 'var(--radius)',
+        '2xl': 'var(--radius)',
       },
       colors: {
+        blue: {
+          50: '#edf5ff',
+          100: '#d0e2ff',
+          200: '#a6c8ff',
+          300: '#78a9ff',
+          400: '#4589ff',
+          500: '#0f62fe',
+          600: '#0f62fe',
+          700: '#0043ce',
+          800: '#002d9c',
+          900: '#001d6c',
+          950: '#001141',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -68,10 +81,16 @@ const config: Config = {
         ring: 'hsl(var(--ring))',
       },
       boxShadow: {
-        glow: '0 0 20px -5px hsl(var(--primary) / 0.3)',
-        'glow-lg': '0 0 40px -10px hsl(var(--primary) / 0.25)',
-        'card': '0 4px 24px -4px hsl(0 0% 0% / 0.15)',
-        'card-hover': '0 20px 40px -12px hsl(var(--primary) / 0.1), 0 8px 16px -8px hsl(0 0% 0% / 0.2)',
+        sm: 'none',
+        DEFAULT: 'none',
+        md: 'none',
+        lg: 'none',
+        xl: 'none',
+        '2xl': 'none',
+        glow: 'none',
+        'glow-lg': 'none',
+        'card': 'none',
+        'card-hover': 'none',
       },
       animation: {
         'fade-up': 'fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',

@@ -72,7 +72,7 @@ export function RegisterPage() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-lg items-center justify-center py-8">
-      <Card className="w-full border-blue-100 bg-white/95 shadow-[0_24px_80px_-48px_rgba(37,99,235,0.68)]">
+      <Card className="w-full border-[#c6c6c6] bg-white">
         <CardHeader className="space-y-3 text-center">
           <CardTitle>{t('register.title')}</CardTitle>
           <CardDescription>{t('register.subtitle')}</CardDescription>

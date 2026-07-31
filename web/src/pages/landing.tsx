@@ -55,27 +55,27 @@ export function LandingPage() {
 
   return (
     <div className="landing-tech-page">
-      <section className="relative overflow-hidden px-4 pb-14 pt-12 md:px-8 md:pb-20 md:pt-16">
-        <div className="mx-auto flex min-h-[520px] max-w-6xl flex-col items-start justify-center text-left">
+      <section className="relative overflow-hidden border-b border-[#e0e0e0] px-4 pb-14 pt-12 md:px-8 md:pb-20 md:pt-16">
+        <div className="mx-auto flex min-h-[520px] max-w-[1312px] flex-col items-start justify-center text-left">
           <div className="w-full max-w-5xl">
-            <div className="mb-5 inline-flex items-center rounded-lg border border-blue-100 bg-white/80 px-3 py-2 text-sm font-semibold text-blue-700 shadow-[0_12px_32px_-24px_rgba(37,99,235,0.65)] backdrop-blur">
+            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-[#0f62fe]">
               {t('landing.badge')}
             </div>
 
-            <h1 className="max-w-none whitespace-nowrap text-left text-[clamp(2rem,4.2vw,3.7rem)] font-black leading-[1.08] text-slate-950">
+            <h1 className="max-w-none text-left text-[clamp(2.5rem,5vw,4.75rem)] font-light leading-[1.05] text-[#161616] md:whitespace-nowrap">
               {t('landing.hero.title')}
             </h1>
-            <p className="mt-6 max-w-2xl text-base font-medium leading-8 text-slate-600 md:text-lg">
+            <p className="mt-6 max-w-2xl text-base font-normal leading-7 text-[#525252] md:text-lg">
               {t('landing.hero.subtitle')}
             </p>
 
-            <div className="mt-8 flex w-full max-w-2xl items-center gap-2 rounded-lg border border-white/80 bg-white/86 p-2 shadow-[0_24px_64px_-38px_rgba(37,99,235,0.5)] backdrop-blur">
-              <SearchIcon className="ml-3 h-5 w-5 flex-shrink-0 text-blue-500" strokeWidth={1.9} />
+            <div className="mt-8 flex w-full max-w-2xl items-center bg-[#f4f4f4]">
+              <SearchIcon className="ml-4 h-5 w-5 flex-shrink-0 text-[#525252]" strokeWidth={1.8} />
               <input
                 type="text"
                 aria-label={t('landing.hero.searchPlaceholder')}
                 placeholder={t('landing.hero.searchPlaceholder')}
-                className="hero-input h-12 min-w-0 flex-1 bg-transparent text-base font-medium text-slate-900 outline-none"
+                className="hero-input h-12 min-w-0 flex-1 border-b border-[#8d8d8d] bg-transparent px-4 text-base text-[#161616] outline-none focus:border-b-2 focus:border-[#0f62fe]"
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
                     handleSearch((event.target as HTMLInputElement).value)
@@ -84,7 +84,7 @@ export function LandingPage() {
               />
               <Button
                 type="button"
-                className="hidden sm:inline-flex"
+                className="hidden h-12 sm:inline-flex"
                 onClick={() => navigate({ to: '/search', search: { q: '', sort: 'relevance', page: 0, starredOnly: false } })}
               >
                 {t('landing.hero.exploreSkills')}
@@ -96,7 +96,7 @@ export function LandingPage() {
                 <button
                   key={scenario}
                   type="button"
-                  className="rounded-lg border border-blue-100 bg-white/72 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-white"
+                  className="rounded-full bg-[#edf5ff] px-3 py-1.5 text-sm font-medium text-[#0043ce] transition hover:bg-[#d0e2ff]"
                   onClick={() => handleSearch(scenario)}
                 >
                   {scenario}
@@ -108,14 +108,14 @@ export function LandingPage() {
               <Link
                 to="/search"
                 search={{ q: '', sort: 'relevance', page: 0, starredOnly: false }}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-[0_18px_36px_-18px_rgba(37,99,235,0.75)] transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                className="inline-flex min-h-12 items-center justify-center gap-8 bg-[#0f62fe] px-6 py-3 text-base font-medium text-white transition hover:bg-[#0353e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0f62fe]"
               >
                 {t('landing.hero.exploreSkills')}
                 <ArrowRight className="h-4 w-4" strokeWidth={1.9} />
               </Link>
               <Link
                 to="/dashboard/publish"
-                className="inline-flex min-h-12 items-center justify-center rounded-lg border border-slate-200 bg-white/75 px-6 py-3 text-base font-semibold text-blue-700 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.5)] backdrop-blur transition hover:border-blue-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                className="inline-flex min-h-12 items-center justify-center border border-[#0f62fe] bg-transparent px-6 py-3 text-base font-medium text-[#0f62fe] transition hover:bg-[#edf5ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0f62fe]"
               >
                 {t('landing.hero.publishSkill')}
               </Link>
@@ -168,15 +168,15 @@ function SkillShowcaseSection({
   return (
     <section
       ref={inViewRef}
-      className={`relative z-10 w-full px-4 py-12 md:px-8 md:py-14 scroll-fade-up${inView ? ' in-view' : ''}`}
-      style={{ background: sort === 'downloads' ? 'rgba(255,255,255,0.66)' : 'rgba(239,247,255,0.58)' }}
+      className={`relative z-10 w-full border-b border-[#e0e0e0] px-4 py-16 md:px-8 scroll-fade-up${inView ? ' in-view' : ''}`}
+      style={{ background: sort === 'downloads' ? '#f4f4f4' : '#ffffff' }}
     >
-      <div className="mx-auto max-w-6xl space-y-6">
+      <div className="mx-auto max-w-[1312px] space-y-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-2 text-sm font-bold uppercase text-blue-600">{sort === 'downloads' ? 'Popular' : 'Latest'}</p>
-            <h2 className="text-3xl font-black text-slate-950">{title}</h2>
-            <p className="mt-2 text-base leading-7 text-slate-600">{description}</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#0f62fe]">{sort === 'downloads' ? 'Popular' : 'Latest'}</p>
+            <h2 className="text-3xl font-normal text-[#161616] md:text-[2.625rem] md:leading-tight">{title}</h2>
+            <p className="mt-3 text-base leading-7 text-[#525252]">{description}</p>
           </div>
           <Button variant="ghost" onClick={onViewAll}>
             {viewAllLabel}
@@ -186,7 +186,7 @@ function SkillShowcaseSection({
         {isLoading ? (
           <SkeletonList count={6} />
         ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-px bg-[#c6c6c6] md:grid-cols-2 lg:grid-cols-3">
             {skills?.map((skill, index) => (
               <div key={skill.id} className={`animate-fade-up delay-${Math.min(index + 1, 6)}`}>
                 <SkillCard

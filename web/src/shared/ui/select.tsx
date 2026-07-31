@@ -4,15 +4,15 @@ import { Check, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 export const SELECT_TRIGGER_CLASS_NAME = cn(
-  'flex h-11 w-full items-center justify-between gap-2 rounded-lg border border-blue-100 bg-white/90 px-4 py-2 text-sm text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]',
-  'ring-offset-background transition-all duration-200',
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/35 focus-visible:border-blue-300',
+  'flex h-10 w-full items-center justify-between gap-2 rounded-none border-0 border-b border-[#8d8d8d] bg-[#f4f4f4] px-4 py-2 text-sm text-foreground',
+  'transition-colors duration-150',
+  'focus-visible:border-b-2 focus-visible:border-[#0f62fe] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0f62fe]',
   'disabled:cursor-not-allowed disabled:opacity-50',
   'data-[placeholder]:text-muted-foreground [&>span]:line-clamp-1'
 )
 
 export const SELECT_CONTENT_CLASS_NAME = cn(
-  'z-50 overflow-hidden rounded-lg border border-blue-100 bg-white text-popover-foreground shadow-[0_22px_52px_-34px_rgba(15,23,42,0.45)]',
+  'z-50 overflow-hidden rounded-none border border-[#c6c6c6] bg-white text-popover-foreground shadow-[0_4px_8px_rgba(0,0,0,0.2)]',
   'data-[state=open]:animate-in data-[state=closed]:animate-out',
   'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
   'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -21,8 +21,8 @@ export const SELECT_CONTENT_CLASS_NAME = cn(
 )
 
 export const SELECT_ITEM_CLASS_NAME = cn(
-  'relative flex w-full cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-8 text-sm outline-none',
-  'focus:bg-blue-50 focus:text-blue-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
+  'relative flex w-full cursor-pointer select-none items-center rounded-none py-2 pl-8 pr-8 text-sm outline-none',
+  'focus:bg-[#e8e8e8] focus:text-[#161616] data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
 )
 
 export const SELECT_SCROLL_BUTTON_CLASS_NAME = cn(

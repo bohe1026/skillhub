@@ -24,11 +24,11 @@ describe('DropdownMenu components', () => {
     expect(DropdownMenuSeparator.displayName).toBeDefined()
   })
 
-  it('uses the same clear blue-white floating panel style as other controls', () => {
-    expect(DROPDOWN_MENU_CONTENT_CLASS_NAME).toContain('border-blue-100')
+  it('uses the same Carbon floating panel style as other controls', () => {
+    expect(DROPDOWN_MENU_CONTENT_CLASS_NAME).toContain('border-[#c6c6c6]')
     expect(DROPDOWN_MENU_CONTENT_CLASS_NAME).toContain('bg-white')
-    expect(DROPDOWN_MENU_CONTENT_CLASS_NAME).toContain('text-slate-900')
-    expect(DROPDOWN_MENU_ITEM_CLASS_NAME).toContain('focus:bg-blue-50')
-    expect(DROPDOWN_MENU_ITEM_CLASS_NAME).toContain('focus:text-blue-700')
+    expect(DROPDOWN_MENU_CONTENT_CLASS_NAME).toContain('text-[#161616]')
+    expect(DROPDOWN_MENU_ITEM_CLASS_NAME).toContain('focus:bg-[#e8e8e8]')
+    expect(DROPDOWN_MENU_ITEM_CLASS_NAME).toContain('focus:text-[#161616]')
   })
 })

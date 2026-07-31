@@ -17,6 +17,9 @@ vi.mock('react-i18next', async () => {
 
 vi.mock('lucide-react', () => ({
   ArrowRight: () => null,
+  Boxes: () => null,
+  Building2: () => null,
+  CloudCog: () => null,
   Search: () => null,
 }))
 
